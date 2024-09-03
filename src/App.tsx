@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Landing from "./Pages/Landing"
-import Navbar from "@/components/navbar";
+import NavWrapper from "./wrapper/NavWrapper";
 
 function App() {
 
@@ -8,10 +8,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={
-          <div>
-            <Navbar />
+          <NavWrapper>
             <Landing />
-          </div>
+          </NavWrapper>
         } />
         <Route path="/home" />
         <Route path="/auth" element={<AuthRoutes />} />
