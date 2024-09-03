@@ -3,6 +3,7 @@ import Landing from "./Pages/Landing"
 import NavWrapper from "./wrapper/NavWrapper";
 import Login from "./Pages/Login";
 import ToggleModeWrapper from "./wrapper/ToggleModeWrapper";
+import Register from "./Pages/Register";
 
 function App() {
 
@@ -19,7 +20,11 @@ function App() {
             <Login />
           </ToggleModeWrapper>
         } />
-        <Route path="/auth/register" />
+        <Route path="/auth/register" element={
+          <ToggleModeWrapper>
+            <Register />
+          </ToggleModeWrapper>
+        } />
         <Route path="/home" />
         <Route path="/about-us" />
         <Route />
