@@ -4,6 +4,7 @@ import NavWrapper from "./wrapper/NavWrapper";
 import Login from "./Pages/Login";
 import ToggleModeWrapper from "./wrapper/ToggleModeWrapper";
 import Register from "./Pages/Register";
+import NotFound from "./Pages/NotFound";
 
 function App() {
 
@@ -27,7 +28,7 @@ function App() {
         } />
         <Route path="/home" />
         <Route path="/about-us" />
-        <Route />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )
