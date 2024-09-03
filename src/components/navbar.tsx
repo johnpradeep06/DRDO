@@ -14,8 +14,8 @@ const Navbar = () => {
           RedHawk
         </div>
         <div className="flex gap-x-4">
-          <Button variant={"ghost"}>Register</Button>
-          <Button>Login</Button>
+          <Button variant={"ghost"} className="text-sm">Register</Button>
+          <Button className="text-sm">Login</Button>
           <ModeToggle />
         </div>
       </div>
