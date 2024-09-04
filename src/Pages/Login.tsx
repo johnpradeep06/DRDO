@@ -1,4 +1,5 @@
 import { SubmitHandler, useForm } from "react-hook-form"
+import { HomeBar } from "@/components/navbar"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import Spinner from "@/components/spinner"
@@ -8,7 +9,7 @@ import { toast } from "sonner"
 import { 
   Form, 
   FormControl, 
-  FormDescription, 
+  // FormDescription, 
   FormField, 
   FormItem, 
   FormLabel, 
@@ -19,7 +20,7 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
+  // CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -53,11 +54,9 @@ const Login = () => {
   }
 
   return (  
-    <div className="w-full dark:bg-[#1f1f1f] flex flex-col items-center">
-      <div className="text-4xl mt-2 tracking-wider font-bold font-sunflowers">
-          RedHawk
-        </div>
-      <Card className="mt-20 w-80">
+    <div className="w-full min-h-screen bg-primary-foreground dark:bg-[#1f1f1f] flex flex-col items-center">
+      <HomeBar />
+      <Card className="mt-20 w-80 shadow-sm dark:shadow-gray-900 shadow-gray-200">
         <CardHeader>
           <CardTitle className="text-4xl text-center font-howdy text-gray-400">
             Login

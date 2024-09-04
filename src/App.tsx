@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Landing from "./Pages/Landing"
 import NavWrapper from "./wrapper/NavWrapper";
 import Login from "./Pages/Login";
-import ToggleModeWrapper from "./wrapper/ToggleModeWrapper";
 import Register from "./Pages/Register";
 import NotFound from "./Pages/NotFound";
 import { Toaster } from "./components/ui/sonner";
@@ -19,14 +18,10 @@ function App() {
           </NavWrapper>
         } />
         <Route path="/auth/login" element={
-          <ToggleModeWrapper>
             <Login />
-          </ToggleModeWrapper>
         } />
         <Route path="/auth/register" element={
-          <ToggleModeWrapper>
             <Register />
-          </ToggleModeWrapper>
         } />
         <Route path="/home" />
         <Route path="/about-us" />

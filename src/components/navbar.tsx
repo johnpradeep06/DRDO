@@ -4,7 +4,7 @@ import { ModeToggle } from "./mode-toggle";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
 
-const Navbar = () => {
+export const Navbar = () => {
   const scrolled = useScrollTop();
   const navigate = useNavigate();
   const handleClick = (url: string)=>{
@@ -38,5 +38,22 @@ const Navbar = () => {
     </div>
   );
 }
- 
-export default Navbar;
+
+export const HomeBar = ()=>{
+  const navigate = useNavigate();
+  const handleClick = (url: string)=>{
+    return ()=>navigate(url);
+  }
+  return (
+      <div className="relative w-full flex items-center justify-center px-5 py-2 border-b shadow-sm">
+      <div className="text-4xl mt-2 tracking-wider font-bold font-sunflowers cursor-pointer"
+        onClick={handleClick("/")}
+        >
+          RedHawk
+      </div>
+      <div className="absolute right-2">
+        <ModeToggle />
+      </div>
+    </div>
+  )
+}
