@@ -4,94 +4,117 @@ import { Button } from "@/components/ui/button"
 import Spinner from "@/components/spinner"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { toast } from "sonner"
+import { 
+  Form, 
+  FormControl, 
+  FormDescription, 
+  FormField, 
+  FormItem, 
+  FormLabel, 
+  FormMessage 
+} from "@/components/ui/form"
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 
 const schema = z.object({
-  employeeId: z.string().min(1, { message: "Required" }),
+  employeeId: z.string().length(10, { message: "Invalid ID" }),
   password: z.string().min(8, { message: "Password must have atleast 8 characters" })
 })
 
 type FormFields = z.infer<typeof schema>
 
-// type FormFields = {
-//   employeeId: string,
-//   password: string
-// }
-
 const Login = () => {
-  const { 
-    register, 
-    handleSubmit, 
-    setError,
-    formState: { errors, isSubmitting } 
-  } = useForm<FormFields>({
-    resolver: zodResolver(schema)
-  });
+  const form = useForm<FormFields>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      employeeId: '',
+      password: ''
+    }
+  })
 
   const onSubmit: SubmitHandler<FormFields> = async (data)=>{
     try {
-      await new Promise((resolve)=>setTimeout(resolve, 1000));
-      console.log(data);
-      throw new Error();
+      await new Promise((resolve) =>
+        setTimeout(() => resolve("done"), 1000)
+      ).then(()=>console.log(data))
+      toast.success("Form has been submitted successfully!!!");
     } catch(error){
       console.log(error);
-      setError("password", {
-        message: "Invalid password"
-      });
-      setError("root", {
-        message: "Server Error"
-      });
+      toast.error("Failed to submit form.");
     }
   }
 
   return (  
     <div className="w-full dark:bg-[#1f1f1f] flex flex-col items-center">
-      <div className="mt-20">
-        <form className="flex flex-col gap-y-3" onSubmit={handleSubmit(onSubmit)}>
-          <div>
-            <Input 
-              type="text" 
-              placeholder="Your ID: "
-              {...register("employeeId", 
-                // {
-                //   required: {
-                //     value: true,
-                //     message: "Required"
-                //   }
-                // }
-              )} 
-              />
-            {errors.employeeId && <div className="text-xs text-red-500">{errors.employeeId.message}</div>}
-          </div>
-          <div>
-            <Input 
-              type="text" 
-              placeholder="Enter Password: " 
-              {...register("password", 
-                // {
-                //   required: {
-                //     value: true,
-                //     message: "Required"
-                //   },
-                //   minLength: {
-                //     value: 8,
-                //     message: "Password must have at least 8 characters"
-                //   }
-                // }
-              )} 
-              />
-            {errors.password && <div className="text-xs text-red-500">{errors.password?.message}</div>}
-          </div>
-          <Button 
-            variant={"secondary"} 
-            type="submit"
-            disabled={isSubmitting}
-          >
-            <Spinner loading={isSubmitting} color="#fff" size={20} />
-            {!isSubmitting && "Submit"}
-          </Button>
-          {errors.root && <div className="text-xs text-red-500">{errors.root?.message}</div>}
-        </form>
-      </div>
+      <div className="text-4xl mt-2 tracking-wider font-bold font-sunflowers">
+          RedHawk
+        </div>
+      <Card className="mt-20 w-80">
+        <CardHeader>
+          <CardTitle className="text-4xl text-center font-howdy text-gray-400">
+            Login
+          </CardTitle>
+          <CardDescription className="text-base text-center">
+            Enter your credentials to login.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col space-y-3 w-full">
+              <FormField
+                control={form.control}
+                name="employeeId"
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel>Employee ID:</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Your ID:" {...field} />
+                    </FormControl>
+                    {/* <FormDescription>
+                      Description
+                      </FormDescription> */}
+                    <FormMessage />
+                  </FormItem>
+                )}
+                />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({field}) => (
+                  <FormItem>
+                    <FormLabel>Password:</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter Password:" {...field} />
+                    </FormControl>
+                    {/* <FormDescription>
+                      Description
+                      </FormDescription> */}
+                    <FormMessage />
+                  </FormItem>
+                )}
+                />
+              <Button 
+                type="submit"
+                variant={"secondary"} 
+                disabled={form.formState.isSubmitting}
+                >
+                {form.formState.isSubmitting 
+                  ? <Spinner loading={true} color="#fff" size={20} />
+                  : "Submit"
+                }
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

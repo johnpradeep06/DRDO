@@ -5,11 +5,13 @@ import Login from "./Pages/Login";
 import ToggleModeWrapper from "./wrapper/ToggleModeWrapper";
 import Register from "./Pages/Register";
 import NotFound from "./Pages/NotFound";
+import { Toaster } from "./components/ui/sonner";
 
 function App() {
 
   return (
     <BrowserRouter>
+      <Toaster position="bottom-right" />
       <Routes>
         <Route path="/" element={
           <NavWrapper>
