@@ -5,7 +5,7 @@ export const profileSchema = z.object({
   fullName: z.string(),
   gender: z.enum(genders),
   caste: z.enum(castes),
-  dob: z.date(),
+  dob: z.string().date(),
   presentAge: z.number(),
   mobileNumber: z.number(),
   emailAddress: z.string().email(),
@@ -59,3 +59,5 @@ export const registrationFormSchema = z.object({
   password: passwordSchema,
   declaration: z.boolean()
 })
+
+export type RegistrationFormType = z.infer<typeof registrationFormSchema>;
