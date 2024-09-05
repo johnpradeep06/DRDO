@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export const Header: React.FC = () => {
   const [dark, SetDark] = useState<boolean>(true);
@@ -27,7 +28,7 @@ export const Header: React.FC = () => {
             <NavLink to='/' className={(a)=>a.isActive?"my-auto hover:pb-2 hover:transition-all duration-500 mx-2 text-lg text-red-600 dark:text-red-400 font-semibold": "my-auto hover:pb-2 hover:transition-all duration-500 mx-2 text-2xl dark:text-gray-500 mr-5"}>Overview</NavLink>
             <NavLink to='/shipment' className={(a)=>a.isActive?"my-auto mx-4 hover:pb-2 hover:transition-all duration-500  text-red-600 dark:text-red-400 font-semibold":"my-auto mx-2 text-2xl dark:text-gray-500 hover:pb-2 hover:transition-all duration-500 mr-5"}>Panel Status</NavLink>
             <NavLink to='/vehicle' className={(a)=>a.isActive?"my-auto hover:pb-2 hover:transition-all duration-500 mx-2  text-red-600 dark:text-red-400 font-semibold":"my-auto mx-2 text-2xl dark:text-gray-500 hover:pb-2 hover:transition-all duration-500 mr-5"}>Alerts</NavLink>
-            
+            <Button>John</Button>
 
         </nav>
       <div className="mx-5 flex">
