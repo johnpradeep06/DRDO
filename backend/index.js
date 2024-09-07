@@ -77,14 +77,13 @@ app.post('/register-details', async (req, res) => {
                 yearsOfExperience, skills, researchTitle, researchField, researchSummary, 
                 areasOfExpertise, interviewMode, availabilityDate: new Date(availabilityDate), 
                 linkedInURL, userId
-            }
+            },
         });
 
-        console.log("Candidate details registered:", candidateDetails);
-        return res.status(201).json({ message: "Candidate details registered successfully!", candidateDetails });
+        res.status(201).json(candidateDetails);
     } catch (error) {
-        console.error("Error registering candidate details:", error);
-        return res.status(500).json({ error: "Failed to register candidate details." });
+        console.error("Error creating candidate details:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 

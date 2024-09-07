@@ -43,5 +43,5 @@ model CandidateDetails {
   availabilityDate DateTime
   linkedInURL      String?
   userId           String     @unique @db.ObjectId
-  user             User       @relation(fields: [userId], references: [id])
+  user             User?       @relation(fields: [userId], references: [id])
 }

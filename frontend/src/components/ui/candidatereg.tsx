@@ -9,7 +9,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 
-export function Reg_details() {
+export function CandidateReg() {
   const [date, setDate] = useState<Date | undefined>();
   const [formData, setFormData] = useState({
     degree: '',
@@ -26,6 +26,7 @@ export function Reg_details() {
     fields: [] as string[],
     interviewMode: '',
     linkedin: '',
+    userId: '', // Ensure userId is part of the form data
   });
 
   const handleCheckboxChange = (field: string) => {
@@ -56,10 +57,13 @@ export function Reg_details() {
       if (response.ok) {
         console.log('Form submitted successfully');
       } else {
-        console.error('Form submission failed');
+        const errorData = await response.json();
+        console.error('Form submission failed:', errorData);
+        alert(`Error: ${errorData.error}`);
       }
     } catch (error) {
       console.error('Error during form submission:', error);
+      alert('Error during form submission.');
     }
   };
 
@@ -109,7 +113,30 @@ export function Reg_details() {
       {/* Professional Experience Section */}
       <div className="space-y-2">
         <h2 className="text-2xl font-bold">Professional Experience</h2>
-        {/* Add relevant inputs for experience */}
+        <Label htmlFor="jobTitle">Job Title</Label>
+        <Input
+          id="jobTitle"
+          placeholder="e.g., Software Engineer"
+          className="bg-muted text-foreground"
+          onChange={(e) => setFormData({ ...formData, jobTitle: e.target.value })}
+        />
+
+        <Label htmlFor="company">Company Name</Label>
+        <Input
+          id="company"
+          placeholder="e.g., TechCorp"
+          className="bg-muted text-foreground"
+          onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+        />
+
+        <Label htmlFor="experience">Years of Experience</Label>
+        <Input
+          id="experience"
+          type="number"
+          placeholder="e.g., 5"
+          className="bg-muted text-foreground"
+          onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
+        />
       </div>
 
       {/* Area of Expertise Section */}
