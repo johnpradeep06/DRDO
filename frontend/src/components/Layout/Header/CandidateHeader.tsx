@@ -4,7 +4,7 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { Separator } from "@/components/ui/separator";
 
 
-export const Header: React.FC = () => {
+export const C_Header: React.FC = () => {
   const [dark, SetDark] = useState<boolean>(true);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export const Header: React.FC = () => {
           alt="User Avatar"
           className="w-10 rounded-full mx-4"
         />
-        <strong className="my-auto text-2xl">Smart interview</strong>
+        <strong className="my-auto text-2xl">Candidate Panel</strong>
       </div>
       <nav className="flex">
             <NavLink to='/Overview' className={(a)=>a.isActive?"my-auto hover:pb-2 hover:transition-all duration-500 mx-2  hover:text-red-600 dark:text-red-400 font-semibold":"my-auto hover:pb-2 hover:transition-all duration-500 mx-2 dark:text-gray-500 "}>Overview</NavLink>

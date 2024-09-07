@@ -1,24 +1,31 @@
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function Component() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+export default function AdminLogin() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    // Here you would typically handle the login logic
-    console.log('Login attempted with:', { email, password })
-  }
+    e.preventDefault();
+    console.log('Login attempted with:', { email, password });
+    
+    
+    if (email && password) {
+   
+      navigate('/scientist');
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen">
       <Card className="w-full max-w-sm mx-auto">
         <CardHeader>
-          <CardTitle>Scientist Login</CardTitle>
+          <CardTitle>Scientist  Login</CardTitle>
           <CardDescription>Enter your credentials to access your account</CardDescription>
         </CardHeader>
         <CardContent>
@@ -44,12 +51,13 @@ export default function Component() {
                 required
               />
             </div>
+            <Button type="submit" className="w-full">Log in</Button>
           </form>
         </CardContent>
         <CardFooter>
-          <Button type="submit" className="w-full">Log in</Button>
+          {/* Optionally, add more footer content here */}
         </CardFooter>
       </Card>
     </div>
-  )
+  );
 }
