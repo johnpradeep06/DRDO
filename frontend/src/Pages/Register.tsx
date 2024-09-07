@@ -9,7 +9,7 @@ import { toast } from "@/components/ui/use-toast"
 import { useNavigate } from 'react-router-dom'; 
 
 
-export default function RegistrationForm() {
+export  const RegistrationForm =() => {
   
   let navigate = useNavigate(); 
   const routeChange = () =>{ 
@@ -173,3 +173,4 @@ export default function RegistrationForm() {
     </form>
   )
 }
+export default RegistrationForm;

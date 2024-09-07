@@ -185,3 +185,4 @@ export function CandidateReg() {
     </form>
   );
 }
+export default CandidateReg;
