@@ -26,7 +26,7 @@ export function CandidateReg() {
     fields: [] as string[],
     interviewMode: '',
     linkedin: '',
-    userId: '', // Ensure userId is part of the form data
+    userId: '', 
   });
 
   const handleCheckboxChange = (field: string) => {

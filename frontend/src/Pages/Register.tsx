@@ -8,14 +8,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "@/components/ui/use-toast"
 import { useNavigate } from 'react-router-dom'; 
 
-
-export  const RegistrationForm =() => {
+export default function RegistrationForm() {
   
   let navigate = useNavigate(); 
-  const routeChange = () =>{ 
-    let path = `/`; 
-    navigate(path);
-  }
+  
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -69,8 +65,8 @@ export  const RegistrationForm =() => {
             });
             console.log('User registered:', data.user);
 
-            
-            
+            // Navigate after successful registration
+            navigate('/');
         } else {
             const errorData = await response.json();
             toast({
@@ -87,8 +83,7 @@ export  const RegistrationForm =() => {
         });
         console.error("Error during registration:", error);
     }
-};
-
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-md mx-auto p-6 bg-card rounded-lg shadow-lg">
@@ -169,8 +164,7 @@ export  const RegistrationForm =() => {
         </Select>
       </div>
 
-      <Button type="submit" className="w-full" onClick={routeChange}>Register</Button>
+      <Button type="submit" className="w-full">Register</Button>
     </form>
   )
 }
-export default RegistrationForm;
