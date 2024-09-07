@@ -9,10 +9,11 @@ export default function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  
   const navigate = useNavigate(); 
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    e.preventDefault(); // Prevents the default form submission behavior
     try {
       const response = await fetch('http://localhost:5353/admin', {
         method: 'POST',
@@ -25,7 +26,7 @@ export default function AdminLogin() {
       const data = await response.json();
 
       if (data.success) {
-        navigate('/admin');
+        navigate('/admin'); // Navigate only on success
       } else {
         setErrorMessage(data.message);
       }
@@ -66,11 +67,11 @@ export default function AdminLogin() {
                 required
               />
             </div>
+            <CardFooter>
+              <Button type="submit" className="w-full">Log in</Button> {/* Removed onClick */}
+            </CardFooter>
           </form>
         </CardContent>
-        <CardFooter>
-            <Button type="submit" className="w-full">Log in</Button>
-        </CardFooter>
       </Card>
     </div>
   );
