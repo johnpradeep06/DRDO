@@ -18,13 +18,7 @@ app.post('/register', async (req, res) => {
 
     try {
         const newUser = await prisma.user.create({
-            data: {
-                fullName,
-                email,
-                phoneNumber,
-                password,
-                role, 
-            },
+            data: { fullName, email, phoneNumber, password, role },
         });
         
         console.log("User registered:", newUser);
@@ -44,9 +38,7 @@ const loginUser = async (req, res, role) => {
     const { email, password } = req.body;
 
     try {
-        const user = await prisma.user.findUnique({
-            where: { email },
-        });
+        const user = await prisma.user.findUnique({ where: { email } });
 
         if (!user || user.password !== password || user.role !== role) {
             return res.status(401).json({ success: false, message: "Invalid credentials or unauthorized access" });
@@ -65,23 +57,12 @@ app.post('/candidate', (req, res) => loginUser(req, res, 'CANDIDATE'));
 
 app.post('/register-details', async (req, res) => {
     const {
-        highestDegree,
-        institution,
-        graduationYear,
-        major,
-        jobTitle,
-        company,
-        yearsOfExperience,
-        skills,
-        researchTitle,
-        researchField,
-        researchSummary,
-        areasOfExpertise,
-        interviewMode,
-        availabilityDate,
-        linkedInURL,
-        userId
+        highestDegree, institution, graduationYear, major, jobTitle, company, yearsOfExperience,
+        skills, researchTitle, researchField, researchSummary, areasOfExpertise,
+        interviewMode, availabilityDate, linkedInURL, userId
     } = req.body;
+
+    console.log("Incoming request:", req.body);
 
     if (!highestDegree || !institution || !graduationYear || !major || !interviewMode || !availabilityDate || !userId) {
         return res.status(400).json({ error: "All required fields must be provided." });
@@ -90,22 +71,10 @@ app.post('/register-details', async (req, res) => {
     try {
         const candidateDetails = await prisma.candidateDetails.create({
             data: {
-                highestDegree,
-                institution,
-                graduationYear,
-                major,
-                jobTitle,
-                company,
-                yearsOfExperience,
-                skills,
-                researchTitle,
-                researchField,
-                researchSummary,
-                areasOfExpertise,
-                interviewMode,
-                availabilityDate: new Date(availabilityDate),
-                linkedInURL,
-                userId
+                highestDegree, institution, graduationYear, major, jobTitle, company, 
+                yearsOfExperience, skills, researchTitle, researchField, researchSummary, 
+                areasOfExpertise, interviewMode, availabilityDate: new Date(availabilityDate), 
+                linkedInURL, userId
             }
         });
 
@@ -116,6 +85,7 @@ app.post('/register-details', async (req, res) => {
         return res.status(500).json({ error: "Failed to register candidate details." });
     }
 });
+
 
 app.get("/", (req, res) => {
     res.status(200).json({ message: "Welcome to the Role-Based Login API" });
