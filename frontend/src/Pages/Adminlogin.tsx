@@ -8,16 +8,30 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 export default function AdminLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate(); 
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login attempted with:', { email, password });
-    
-    
-    if (email && password) {
-   
-      navigate('/admin');
+    try {
+      const response = await fetch('http://localhost:5353/admin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password, role: 'ADMIN' }), 
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        navigate('/admin');
+      } else {
+        setErrorMessage(data.message);
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+      setErrorMessage('Something went wrong. Please try again later.');
     }
   };
 
@@ -30,6 +44,7 @@ export default function AdminLogin() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
+            {errorMessage && <p className="text-red-500">{errorMessage}</p>}
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -51,11 +66,10 @@ export default function AdminLogin() {
                 required
               />
             </div>
-            <Button type="submit" className="w-full">Log in</Button>
           </form>
         </CardContent>
         <CardFooter>
-          {/* Optionally, add more footer content here */}
+            <Button type="submit" className="w-full">Log in</Button>
         </CardFooter>
       </Card>
     </div>
