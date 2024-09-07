@@ -28,6 +28,7 @@ export default function RegistrationForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    
     if (formData.password !== formData.confirmPassword) {
       toast({
         title: "Error",
@@ -43,13 +44,7 @@ export default function RegistrationForm() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          fullName: formData.fullName,
-          email: formData.email,
-          phoneNumber: formData.phoneNumber,
-          password: formData.password,
-          role: formData.role
-        }),
+        body: JSON.stringify(formData),
       })
 
       if (response.ok) {
