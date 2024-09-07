@@ -1,6 +1,6 @@
 import { CustomerSupport } from '@/components/dashboard/Scientist/CustomerSupport';
 import { FinancialDash } from '@/components/dashboard/Scientist/FinancialDash';
-import { MarketingDash } from '@/components/dashboard/Scientist/MarketingDash';
+import { Applicants } from '@/components/dashboard/Admin/applicants';
 import { ScientistProfile } from '@/components/dashboard/Scientist/quickacess';
 
 import { Button } from '@/components/ui/button';
@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 
 
 
-type Tab = 'Finance' | 'Market' | 'Dashcontent' | 'Project' | 'Customer'|'Report';
+type Tab = 'Finance' | 'Applicants' | 'Dashcontent' | 'Project' | 'Customer'|'Report';
 
 export const A_Dashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>('Dashcontent');
@@ -25,8 +25,8 @@ export const A_Dashboard: React.FC = () => {
       case 'Finance':
         setCurDash(<FinancialDash />);
         break;
-      case 'Market':
-        setCurDash(<MarketingDash />);
+      case 'Applicants':
+        setCurDash(<Applicants />);
         break;
       case 'Customer':
         setCurDash(<CustomerSupport />);
@@ -60,14 +60,14 @@ export const A_Dashboard: React.FC = () => {
         </li>
         <li>
           <Button
-            onClick={() => handleTabChange('Market')}
+            onClick={() => handleTabChange('Applicants')}
             className={`w-full px-8 py-5 text-left rounded-lg transition-colors duration-300 ${
-              activeTab === 'Market'
+              activeTab === 'Applicants'
               ? 'bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-300' 
               : 'bg-gray-50 hover:bg-gray-100 text-gray-900 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-100' 
             }`}
           >
-            Pending application
+            Applicants 
           </Button>
         </li>
         <li>
@@ -111,7 +111,7 @@ export const A_Dashboard: React.FC = () => {
           <Button
             onClick={() => handleTabChange('Report')}
             className={`w-full px-8 py-5 text-left rounded-lg transition-colors duration-300 ${
-              activeTab === 'Customer'
+              activeTab === 'Report'
               ? 'bg-black text-white hover:bg-gray-900 dark:bg-white dark:text-black dark:hover:bg-gray-300' 
               : 'bg-gray-50 hover:bg-gray-100 text-gray-900 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-gray-100' 
             }`}

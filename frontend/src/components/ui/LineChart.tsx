@@ -41,7 +41,7 @@ export const ScoreChart = () => {
   ];
 
   return (
-    <Card className="flex flex-col lg:max-w-xs">
+    <Card className="flex flex-col lg:max-w-50">
       <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-2 [&>div]:flex-1">
         <div>
           <CardDescription>Expert Relevance</CardDescription>
