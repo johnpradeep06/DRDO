@@ -18,7 +18,8 @@ import {
 import {
   ChartContainer,
   ChartTooltipContent,
-} from "@/components/ui/chart"; // Adjust import paths as per your project structure
+} from "@/components/ui/chart"; 
+
 
 // Define the type for the chart data
 interface ChartData {
@@ -27,7 +28,7 @@ interface ChartData {
   expertiseMatch: number;
 }
 
-export const LineChart = () => {
+export const ScoreChart = () => {
   // Use ChartData[] type for chartData
   const chartData: ChartData[] = [
     { month: "2024-01", relevance: 78, expertiseMatch: 65 },
