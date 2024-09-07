@@ -26,7 +26,7 @@ export default function RegistrationForm() {
     setFormData(prev => ({ ...prev, role: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (formData.password !== formData.confirmPassword) {
       toast({
@@ -36,12 +36,45 @@ export default function RegistrationForm() {
       })
       return
     }
-    // Here you would typically send the data to your backend
-    console.log('Form submitted:', formData)
-    toast({
-      title: "Success",
-      description: "Registration submitted successfully!",
-    })
+
+    try {
+      const response = await fetch('http://localhost:5353/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+          phoneNumber: formData.phoneNumber,
+          password: formData.password,
+          role: formData.role
+        }),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        toast({
+          title: "Success",
+          description: "Registration submitted successfully!",
+        })
+        console.log('User registered:', data.user)
+      } else {
+        const errorData = await response.json()
+        toast({
+          title: "Error",
+          description: errorData.error || "Failed to register.",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to register. Please try again later.",
+        variant: "destructive",
+      })
+      console.error("Error during registration:", error)
+    }
   }
 
   return (
@@ -116,9 +149,9 @@ export default function RegistrationForm() {
             <SelectValue placeholder="Select a role" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="admin">Admin</SelectItem>
-            <SelectItem value="candidate">Candidate</SelectItem>
-            <SelectItem value="scientist">Scientist</SelectItem>
+            <SelectItem value="ADMIN">Admin</SelectItem>
+            <SelectItem value="CANDIDATE">Candidate</SelectItem>
+            <SelectItem value="SCIENTIST">Scientist</SelectItem>
           </SelectContent>
         </Select>
       </div>

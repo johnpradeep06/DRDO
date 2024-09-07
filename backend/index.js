@@ -1,8 +1,12 @@
 import express from 'express';
+import cors from 'cors';
 import prisma from './prisma/prismaClient.js'; 
 import { checkDB } from './prisma/checkDB.js';
 
 const app = express();
+const PORT = process.env.PORT || 5252;
+
+app.use(cors());
 app.use(express.json());
 
 app.post('/register', async (req, res) => {
@@ -18,7 +22,7 @@ app.post('/register', async (req, res) => {
                 role,
             },
         });
-        
+        console.log("User registered: ", newUser);
         res.status(201).json({ message: "User registered successfully!", user: newUser });
     } catch (error) {
         console.error("Error registering user:", error);
@@ -30,7 +34,6 @@ app.get("/", (req, res) => {
     console.log("Jo");
 });
 
-const PORT = process.env.PORT || 5252;
 
 app.listen(PORT, async () => {
   console.log(`Backend running at server: ${PORT}`);
