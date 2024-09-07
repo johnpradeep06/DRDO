@@ -35,8 +35,10 @@ app.post('/register', async (req, res) => {
 });
 
 const loginUser = async (req, res, role) => {
+        console.log('Request received at login for role:', role);
+        console.log('Request body:', req.body);
+    
     const { email, password } = req.body;
-
     try {
         const user = await prisma.user.findUnique({ where: { email } });
 
