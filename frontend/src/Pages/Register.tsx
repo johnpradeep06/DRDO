@@ -8,14 +8,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { toast } from "@/components/ui/use-toast"
 import { useNavigate } from 'react-router-dom'; 
 
-
 export default function RegistrationForm() {
   
   let navigate = useNavigate(); 
-  const routeChange = () =>{ 
+  const routeChange = () => { 
     let path = `/`; 
     navigate(path);
   }
+
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -38,57 +38,55 @@ export default function RegistrationForm() {
     e.preventDefault();
     
     if (formData.password !== formData.confirmPassword) {
-        toast({
-            title: "Error",
-            description: "Passwords do not match",
-            variant: "destructive",
-        });
-        return;
+      toast({
+        title: "Error",
+        description: "Passwords do not match",
+        variant: "destructive",
+      });
+      return;
     }
 
     try {
-        const response = await fetch('http://localhost:5353/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                fullName: formData.fullName,
-                email: formData.email,
-                phoneNumber: formData.phoneNumber,
-                password: formData.password,
-                role: formData.role,
-            }),
-        });
+      const response = await fetch('http://localhost:5353/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+          phoneNumber: formData.phoneNumber,
+          password: formData.password,
+          role: formData.role,
+        }),
+      });
 
-        if (response.ok) {
-            const data = await response.json();
-            toast({
-                title: "Success",
-                description: "Registration submitted successfully!",
-            });
-            console.log('User registered:', data.user);
-
-            
-            
-        } else {
-            const errorData = await response.json();
-            toast({
-                title: "Error",
-                description: errorData.error || "Failed to register.",
-                variant: "destructive",
-            });
-        }
-    } catch (error) {
+      if (response.ok) {
+        const data = await response.json();
         toast({
-            title: "Error",
-            description: "Failed to register. Please try again later.",
-            variant: "destructive",
+          title: "Success",
+          description: "Registration submitted successfully!",
         });
-        console.error("Error during registration:", error);
-    }
-};
+        console.log('User registered:', data.user);
 
+        routeChange(); 
+      } else {
+        const errorData = await response.json();
+        toast({
+          title: "Error",
+          description: errorData.error || "Failed to register.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to register. Please try again later.",
+        variant: "destructive",
+      });
+      console.error("Error during registration:", error);
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-md mx-auto p-6 bg-card rounded-lg shadow-lg">
@@ -169,7 +167,7 @@ export default function RegistrationForm() {
         </Select>
       </div>
 
-      <Button type="submit" className="w-full" onClick={routeChange}>Register</Button>
+      <Button type="submit" className="w-full">Register</Button>
     </form>
   )
 }
