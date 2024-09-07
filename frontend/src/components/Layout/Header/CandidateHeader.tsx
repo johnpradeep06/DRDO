@@ -25,15 +25,7 @@ export const C_Header: React.FC = () => {
         />
         <strong className="my-auto text-2xl">Candidate Panel</strong>
       </div>
-      <nav className="flex">
-            <NavLink to='/Overview' className={(a)=>a.isActive?"my-auto hover:pb-2 hover:transition-all duration-500 mx-2  hover:text-red-600 dark:text-red-400 font-semibold":"my-auto hover:pb-2 hover:transition-all duration-500 mx-2 dark:text-gray-500 "}>Overview</NavLink>
-            <Separator orientation="vertical" />
-            <NavLink to='/Status' className={(a)=>a.isActive?"my-auto hover:pb-2 hover:transition-all duration-500 mx-2  text-red-600 dark:text-red-400 font-semibold":"my-auto hover:pb-2 hover:transition-all duration-500 mx-2 dark:text-gray-500 "}>Panel Status</NavLink>
-            <Separator orientation="vertical" />
-            <NavLink to='/Alerts' className={(a)=>a.isActive?"my-auto hover:pb-2 hover:transition-all duration-500 mx-2  text-red-600 dark:text-red-400 font-semibold":"my-auto hover:pb-2 hover:transition-all duration-500 mx-2 dark:text-gray-500 "}>Alerts</NavLink>
-            
-
-        </nav>
+      
       <div className="mx-5 flex">
         <ModeToggle />
         <img
