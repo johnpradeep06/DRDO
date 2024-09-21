@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   CartesianGrid,
   Line,
@@ -6,7 +7,7 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-} from "recharts"; // Ensure Recharts types are installed
+} from "recharts";
 
 import {
   Card,
@@ -14,11 +15,11 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"; // Adjust import paths as per your project structure
+} from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltipContent,
-} from "@/components/ui/chart"; 
+} from "@/components/ui/chart";
 
 // Define the type for the chart data
 interface ChartData {
@@ -27,8 +28,7 @@ interface ChartData {
   expertiseMatch: number;
 }
 
-export const ScoreChart = () => {
-  // Use ChartData[] type for chartData
+export const ScoreChart: React.FC = () => {
   const chartData: ChartData[] = [
     { month: "2024-01", relevance: 78, expertiseMatch: 65 },
     { month: "2024-02", relevance: 85, expertiseMatch: 70 },
@@ -40,7 +40,7 @@ export const ScoreChart = () => {
   ];
 
   return (
-    <Card className="flex flex-col max-w-[300px]"> {/* Set max width for the card */}
+    <Card className="flex flex-col max-w-[300px]">
       <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-2 [&>div]:flex-1">
         <div>
           <CardDescription>Expert Relevance</CardDescription>
@@ -69,14 +69,10 @@ export const ScoreChart = () => {
           }}
           className="w-full"
         >
-          <ResponsiveContainer width="100%" height={100}> {/* Set height to 200px */}
+          <ResponsiveContainer width="100%" height={200}>
             <RechartsLineChart
               data={chartData}
-              margin={{
-                left: 14,
-                right: 14,
-                top: 10,
-              }}
+              
             >
               <CartesianGrid
                 strokeDasharray="4 4"
@@ -99,7 +95,6 @@ export const ScoreChart = () => {
               <Line
                 dataKey="relevance"
                 type="natural"
-                fill="var(--color-relevance)"
                 stroke="var(--color-relevance)"
                 strokeWidth={2}
                 dot={false}
@@ -112,7 +107,6 @@ export const ScoreChart = () => {
               <Line
                 dataKey="expertiseMatch"
                 type="natural"
-                fill="var(--color-expertise)"
                 stroke="var(--color-expertise)"
                 strokeWidth={2}
                 dot={false}
@@ -123,17 +117,16 @@ export const ScoreChart = () => {
                 }}
               />
               <Tooltip
-                content={
+                content={({ label, payload }) => (
                   <ChartTooltipContent
                     indicator="line"
-                    labelFormatter={(value: string) =>
-                      new Date(value + "-01").toLocaleDateString("en-US", {
-                        month: "long",
-                        year: "numeric",
-                      })
-                    }
+                    label={new Date(label + "-01").toLocaleDateString("en-US", {
+                      month: "long",
+                      year: "numeric",
+                    })}
+                    payload={payload}
                   />
-                }
+                )}
                 cursor={false}
               />
             </RechartsLineChart>

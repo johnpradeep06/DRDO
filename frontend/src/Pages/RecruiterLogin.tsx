@@ -1,5 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -16,7 +27,6 @@ const Login: React.FC = () => {
                 password,
             });
             setToken(response.data.token);
-            // Optionally, store the token in local storage
             localStorage.setItem('token', response.data.token);
             alert('Login successful!');
         } catch (err: any) {
@@ -29,31 +39,44 @@ const Login: React.FC = () => {
     };
 
     return (
-        <div>
-            <h2>Login</h2>
-            <form onSubmit={handleLogin}>
-                <div>
-                    <label>Email:</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                <button type="submit">Login</button>
-            </form>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            {token && <p>Token: {token}</p>}
+        <div className="flex items-center justify-center min-h-screen">
+            <Card className="w-full max-w-sm">
+                <CardHeader>
+                    <CardTitle className="text-2xl">Recruiter</CardTitle>
+                    <CardDescription>
+                        Enter your email below to login to your account.
+                    </CardDescription>
+                </CardHeader>
+                <form onSubmit={handleLogin}>
+                    <CardContent className="grid gap-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="email">Email</Label>
+                            <Input
+                                id="email"
+                                type="email"
+                                placeholder="m@example.com"
+                                required
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="password">Password</Label>
+                            <Input
+                                id="password"
+                                type="password"
+                                required
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </div>
+                        {error && <p className="text-red-500">{error}</p>}
+                    </CardContent>
+                    <CardFooter>
+                        <Button type="submit" className="w-full">Sign in</Button>
+                    </CardFooter>
+                </form>
+            </Card>
         </div>
     );
 };
