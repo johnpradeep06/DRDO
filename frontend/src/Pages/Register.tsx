@@ -13,9 +13,9 @@ export default function RegistrationForm() {
   let navigate = useNavigate(); 
 
   const [formData, setFormData] = useState({
-    full_name: '',
+    fullName: '',
     email: '',
-    phone_number: '',
+    phoneNumber: '',
     password: '',
     confirmPassword: '',
     role: ''
@@ -47,9 +47,9 @@ export default function RegistrationForm() {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                fullname: formData.full_name,
+                fullName: formData.fullName,
                 email: formData.email,
-                phonenumber: formData.phone_number,
+                phoneNumber: formData.phoneNumber,
                 password: formData.password,
                 role: formData.role,
             }),
@@ -57,7 +57,7 @@ export default function RegistrationForm() {
         
         if (response.ok) {
             const data = await response.json();
-            console.log('User registered:', data.full_name);
+            console.log('User registered:', data.fullName);
             navigate('/');  // Navigate after successful registration
         } else {
             const errorData = await response.json();
@@ -81,11 +81,11 @@ export default function RegistrationForm() {
       <h2 className="text-2xl font-bold text-center mb-6">Register</h2>
       
       <div className="space-y-2">
-        <Label htmlFor="full_name">Full Name</Label>
+        <Label htmlFor="fullName">Full Name</Label>
         <Input 
-          id="full_name" 
-          name="full_name" 
-          value={formData.full_name} 
+          id="fullName" 
+          name="fullName" 
+          value={formData.fullName} 
           onChange={handleInputChange} 
           required 
         />
@@ -104,12 +104,12 @@ export default function RegistrationForm() {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="phone_number">Phone Number</Label>
+        <Label htmlFor="phoneNumber">Phone Number</Label>
         <Input 
-          id="phone_number" 
-          name="phone_number" 
+          id="phoneNumber" 
+          name="phoneNumber" 
           type="tel" 
-          value={formData.phone_number} 
+          value={formData.phoneNumber} 
           onChange={handleInputChange} 
           required 
         />
