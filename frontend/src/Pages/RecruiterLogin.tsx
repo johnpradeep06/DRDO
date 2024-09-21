@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +18,10 @@ const Login: React.FC = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [token, setToken] = useState('');
+
+    const navigate = useNavigate();
+    const handleClick = (url: string)=>{
+        return ()=>navigate(url);}
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -73,7 +78,7 @@ const Login: React.FC = () => {
                         {error && <p className="text-red-500">{error}</p>}
                     </CardContent>
                     <CardFooter>
-                        <Button type="submit" className="w-full">Sign in</Button>
+                        <Button type="submit" className="w-full" onSubmit={handleClick('/admin')}>Sign in</Button>
                     </CardFooter>
                 </form>
             </Card>
