@@ -13,7 +13,7 @@ export default function RegistrationForm() {
   let navigate = useNavigate(); 
 
   const [formData, setFormData] = useState({
-    full_name: '',g
+    full_name: '',
     email: '',
     phone_number: '',
     password: '',
