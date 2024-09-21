@@ -41,15 +41,15 @@ export default function RegistrationForm() {
     }
 
     try {
-        const response = await fetch('http://localhost:8000/api/register/', {
+        const response = await fetch('http://localhost:5000/api/register/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                full_name: formData.full_name,
+                fullname: formData.full_name,
                 email: formData.email,
-                phone_number: formData.phone_number,
+                phonenumber: formData.phone_number,
                 password: formData.password,
                 role: formData.role,
             }),
@@ -148,8 +148,8 @@ export default function RegistrationForm() {
             <SelectValue placeholder="Select a role" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="RECRUITER">Recruiter</SelectItem>
-            <SelectItem value="CANDIDATE">Candidate</SelectItem>
+            <SelectItem value="RECRUITER">RECRUITER</SelectItem>
+            <SelectItem value="CANDIDATE">CANDIDATE</SelectItem>
           </SelectContent>
         </Select>
         <Toaster richColors/>
