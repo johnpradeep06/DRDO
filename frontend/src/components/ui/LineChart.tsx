@@ -20,7 +20,6 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"; 
 
-
 // Define the type for the chart data
 interface ChartData {
   month: string;
@@ -41,20 +40,18 @@ export const ScoreChart = () => {
   ];
 
   return (
-    <Card className="flex flex-col lg:max-w-50">
+    <Card className="flex flex-col max-w-[300px]"> {/* Set max width for the card */}
       <CardHeader className="flex flex-row items-center gap-4 space-y-0 pb-2 [&>div]:flex-1">
         <div>
           <CardDescription>Expert Relevance</CardDescription>
           <CardTitle className="flex items-baseline gap-1 text-4xl tabular-nums">
             90%
-           
           </CardTitle>
         </div>
         <div>
-          <CardDescription >Expertise Match</CardDescription>
+          <CardDescription>Expertise Match</CardDescription>
           <CardTitle className="flex items-baseline gap-1 text-4xl tabular-nums">
             85%
-           
           </CardTitle>
         </div>
       </CardHeader>
@@ -72,7 +69,7 @@ export const ScoreChart = () => {
           }}
           className="w-full"
         >
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={100}> {/* Set height to 200px */}
             <RechartsLineChart
               data={chartData}
               margin={{

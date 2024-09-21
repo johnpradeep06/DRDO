@@ -5,8 +5,7 @@ import NavWrapper from "./wrapper/NavWrapper";
 import Register from "./Pages/Register";
 import UsersList from "./Pages/displaylist";
 import { Toaster } from "./components/ui/sonner";
-import {A_Header} from "./components/Layout/Header/AdminHeader";
-import { A_Dashboard} from "./Pages/Dashboard/Admin/Admin";
+import { Dashboard} from "./Pages/Dashboard/Admin/recruiter";
 
 import Login from "./Pages/RecruiterLogin";
 
@@ -27,8 +26,8 @@ function App() {
 
         <Route path="/admin" element={
           <>
-          <A_Header/>
-          <A_Dashboard />
+          
+          <Dashboard />
           </>
             
         } />
