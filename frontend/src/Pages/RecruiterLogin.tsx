@@ -27,7 +27,7 @@ const Login: React.FC = () => {
         e.preventDefault();
         setError('');
         try {
-            const response = await axios.post('http://localhost:8000/api/login/', {
+            const response = await axios.post('http://localhost:5000/api/recruiter/', {
                 email,
                 password,
             });

@@ -15,6 +15,29 @@ app.get('/', async (req, res) => {
     res.status(200).json({ message: 'Server is running!' });
 });
 
+app.post('/api/recruiter/', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const recruiter = await prisma.user.findUnique({
+            where: { email },
+        });
+
+        if (!recruiter || recruiter.role !== 'RECRUITER') {
+            return res.status(401).json({ error: 'Recruiter not found or invalid role' });
+        }
+
+        if (recruiter.password !== password) {
+            return res.status(401).json({ error: 'Invalid password' });
+        }
+        console.log("Successful da!!");
+        res.status(200).json({ message: 'Sign in successful', recruiter: { email: recruiter.email, role: recruiter.role } });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Something went wrong' });
+    }
+});
 app.post('/api/register', async (req, res) => {
     console.log("Hi");
     const { fullName, email, phoneNumber, password, role } = req.body;
