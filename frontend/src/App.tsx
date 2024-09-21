@@ -1,17 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "./Pages/Landing";
 import NavWrapper from "./wrapper/NavWrapper";
-import CandidateLogin from "./Pages/CandidateLogin";
-import ScientistLogin from "./Pages/ScientistLogin";
+
 import Register from "./Pages/Register";
 import UsersList from "./Pages/displaylist";
 import { Toaster } from "./components/ui/sonner";
 import {A_Header} from "./components/Layout/Header/AdminHeader";
 import { A_Dashboard} from "./Pages/Dashboard/Admin/Admin";
-import { C_Dashboard} from "./Pages/Dashboard/Admin/Candidate";
-import { S_Dashboard} from "./Pages/Dashboard/Admin/Scientist";
-import {C_Header} from "./components/Layout/Header/CandidateHeader";
-import {S_Header} from "./components/Layout/Header/ScientistHeader";
+
 import Login from "./Pages/RecruiterLogin";
 
 
@@ -26,8 +22,6 @@ function App() {
           </NavWrapper>
         } />
         <Route path="/auth/list" element={<UsersList/>}/>
-        <Route path="/auth/Candidate" element={<CandidateLogin />} />
-        <Route path="/auth/Scientist" element={<ScientistLogin />} />
         <Route path="/auth/register" element={<Register />} />
         <Route path="/auth/recruiter" element={<Login />} />
 
@@ -38,20 +32,8 @@ function App() {
           </>
             
         } />
-        <Route path="/candidate" element={
-          <>
-          <C_Header/>
-          <C_Dashboard />
-          </>
-            
-        } />
-        <Route path="/scientist" element={
-          <>
-          <S_Header/>
-          <S_Dashboard />
-          </>
-            
-        } />
+        
+       
         
       </Routes>
     </BrowserRouter>
