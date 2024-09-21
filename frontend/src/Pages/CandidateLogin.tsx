@@ -11,16 +11,17 @@ export default function AdminLogin() {
   const [errorMessage, setErrorMessage] = useState('');
   
   const navigate = useNavigate(); 
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); // Prevents the default form submission behavior
     try {
-      const response = await fetch('http://localhost:5353/candidate', {
+      const response = await fetch('http://localhost:8000/candidate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password, role: 'ADMIN' }), 
+        body: JSON.stringify({ email, password, role: 'RECRUITER' }), 
       });
 
       const data = await response.json();
@@ -40,7 +41,7 @@ export default function AdminLogin() {
     <div className="flex items-center justify-center min-h-screen">
       <Card className="w-full max-w-sm mx-auto">
         <CardHeader>
-          <CardTitle>Candidate Login</CardTitle>
+          <CardTitle>Recruiter Login</CardTitle>
           <CardDescription>Enter your credentials to access your account</CardDescription>
         </CardHeader>
         <CardContent>
@@ -68,7 +69,7 @@ export default function AdminLogin() {
               />
             </div>
             <CardFooter>
-              <Button type="submit" className="w-full">Log in</Button> {/* Removed onClick */}
+              <Button type="submit" className="w-full" >Log in</Button> 
             </CardFooter>
           </form>
         </CardContent>

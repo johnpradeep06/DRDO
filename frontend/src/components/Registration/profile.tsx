@@ -84,25 +84,7 @@ export const Profile = ()=>{
               </FormItem>
             )}
           />
-          <FormField 
-            control={control}
-            name="profile.presentAge"
-            render={({field})=>(
-              <FormItem>
-                <FormLabel>
-                  Present Age
-                </FormLabel>
-                <FormControl>
-                <Input type="number" placeholder="Your present age" 
-                  className="dark:bg-neutral-900"
-                  onChange={field.onChange}
-                  defaultValue={field.value} 
-                />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          
           <FormField 
             control={control}
             name="profile.gender"
@@ -167,32 +149,7 @@ export const Profile = ()=>{
               </FormItem>
             )}
           />
-          <FormField 
-            control={control}
-            name="profile.caste"
-            render={({field})=>(
-              <FormItem>
-                <FormLabel>
-                  Caste
-                </FormLabel>
-                <FormControl>
-                  <RadioGroup                  
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="flex space-x-2"
-                    >
-                    {castes.map((caste, index)=>(
-                      <FormItem className="flex items-center space-x-3 space-y-0" key={index}>
-                        <FormControl><RadioGroupItem value={caste} /></FormControl>
-                        <FormLabel>{caste}</FormLabel>
-                      </FormItem>
-                    ))}
-                  </RadioGroup>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          
           <div className="lg:flex justify-between lg:space-x-2 max-lg:border max-lg:rounded-xl max-lg:p-2 max-lg:space-y-1 max-lg:shadow-sm">
             <FormField 
               control={control}

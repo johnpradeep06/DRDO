@@ -19,31 +19,7 @@ export const Navbar = () => {
           RedHawk
         </div>
         <div className="flex gap-x-4">
-        <Button 
-            className="text-sm" 
-            onClick={handleClick("/auth/Admin")}
-          >
-            Admin
-          </Button>
-        <Button 
-            className="text-sm" 
-            onClick={handleClick("/auth/Scientist")}
-          >
-            Scientist
-          </Button>
-        <Button 
-            className="text-sm" 
-            onClick={handleClick("/auth/Candidate")}
-          >
-            Candidate
-          </Button>
-          <Button 
-            variant={"ghost"} 
-            className="text-sm" 
-            onClick={handleClick("/auth/register")}
-          >
-            Register
-          </Button>
+        
           
           <ModeToggle />
         </div>

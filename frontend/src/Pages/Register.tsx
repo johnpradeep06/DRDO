@@ -1,100 +1,91 @@
-'use client'
-
-import { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { toast } from "@/components/ui/use-toast"
+'use client';
+import { useState } from 'react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+//import { toast } from "@/components/ui/use-toast";
 import { useNavigate } from 'react-router-dom'; 
+import {Toaster,toast} from 'sonner';
 
 export default function RegistrationForm() {
   
   let navigate = useNavigate(); 
-  
+
   const [formData, setFormData] = useState({
-    fullName: '',
+    full_name: '',
     email: '',
-    phoneNumber: '',
+    phone_number: '',
     password: '',
     confirmPassword: '',
     role: ''
-  })
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
-  }
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
 
   const handleRoleChange = (value: string) => {
-    setFormData(prev => ({ ...prev, role: value }))
-  }
+    setFormData(prev => ({ ...prev, role: value }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log(formData); // Log the formData before sending it
+
     if (formData.password !== formData.confirmPassword) {
-        toast({
-            title: "Error",
-            description: "Passwords do not match",
-            variant: "destructive",
-        });
+        toast.error("password mismatch")
         return;
     }
 
     try {
-        const response = await fetch('http://localhost:5353/register', {
+        const response = await fetch('http://localhost:8000/api/register/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                fullName: formData.fullName,
+                full_name: formData.full_name,
                 email: formData.email,
-                phoneNumber: formData.phoneNumber,
+                phone_number: formData.phone_number,
                 password: formData.password,
                 role: formData.role,
             }),
         });
-
+        
         if (response.ok) {
             const data = await response.json();
-            toast({
-                title: "Success",
-                description: "Registration submitted successfully!",
-            });
-            console.log('User registered:', data.user);
-
-            // Navigate after successful registration
-            navigate('/');
+            console.log('User registered:', data.full_name);
+            navigate('/');  // Navigate after successful registration
         } else {
             const errorData = await response.json();
-            toast({
-                title: "Error",
-                description: errorData.error || "Failed to register.",
-                variant: "destructive",
-            });
+            if (errorData.email && Array.isArray(errorData.email)) {
+             
+              toast.error("Email address already exists");
+          }
+            console.log(errorData);
+            
+           
         }
     } catch (error) {
-        toast({
-            title: "Error",
-            description: "Failed to register. Please try again later.",
-            variant: "destructive",
-        });
+        
         console.error("Error during registration:", error);
     }
-  };
+};
+
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-md mx-auto p-6 bg-card rounded-lg shadow-lg">
+    <form onSubmit={handleSubmit} className="space-y-6 max-w-md mx-auto mt-8 p-6 bg-card rounded-lg shadow-lg shadow-[0_-4px_10px_rgba(0,0,0,0.1)]">
       <h2 className="text-2xl font-bold text-center mb-6">Register</h2>
       
       <div className="space-y-2">
-        <Label htmlFor="fullName">Full Name</Label>
+        <Label htmlFor="full_name">Full Name</Label>
         <Input 
-          id="fullName" 
-          name="fullName" 
-          value={formData.fullName} 
+          id="full_name" 
+          name="full_name" 
+          value={formData.full_name} 
           onChange={handleInputChange} 
           required 
         />
@@ -113,12 +104,12 @@ export default function RegistrationForm() {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="phoneNumber">Phone Number</Label>
+        <Label htmlFor="phone_number">Phone Number</Label>
         <Input 
-          id="phoneNumber" 
-          name="phoneNumber" 
+          id="phone_number" 
+          name="phone_number" 
           type="tel" 
-          value={formData.phoneNumber} 
+          value={formData.phone_number} 
           onChange={handleInputChange} 
           required 
         />
@@ -157,14 +148,14 @@ export default function RegistrationForm() {
             <SelectValue placeholder="Select a role" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="ADMIN">Admin</SelectItem>
+            <SelectItem value="RECRUITER">Recruiter</SelectItem>
             <SelectItem value="CANDIDATE">Candidate</SelectItem>
-            <SelectItem value="SCIENTIST">Scientist</SelectItem>
           </SelectContent>
         </Select>
+        <Toaster richColors/>
       </div>
 
-      <Button type="submit" className="w-full">Register</Button>
+      <Button type="submit" className="w-full" onSubmit={() => toast.success('successfully registered')}>Register</Button>
     </form>
-  )
+  );
 }
