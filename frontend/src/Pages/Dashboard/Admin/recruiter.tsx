@@ -16,7 +16,7 @@ import { Dash } from '@/components/dashboard/dashboard';
 import { Jobpost } from '@/components/dashboard/jobpost';
 import { Questions } from '@/components/dashboard/questions';
 
-export function Dashboard() {
+export function RecruiterDashboard() {
   const [userName, setUserName] = useState("");
   const [curDash, setCurDash] = useState<"Dashboard" | "Job Posts" | "Candidates" | "AI Questions">("Dashboard");
 

@@ -1,13 +1,14 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "./Pages/Landing";
 import NavWrapper from "./wrapper/NavWrapper";
-
+import CLogin from "./Pages/CandidateLogin";
 import Register from "./Pages/Register";
 import UsersList from "./Pages/displaylist";
 import { Toaster } from "./components/ui/sonner";
-import { Dashboard} from "./Pages/Dashboard/Admin/recruiter";
+import { RecruiterDashboard} from "./Pages/Dashboard/Admin/recruiter";
+import { CandidateDashboard } from "./Pages/Dashboard/Admin/CandidateDashboard";
 
-import Login from "./Pages/RecruiterLogin";
+import RLogin from "./Pages/RecruiterLogin";
 
 
 function App() {
@@ -20,14 +21,22 @@ function App() {
             <Landing />
           </NavWrapper>
         } />
+        <Route path="/auth/candidate" element={<CLogin/>}/>
         <Route path="/auth/list" element={<UsersList/>}/>
         <Route path="/auth/register" element={<Register />} />
-        <Route path="/auth/recruiter" element={<Login />} />
+        <Route path="/auth/recruiter" element={<RLogin />} />
 
         <Route path="/admin" element={
           <>
           
-          <Dashboard />
+          <RecruiterDashboard />
+          </>
+            
+        } />
+        <Route path="/candidate" element={
+          <>
+          
+          <CandidateDashboard />
           </>
             
         } />

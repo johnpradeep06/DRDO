@@ -1,0 +1,25 @@
+/* ToastStyles.css */
+
+/* Override Sonner's default toast background color */
+.toast {
+    background-color: #4caf50 !important; /* Custom background color */
+    color: white !important; /* Custom text color */
+  }
+  
+  /* Customize specific types */
+  .toast--success {
+    background-color: #28a745 !important; /* Green for success */
+  }
+  
+  .toast--error {
+    background-color: #dc3545 !important; /* Red for error */
+  }
+  
+  .toast--info {
+    background-color: #17a2b8 !important; /* Blue for info */
+  }
+  
+  .toast--warning {
+    background-color: #ffc107 !important; /* Yellow for warning */
+  }
+  

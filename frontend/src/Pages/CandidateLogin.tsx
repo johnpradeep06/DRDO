@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from 'sonner';
 
-const RLogin: React.FC = () => {
+const CLogin: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -28,7 +28,7 @@ const RLogin: React.FC = () => {
         e.preventDefault();
         setError('');
         try {
-            const response = await axios.post('http://localhost:5000/api/recruiter/', {
+            const response = await axios.post('http://localhost:5000/api/candidate/', {
                 email,
                 password,
             });
@@ -38,7 +38,7 @@ const RLogin: React.FC = () => {
             toast.success('successfull Login');
             
             // Redirect to /admin after successful login
-            navigate('/admin');
+            navigate('/candidate');
         } catch (err: any) {
             if (err.response) {
                 setError(err.response.data.non_field_errors || 'Login failed');
@@ -53,7 +53,7 @@ const RLogin: React.FC = () => {
             <Toaster richColors/>
             <Card className="w-full max-w-sm">
                 <CardHeader>
-                    <CardTitle className="text-2xl">Recruiter</CardTitle>
+                    <CardTitle className="text-2xl">candidate</CardTitle>
                     <CardDescription>
                         Enter your email below to login to your account.
                     </CardDescription>
@@ -92,4 +92,4 @@ const RLogin: React.FC = () => {
     );
 };
 
-export default RLogin;
+export default CLogin;

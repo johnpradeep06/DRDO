@@ -36,7 +36,7 @@ const Landing = () => {
 
           <Card 
             className="w-64 hover:shadow-lg transition-shadow duration-300 cursor-pointer transform hover:scale-105 active:scale-95"
-            onClick={() => console.log('Candidate selected')}
+            onClick={handleClick("/auth/candidate")}
             tabIndex={0}
             role="button"
             aria-label="Select Candidate role"

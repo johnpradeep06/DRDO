@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 //import { toast } from "@/components/ui/use-toast";
 import { useNavigate } from 'react-router-dom'; 
-import {Toaster,toast} from 'sonner';
+import {Toaster, toast} from 'sonner';
 
 export default function RegistrationForm() {
   
@@ -35,8 +35,9 @@ export default function RegistrationForm() {
     
     console.log(formData); // Log the formData before sending it
 
+    // Check if passwords match
     if (formData.password !== formData.confirmPassword) {
-        toast.error("password mismatch")
+        toast.error("Passwords do not match");
         return;
     }
 
@@ -54,26 +55,30 @@ export default function RegistrationForm() {
                 role: formData.role,
             }),
         });
-        
+
+        // Handle response based on status
         if (response.ok) {
             const data = await response.json();
-            console.log('User registered:', data.fullName);
-            navigate('/');  // Navigate after successful registration
+            if (data.user) {
+                console.log('User registered:', data.user.fullName);
+                toast.success('Successfully registered');
+                navigate('/');  // Navigate after successful registration
+            } else {
+                toast.error('Something went wrong during registration');
+            }
         } else {
             const errorData = await response.json();
-            if (errorData.email && Array.isArray(errorData.email)) {
-             
-              toast.error("Email address already exists");
-          }
-            console.log(errorData);
-            
-           
+            if (errorData.error === 'User already exists') {
+                toast.error('User already exists with this email');
+            } else {
+                toast.error('Registration failed. Please check your details.');
+            }
         }
     } catch (error) {
-        
+        toast.error('Network error or server unavailable');
         console.error("Error during registration:", error);
     }
-};
+  };
 
 
   return (
@@ -155,7 +160,7 @@ export default function RegistrationForm() {
         <Toaster richColors/>
       </div>
 
-      <Button type="submit" className="w-full" onSubmit={() => toast.success('successfully registered')}>Register</Button>
+      <Button type="submit" className="w-full">Register</Button>
     </form>
   );
 }
