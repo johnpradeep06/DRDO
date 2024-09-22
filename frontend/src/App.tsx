@@ -7,7 +7,7 @@ import UsersList from "./Pages/displaylist";
 import { Toaster } from "./components/ui/sonner";
 import { RecruiterDashboard} from "./Pages/Dashboard/Admin/recruiter";
 import { CandidateDashboard } from "./Pages/Dashboard/Admin/CandidateDashboard";
-
+import JobPostingForm from "./components/dashboard/createpost";
 import RLogin from "./Pages/RecruiterLogin";
 
 
@@ -25,7 +25,8 @@ function App() {
         <Route path="/auth/list" element={<UsersList/>}/>
         <Route path="/auth/register" element={<Register />} />
         <Route path="/auth/recruiter" element={<RLogin />} />
-
+        <Route path="/recruiter/createpost" element={<JobPostingForm />} />
+        
         <Route path="/admin" element={
           <>
           

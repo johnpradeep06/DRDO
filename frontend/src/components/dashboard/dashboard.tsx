@@ -7,13 +7,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { useNavigate } from "react-router-dom"
 
 
 export const Dash: React.FC = () => {
+  const navigate =  useNavigate();
+  const handleClick = (url: string)=>{
+    return ()=>navigate(url);
+  }
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
       <div className="flex justify-between items-center">
-        <Button className="gap-2">
+        <Button className="gap-2" onClick={handleClick('/recruiter/createpost')}>
           <Plus className="h-4 w-4" />
           Create Job Post
         </Button>

@@ -36,6 +36,7 @@ const CLogin: React.FC = () => {
             setToken(response.data.token);
             localStorage.setItem('token', response.data.token);
             toast.success('successfull Login');
+            navigate(-1);
             
             // Redirect to /admin after successful login
             navigate('/candidate');
