@@ -15,11 +15,15 @@ export default function JobPostingForm() {
   const [formData, setFormData] = useState({
     recruiterName: '',
     jobTitle: '',
+    jobDescription: '',  // Added field
     employmentType: '',
     requiredSkills: '',
     requiredExperience: '',
     educationalLevel: '',
-    contactInfo: ''
+    contactInfo: '',
+    location: '',  // Added field
+    companyName: '',  // Added field
+    salary: ''  // Added field
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -92,6 +96,18 @@ export default function JobPostingForm() {
       </div>
 
       <div className="space-y-2">
+        <Label htmlFor="jobDescription">Job Description</Label>
+        <Textarea 
+          id="jobDescription" 
+          name="jobDescription" 
+          value={formData.jobDescription} 
+          onChange={handleInputChange} 
+          required 
+          placeholder="Describe the job role and responsibilities"
+        />
+      </div>
+
+      <div className="space-y-2">
         <Label htmlFor="employmentType">Employment Type</Label>
         <Select onValueChange={handleEmploymentTypeChange} required>
           <SelectTrigger>
@@ -147,6 +163,40 @@ export default function JobPostingForm() {
           name="contactInfo" 
           type="tel" 
           value={formData.contactInfo} 
+          onChange={handleInputChange} 
+          required 
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="location">Location</Label>
+        <Input 
+          id="location" 
+          name="location" 
+          value={formData.location} 
+          onChange={handleInputChange} 
+          required 
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="companyName">Company Name</Label>
+        <Input 
+          id="companyName" 
+          name="companyName" 
+          value={formData.companyName} 
+          onChange={handleInputChange} 
+          required 
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="salary">Salary</Label>
+        <Input 
+          id="salary" 
+          name="salary" 
+          type="number" 
+          value={formData.salary} 
           onChange={handleInputChange} 
           required 
         />
