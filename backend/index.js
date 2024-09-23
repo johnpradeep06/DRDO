@@ -73,6 +73,17 @@ const loginUser = async (email, password, role, res) => {
     }
 };
 
+app.get('/api/jobposts', async (req, res) => {
+    try {
+      const jobPosts = await prisma.job.findMany(); // Fetch all job posts from the database
+      res.status(200).json(jobPosts); // Return the job posts in JSON format
+    } catch (error) {
+      console.error('Error fetching job posts:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
+
 app.get('/api/user', verifyToken, async (req, res) => {
     try {
         const user = await prisma.user.findUnique({
@@ -82,7 +93,6 @@ app.get('/api/user', verifyToken, async (req, res) => {
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
-        console.log("RETURNING THE NAME");
         res.status(200).json({ name: user.fullName });
     } catch (error) {
         console.error(error);
