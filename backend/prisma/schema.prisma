@@ -21,3 +21,20 @@ enum Role {
   RECRUITER
   CANDIDATE
 }
+
+model Job {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  recruiterName     String
+  jobTitle          String
+  jobDescription    String
+  employmentType    String
+  requiredSkills    String
+  requiredExperience String
+  educationalLevel  String
+  contactInfo       String
+  location          String
+  companyName       String
+  salary            String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
