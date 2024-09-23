@@ -51,18 +51,14 @@ export default function JobPostingForm() {
 
         // Handle response based on status
         if (response.ok) {
-            const data = await response.json();
-            if (data.success) {
-                console.log('Job posted:', data.jobTitle);
-                toast.success('Job posting created successfully');
-                navigate('/');  // Navigate after successful creation
-            } else {
-                toast.error('Something went wrong during job posting');
-            }
-        } else {
-            const errorData = await response.json();
-            toast.error(errorData);
-        }
+          const data = await response.json();
+          console.log(data.jobTitle);
+          toast.success('Job posting created successfully');
+          navigate(-1);  // Navigate back after successful creation
+      } else {
+          const errorData = await response.text();
+          toast.error(errorData || 'Error creating job posting');
+      }
     } catch (error) {
         toast.error('Network error or server unavailable');
         console.error("Error during job posting:", error);
