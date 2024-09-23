@@ -25,7 +25,7 @@ export function RecruiterDashboard() {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch("/api/user", {
+        const response = await fetch("http://localhost:5000/api/user", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
