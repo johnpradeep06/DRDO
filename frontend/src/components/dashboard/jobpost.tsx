@@ -1,10 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/navigation';
-import 'swiper/css/autoplay';
 
 interface JobPost {
   id: string;
@@ -38,91 +32,57 @@ export const Jobpost: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchJobPosts(); // Initial fetch
-    const interval = setInterval(fetchJobPosts, 1000); // Fetch every 1 seconds
-
-    return () => clearInterval(interval); // Cleanup on unmount
+    fetchJobPosts();
+    const interval = setInterval(fetchJobPosts, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {
-    return <div style={{ textAlign: 'center', color: 'white' }}>Loading job posts...</div>;
+    return <div className="text-center text-white">Loading job posts...</div>;
   }
 
   return (
-    <div style={{ padding: '20px', backgroundColor: '#181818', color: 'white' }}>
-      <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>Job Posts</h1>
-      <Swiper
-        spaceBetween={30}
-        slidesPerView={1}
-        pagination={{ clickable: true }}
-        loop={true}
-        autoplay={{ delay: 3000 }}
-        navigation={true}
-        modules={[Navigation, Pagination, Autoplay]}
-        style={{
-          paddingBottom: '50px',
-        }}
-      >
+    <div className="p-6 bg-[#181818] text-white">
+      <h1 className="text-center text-3xl font-bold mb-8">Job Posts</h1>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {jobPosts.map((job) => (
-          <SwiperSlide key={job.id}>
-            <div
-              style={{
-                backgroundColor: '#252525',
-                borderRadius: '10px',
-                padding: '20px',
-                margin: '0 auto',
-                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.5)',
-                textAlign: 'center',
-                maxWidth: '800px',
-                width: '100%',
-                transition: 'transform 0.3s ease',
-              }}
-            >
-              <h2 style={{ color: '#00BFFF', fontSize: '24px' }}>{job.jobTitle}</h2>
-              <h3 style={{ color: '#FFB800', fontSize: '20px' }}>{job.companyName}</h3>
-              <p style={{ fontSize: '16px', marginTop: '10px' }}><strong>Recruiter:</strong> {job.recruiterName}</p>
-              <p style={{ fontSize: '16px' }}>{job.jobDescription}</p>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-around',
-                  marginTop: '20px',
-                  flexWrap: 'wrap',
-                }}
-              >
-                <p><strong>Skills:</strong> {job.requiredSkills}</p>
-                <p><strong>Experience:</strong> {job.requiredExperience}</p>
-                <p><strong>Education:</strong> {job.educationalLevel}</p>
+          <div
+            key={job.id}
+            className="bg-[#1E1E1E] rounded-lg p-6 shadow-lg transition-transform hover:scale-105"
+          >
+            <div className="flex items-center mb-4">
+              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mr-4">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
               </div>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-around',
-                  marginTop: '10px',
-                  flexWrap: 'wrap',
-                }}
-              >
-                <p><strong>Location:</strong> {job.location}</p>
-                <p><strong>Salary:</strong> {job.salary ? `$${job.salary}` : 'N/A'}</p>
-                <p><strong>Employment Type:</strong> {job.employmentType}</p>
+              <div>
+                <h2 className="text-xl font-semibold text-blue-400">{job.jobTitle}</h2>
+                <h3 className="text-lg text-gray-400">{job.companyName}</h3>
               </div>
-              <button
-                style={{
-                  backgroundColor: '#007bff',
-                  color: 'white',
-                  padding: '10px 20px',
-                  border: 'none',
-                  borderRadius: '5px',
-                  cursor: 'pointer',
-                  marginTop: '20px',
-                }}
-              >
-                Apply
-              </button>
             </div>
-          </SwiperSlide>
+            <p className="text-sm mb-4">{job.jobDescription}</p>
+            <div className="flex justify-between text-sm mb-4">
+              <span className="flex items-center">
+                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                {job.location}
+              </span>
+              <span className="flex items-center">
+                <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                {job.employmentType}
+              </span>
+            </div>
+            <button className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors">
+              Apply
+            </button>
+          </div>
         ))}
-      </Swiper>
+      </div>
     </div>
   );
 };
