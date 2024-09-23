@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom"; 
 import { Package2, Menu, User, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -17,6 +19,13 @@ import { Jobpost } from '@/components/dashboard/jobpost';
 import { Questions } from '@/components/dashboard/questions';
 
 export function RecruiterDashboard() {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/"); // Redirect to the login page after logging out
+  };
+  
+
   const [userName, setUserName] = useState("");
   const [curDash, setCurDash] = useState<"Dashboard" | "Job Posts" | "Candidates" | "AI Questions">("Dashboard");
 
@@ -135,18 +144,22 @@ export function RecruiterDashboard() {
         </Sheet>
         
         {/* User Menu */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full">
-              <User className="h-5 w-5" />
-              <span className="sr-only">Toggle user menu</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>{userName || "No name available"}</DropdownMenuItem>
-            <DropdownMenuItem>Logout</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        
+        <div className="flex items-center gap-x-2">
+          <p>{userName}</p>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <User className="h-5 w-5" />
+                <span className="sr-only">Toggle user menu</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem>{userName || "No name available"}</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </header>
 
       <main className="p-4">
