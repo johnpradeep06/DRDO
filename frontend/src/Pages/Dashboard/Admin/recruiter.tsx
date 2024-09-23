@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom"; // Assuming you use React Router
+import { Link } from "react-router-dom"; 
 import { Package2, Menu, User, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -22,14 +22,28 @@ export function RecruiterDashboard() {
 
   // Fetch the user data from the backend
   useEffect(() => {
-    fetch("/api/user") // Replace with your actual API endpoint
-      .then((response) => response.json())
-      .then((data) => {
-        setUserName(data.name); // Assuming the API response has a "name" field
-      })
-      .catch((error) => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch("/api/user", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        if (response.ok) {
+          console.log(`Name from the front end: {data.name}`);
+          setUserName(data.name); // Set the user's full name
+        } else {
+          console.error("Error fetching user data:", data.error);
+        }
+        console.log(`Set the username: {UserName}`);
+      } catch (error) {
         console.error("Error fetching user data:", error);
-      });
+      }
+    };
+
+    fetchUserData();
   }, []);
 
   // Define the component to render based on curDash state
@@ -54,36 +68,28 @@ export function RecruiterDashboard() {
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <Link
             to="#"
-            className={`transition-colors hover:text-foreground ${
-              curDash === "Dashboard" ? "font-bold text-foreground" : "text-muted-foreground"
-            }`}
+            className={`transition-colors hover:text-foreground ${curDash === "Dashboard" ? "font-bold text-foreground" : "text-muted-foreground"}`}
             onClick={() => setCurDash("Dashboard")}
           >
             Dashboard
           </Link>
           <Link
             to="#"
-            className={`transition-colors hover:text-foreground ${
-              curDash === "Job Posts" ? "font-bold text-foreground" : "text-muted-foreground"
-            }`}
+            className={`transition-colors hover:text-foreground ${curDash === "Job Posts" ? "font-bold text-foreground" : "text-muted-foreground"}`}
             onClick={() => setCurDash("Job Posts")}
           >
             Job Posts
           </Link>
           <Link
             to="#"
-            className={`transition-colors hover:text-foreground ${
-              curDash === "Candidates" ? "font-bold text-foreground" : "text-muted-foreground"
-            }`}
+            className={`transition-colors hover:text-foreground ${curDash === "Candidates" ? "font-bold text-foreground" : "text-muted-foreground"}`}
             onClick={() => setCurDash("Candidates")}
           >
             Candidates
           </Link>
           <Link
             to="#"
-            className={`relative overflow-hidden rounded-md px-3 py-1 transition-all duration-300 ease-in-out group ${
-              curDash === "AI Questions" ? "font-bold text-foreground" : "text-muted-foreground hover:text-white"
-            }`}
+            className={`relative overflow-hidden rounded-md px-3 py-1 transition-all duration-300 ease-in-out group ${curDash === "AI Questions" ? "font-bold text-foreground" : "text-muted-foreground hover:text-white"}`}
             onClick={() => setCurDash("AI Questions")}
           >
             <span className="relative z-10 flex items-center gap-1">
@@ -116,9 +122,7 @@ export function RecruiterDashboard() {
               <Link
                 to="#"
                 onClick={() => setCurDash("AI Questions")}
-                className={`relative overflow-hidden rounded-md px-3 py-1 group ${
-                  curDash === "AI Questions" ? "font-bold" : "text-muted-foreground"
-                }`}
+                className={`relative overflow-hidden rounded-md px-3 py-1 group ${curDash === "AI Questions" ? "font-bold" : "text-muted-foreground"}`}
               >
                 <span className="relative z-10 flex items-center gap-1">
                   AI Questions
@@ -139,7 +143,7 @@ export function RecruiterDashboard() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>{userName || "Loading..."}</DropdownMenuItem>
+            <DropdownMenuItem>{userName || "No name available"}</DropdownMenuItem>
             <DropdownMenuItem>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
