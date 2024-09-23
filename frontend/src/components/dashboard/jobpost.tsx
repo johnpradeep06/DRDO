@@ -39,7 +39,7 @@ export const Jobpost: React.FC = () => {
 
   useEffect(() => {
     fetchJobPosts(); // Initial fetch
-    const interval = setInterval(fetchJobPosts, 1000); // Fetch every 60 seconds
+    const interval = setInterval(fetchJobPosts, 1000); // Fetch every 1 seconds
 
     return () => clearInterval(interval); // Cleanup on unmount
   }, []);
