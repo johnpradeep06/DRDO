@@ -100,6 +100,45 @@ app.post('/api/candidate', async (req, res) => {
     loginUser(email, password, 'CANDIDATE', res);
 });
 
+app.post('/api/job-posting', async (req, res) => {
+    try {
+      const {
+        recruiterName,
+        jobTitle,
+        jobDescription,
+        employmentType,
+        requiredSkills,
+        requiredExperience,
+        educationalLevel,
+        contactInfo,
+        location,
+        companyName,
+        salary
+      } = req.body;
+      
+      const newJob = await prisma.job.create({
+        data: {
+          recruiterName,
+          jobTitle,
+          jobDescription,
+          employmentType,
+          requiredSkills,
+          requiredExperience,
+          educationalLevel,
+          contactInfo,
+          location,
+          companyName,
+          salary
+        }
+      });
+      console.log(newJob);
+      res.status(201).json(newJob);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Error creating job posting' });
+    }
+  });
+
 app.post('/api/register', async (req, res) => {
     const { fullName, email, phoneNumber, password, role } = req.body;
 
