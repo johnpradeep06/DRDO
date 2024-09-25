@@ -75,8 +75,8 @@ const loginUser = async (email, password, role, res) => {
 
 app.get('/api/jobposts', async (req, res) => {
     try {
-      const jobPosts = await prisma.job.findMany(); // Fetch all job posts from the database
-      res.status(200).json(jobPosts); // Return the job posts in JSON format
+      const jobPosts = await prisma.job.findMany(); 
+      res.status(200).json(jobPosts); 
     } catch (error) {
       console.error('Error fetching job posts:', error);
       res.status(500).json({ error: 'Internal Server Error' });
