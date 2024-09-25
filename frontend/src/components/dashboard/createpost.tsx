@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea"; 
 import { useNavigate } from 'react-router-dom'; 
-import {Toaster, toast} from 'sonner';
+import { Toaster, toast } from 'sonner';
 
 export default function JobPostingForm() {
   
@@ -41,32 +41,32 @@ export default function JobPostingForm() {
     console.log(formData); // Log the formData before sending it
 
     try {
-        const response = await fetch('http://localhost:5000/api/job-posting/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(formData),
-        });
+      const response = await fetch('http://localhost:5000/api/job-posting/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-        // Handle response based on status
-        if (response.ok) {
-          const data = await response.json();
-          console.log(data.jobTitle);
-          toast.success('Job posting created successfully');
-          navigate(-1);  // Navigate back after successful creation
+      // Handle response based on status
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data.jobTitle);
+        toast.success('Job posting created successfully');
+        navigate(-1);  // Navigate back after successful creation
       } else {
-          const errorData = await response.text();
-          toast.error(errorData || 'Error creating job posting');
+        const errorData = await response.text();
+        toast.error(errorData || 'Error creating job posting');
       }
     } catch (error) {
-        toast.error('Network error or server unavailable');
-        console.error("Error during job posting:", error);
+      toast.error('Network error or server unavailable');
+      console.error("Error during job posting:", error);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-md mx-auto mt-8 p-6 bg-card rounded-lg shadow-lg shadow-[0_-4px_10px_rgba(0,0,0,0.1)]">
+    <form onSubmit={handleSubmit} className="space-y-6 max-w-md mx-auto mt-8 p-6 bg-card rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold text-center mb-6">Create Job Posting</h2>
       
       <div className="space-y-2">
