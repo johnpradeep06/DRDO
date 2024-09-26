@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { UserIcon, BriefcaseIcon } from "lucide-react"
 import { useNavigate } from "react-router-dom";
+import Particles from "@/components/magicui/particles";
 
 
 
@@ -53,7 +54,14 @@ const Landing = () => {
         <Button size="lg" className="mt-8" onClick={handleClick("/auth/register")}>
           Register
         </Button>
+        
       </div>
+      <Particles
+        className="absolute inset-0"
+        quantity={100}
+        ease={80}
+        refresh
+      />
     </div>
   )
 }

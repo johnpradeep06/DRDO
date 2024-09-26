@@ -45,7 +45,7 @@ export const Dash: React.FC = () => {
         formData.append("resume", file); // Append the file to the form data
 
         // Send the POST request to upload the file
-        const response = await fetch("/api/upload-resume", {
+        const response = await fetch("http://localhost:5000/api/upload-resume", {
           method: "POST",
           body: formData,
         });

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Trash2, Edit } from 'lucide-react';
 import {  MapPin, Briefcase, GraduationCap, DollarSign } from 'lucide-react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import ShinyButton from "@/components/magicui/shiny-button";
+import { useNavigate } from 'react-router-dom';
 
 
 interface JobPost {
@@ -23,12 +22,41 @@ interface JobPost {
 }
 
 export const JobLists: React.FC = () => {
+  const [userName, setUserName] = useState("");
   const [jobPosts, setJobPosts] = useState<JobPost[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const handleClick = (url: string)=>{
+    return ()=>navigate(url);
+  }
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch("http://localhost:5000/api/user", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        if (response.ok) {
+          console.log(`Name from the front end: {data.name}`);
+          setUserName(data.name); // Set the user's full name
+        } else {
+          console.error("Error fetching user data:", data.error);
+        }
+        console.log(`Set the username: {UserName}`);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const fetchJobPosts = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/jobposts');
+      const response = await fetch('http://localhost:5000/api/jobplists');
       const data = await response.json();
       setJobPosts(data);
       setLoading(false);
@@ -99,7 +127,9 @@ export const JobLists: React.FC = () => {
                 </div>
               </CardContent>
               <CardFooter className="mt-auto flex justify-center">
-                <ShinyButton className='text-white bg-black'>Apply</ShinyButton>
+                <ShinyButton className='text-white bg-black'>
+                    <button onClick={handleClick('/candidate/apply')}>Apply</button>
+                </ShinyButton>
 
               </CardFooter>
             </Card>
