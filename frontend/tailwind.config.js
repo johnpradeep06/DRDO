@@ -8,6 +8,8 @@ export default {
   theme: {
   	extend: {
       animation: {
+		"spin-around": "spin-around calc(var(--speed) * 2) infinite linear",
+        slide: "slide var(--speed) ease-in-out infinite alternate",
         grid: "grid 15s linear infinite",
       },
       keyframes: {

@@ -191,7 +191,7 @@ export default function JobPostingForm() {
         <Input 
           id="salary" 
           name="salary" 
-          type="number" 
+           
           value={formData.salary} 
           onChange={handleInputChange} 
           required 

@@ -5,9 +5,9 @@ import CLogin from "./Pages/CandidateLogin";
 import Register from "./Pages/Register";
 import UsersList from "./Pages/displaylist";
 import { Toaster } from "./components/ui/sonner";
-import { RecruiterDashboard} from "./Pages/Dashboard/Admin/recruiter";
-import { CandidateDashboard } from "./Pages/Dashboard/Admin/CandidateDashboard";
-import JobPostingForm from "./components/dashboard/createpost";
+import { RecruiterDashboard} from "./Pages/Dashboard/recruiter";
+import { CandidateDashboard } from "./Pages/Dashboard/candidate";
+import JobPostingForm from "./components/admin_dashboard/createpost";
 import RLogin from "./Pages/RecruiterLogin";
 
 

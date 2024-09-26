@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom"; 
-import { Package2, Menu, User, Sparkles } from "lucide-react";
+import { Menu, User, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 
@@ -13,12 +13,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Candidates } from '@/components/dashboard/candidates';
-import { Dash } from '@/components/dashboard/dashboard';
-import { Jobpost } from '@/components/dashboard/jobpost';
-import { Questions } from '@/components/dashboard/questions';
+import { Candidates } from '@/components/admin_dashboard/candidates';
+import { Dash } from '@/components/candidate_dashboard/cdashboard';
+import { JobLists } from '@/components/candidate_dashboard/joblistings';
+import { Questions } from '@/components/admin_dashboard/questions';
 
-export function RecruiterDashboard() {
+export function CandidateDashboard() {
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -27,14 +27,14 @@ export function RecruiterDashboard() {
   
 
   const [userName, setUserName] = useState("");
-  const [curDash, setCurDash] = useState<"Dashboard" | "Job Posts" | "Candidates" | "AI Questions">("Dashboard");
+  const [curDash, setCurDash] = useState<"Dashboard" | "Job Listings" | "Application Status" | "Interview Schedules">("Dashboard");
 
   // Fetch the user data from the backend
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch("http://localhost:5000/api/user", {
+        const response = await fetch("http://localhost:5000/api/candidate", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -60,11 +60,11 @@ export function RecruiterDashboard() {
     switch (curDash) {
       case "Dashboard":
         return <Dash />;
-      case "Job Posts":
-        return <Jobpost />;
-      case "Candidates":
+      case "Job Listings":
+        return <JobLists />;
+      case "Application Status":
         return <Candidates />;
-      case "AI Questions":
+      case "Interview Schedules":
         return <Questions />;
       default:
         return null;
@@ -77,36 +77,33 @@ export function RecruiterDashboard() {
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <Link
             to="#"
-            className={`transition-colors hover:text-foreground ${curDash === "Dashboard" ? "font-bold text-foreground" : "text-muted-foreground"}`}
+            className={`transition-colors hover:text-blue-500 hover:-translate-y-0.5 ${curDash === "Dashboard" ? "font-bold text-blue-500" : "text-muted-foreground"}`}
             onClick={() => setCurDash("Dashboard")}
           >
             Dashboard
           </Link>
           <Link
             to="#"
-            className={`transition-colors hover:text-foreground ${curDash === "Job Posts" ? "font-bold text-foreground" : "text-muted-foreground"}`}
-            onClick={() => setCurDash("Job Posts")}
+            className={`transition-colors hover:text-blue-500 hover:-translate-y-0.5 ${curDash === "Job Listings" ? "font-bold text-blue-500" : "text-muted-foreground"}`}
+            onClick={() => setCurDash("Job Listings")}
           >
-            Job Posts
+            Job Listings
           </Link>
           <Link
             to="#"
-            className={`transition-colors hover:text-foreground ${curDash === "Candidates" ? "font-bold text-foreground" : "text-muted-foreground"}`}
-            onClick={() => setCurDash("Candidates")}
+            className={`transition-colors hover:text-blue-500 hover:-translate-y-0.5 ${curDash === "Application Status" ? "font-bold text-blue-500" : "text-muted-foreground"}`}
+            onClick={() => setCurDash("Application Status")}
           >
-            Candidates
+            Application Status
           </Link>
           <Link
             to="#"
-            className={`relative overflow-hidden rounded-md px-3 py-1 transition-all duration-300 ease-in-out group ${curDash === "AI Questions" ? "font-bold text-foreground" : "text-muted-foreground hover:text-white"}`}
-            onClick={() => setCurDash("AI Questions")}
+            className={`transition-colors hover:text-blue-500 hover:-translate-y-0.5 ${curDash === "Interview Schedules" ? "font-bold  text-blue-500" : "text-muted-foreground"}`}
+            onClick={() => setCurDash("Interview Schedules")}
           >
-            <span className="relative z-10 flex items-center gap-1">
-              AI Questions
-              <Sparkles className="h-4 w-4" />
-            </span>
-            <span className="absolute inset-0 z-0 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            Intreview Schedules
           </Link>
+          
         </nav>
         
         {/* Mobile navigation */}
@@ -122,23 +119,29 @@ export function RecruiterDashboard() {
               <Link to="#" onClick={() => setCurDash("Dashboard")} className={`hover:text-foreground ${curDash === "Dashboard" ? "font-bold" : ""}`}>
                 Dashboard
               </Link>
-              <Link to="#" onClick={() => setCurDash("Job Posts")} className={`hover:text-foreground ${curDash === "Job Posts" ? "font-bold" : ""}`}>
+              <Link to="#" onClick={() => setCurDash("Job Listings")} className={`hover:text-foreground ${curDash === "Job Listings" ? "font-bold" : ""}`}>
                 Job Posts
               </Link>
-              <Link to="#" onClick={() => setCurDash("Candidates")} className={`hover:text-foreground ${curDash === "Candidates" ? "font-bold" : ""}`}>
+              <Link to="#" onClick={() => setCurDash("Application Status")} className={`hover:text-foreground ${curDash === "Application Status" ? "font-bold" : ""}`}>
                 Candidates
               </Link>
+
               <Link
                 to="#"
-                onClick={() => setCurDash("AI Questions")}
-                className={`relative overflow-hidden rounded-md px-3 py-1 group ${curDash === "AI Questions" ? "font-bold" : "text-muted-foreground"}`}
+                onClick={() => setCurDash("Interview Schedules")}
+                className={`relative overflow-hidden rounded-md px-3 py-1 group ${curDash === "Interview Schedules" ? "font-bold" : "text-muted-foreground"}`}
               >
+                
                 <span className="relative z-10 flex items-center gap-1">
+                
                   AI Questions
+                 
                   <Sparkles className="h-4 w-4" />
                 </span>
                 <span className="absolute inset-0 z-0 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                
               </Link>
+
             </nav>
           </SheetContent>
         </Sheet>
