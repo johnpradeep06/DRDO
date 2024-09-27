@@ -11,6 +11,7 @@ Endpoints:
 6. viewing job posts    : http://localhost:5000/api/get-jobposts
 
 7. candidate job post view: http://localhost:5000/api/recruiter/get-jobposts
+   candidate job post delete: http://localhost:5000/api/recruiter/delete-jobpost
 8. recruiter job post view: http://localhost:5000/api/candidate/get-jobposts
 9. get all users: http://localhost:5000/api/users
 
@@ -20,7 +21,7 @@ Endpoints:
 
 13. candidate apply: http://localhost:5000/api/candidate/applyjob
 14. applied jobs: http://localhost:5000/api/candidate/applied-jobs
-15. 
+15. http://localhost:5000/api/recruiter/view-applied 
 
 status: applied
         rejected/

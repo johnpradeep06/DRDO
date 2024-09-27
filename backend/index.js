@@ -163,10 +163,11 @@ app.get('/api/user', verifyToken, async (req, res) => {
 
 
 //posting job posts
-app.post('/api/recruiter/post-jobposts', async (req, res) => {
+app.post('/api/recruiter/post-jobposts', verifyToken, verifyRole('RECRUITER'), async (req, res) => {
     try {
+      const recruiterId = req.user.userId;
+      console.log(recruiterId); // Get recruiter ID from JWT token
       const {
-        recruiterName,
         jobTitle,
         jobDescription,
         employmentType,
@@ -181,7 +182,7 @@ app.post('/api/recruiter/post-jobposts', async (req, res) => {
       
       const newJob = await prisma.job.create({
         data: {
-          recruiterName,
+          recruiterId,
           jobTitle,
           jobDescription,
           employmentType,
@@ -194,11 +195,12 @@ app.post('/api/recruiter/post-jobposts', async (req, res) => {
           salary
         }
       });    
-        logger.info('New job created: ' + newJob.jobTitle);
-        res.status(201).json(newJob);
+      console.log(newJob);
+      logger.info('New job created: ' + newJob.jobTitle);
+      res.status(201).json(newJob);
     } catch (error) {
-        logger.error('Error creating job posting: ' + error.message);
-        res.status(500).json({ message: 'Error creating job posting' });
+      logger.error('Error creating job posting: ' + error.message);
+      res.status(500).json({ message: 'Error creating job posting' });
     }
 });
 
@@ -241,94 +243,113 @@ app.get('/api/candidate/dashboard', verifyToken, verifyRole('CANDIDATE'), (req, 
     res.status(200).json({ message: 'Welcome to the candidate dashboard' });
 });
 
-// Recruiter: Get jobs posted by them
-app.get('/api/recruiter/jobs', verifyToken, verifyRole('RECRUITER'), async (req, res) => {
-  try {
-      const jobs = await prisma.job.findMany({
-          where: { recruiterId: req.user.id },
+// View job posts to the recruiter
+app.get('/api/recruiter/get-jobposts', verifyToken, verifyRole('RECRUITER'), async (req, res) => {
+    try {
+      const recruiterId = req.user.userId; // Get recruiter ID from JWT token
+      const jobPosts = await prisma.job.findMany({
+        where: { recruiterId },
       });
-      res.json(jobs);
-  } catch (error) {
-      logger.error('Error fetching recruiter jobs:', error);
-      res.status(500).json({ error: 'Error fetching jobs' });
-  }
+      res.status(200).json(jobPosts);
+    } catch (error) {
+      logger.error('Error fetching job posts for recruiter: ' + error.message);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
 });
-
-// Recruiter: Delete a job
-app.delete('/api/recruiter/jobs/:id', verifyToken, verifyRole('RECRUITER'), async (req, res) => {
+  
+// Delete a job post by ID (requires recruiter verification)
+app.delete('/api/recruiter/delete-jobpost/:id', verifyToken, verifyRole('RECRUITER'), async (req, res) => {
   const jobId = req.params.id;
-
   try {
-      const job = await prisma.job.findUnique({
-          where: { id: jobId }
-      });
-
-      if (job.recruiterId !== req.user.id) {
-          return res.status(403).json({ error: 'You can only delete your own jobs' });
-      }
-
-      await prisma.job.delete({
-          where: { id: jobId }
-      });
-
-      res.json({ message: 'Job deleted successfully' });
+    const deletedJob = await prisma.job.delete({
+      where: { id: jobId },
+    });
+    if (!deletedJob) {
+      return res.status(404).json({ error: 'Job post not found' });
+    }
+    logger.info('Job post deleted successfully: ' + deletedJob.jobTitle);
+    res.status(200).json({ message: 'Job post deleted successfully' });
   } catch (error) {
-      logger.error('Error deleting job:', error);
-      res.status(500).json({ error: 'Error deleting job' });
+    logger.error('Error deleting job post: ' + error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+  
+// View list of applicants for a job post (requires recruiter verification)
+app.get('/api/recruiter/view-applied/:jobId', verifyToken, verifyRole('RECRUITER'), async (req, res) => {
+    const jobId = req.params.jobId;
+    const recruiterId = req.user.userId; // Get recruiter ID from JWT token
+    try {
+      // First, verify that the job belongs to this recruiter
+      const job = await prisma.job.findFirst({
+        where: { id: jobId, recruiterId: recruiterId },
+      });
+      
+      if (!job) {
+        return res.status(403).json({ error: 'You do not have permission to view applications for this job' });
+      }
+      
+      const applications = await prisma.application.findMany({
+        where: { jobId },
+        include: { candidate: true }, // Include applicant details
+      });
+      res.status(200).json(applications);
+    } catch (error) {
+      logger.error('Error fetching applicants for job post: ' + error.message);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
+// Update application status (requires recruiter verification)
+app.patch('/api/recruiter/update-application/:applicationId', verifyToken, verifyRole('RECRUITER'), async (req, res) => {
+  const applicationId = req.params.applicationId;
+  const { status } = req.body; // Expected status in request body
 
-// Candidate: Get available jobs excluding applied ones
-app.get('/api/candidate/jobs', verifyToken, verifyRole('CANDIDATE'), async (req, res) => {
+  if (!status || !['PENDING', 'QUALIFIED_FOR_INTERVIEW', 'REJECTED', 'WAITING'].includes(status)) {
+    return res.status(400).json({ error: 'Invalid application status' });
+  }
+
   try {
-      const appliedJobs = await prisma.application.findMany({
-          where: { candidateId: req.user.id },
-          select: { jobId: true }
-      });
-
-      const appliedJobIds = appliedJobs.map(app => app.jobId);
-
-      const jobs = await prisma.job.findMany({
-          where: {
-              id: { notIn: appliedJobIds }
-          }
-      });
-
-      res.json(jobs);
+    const updatedApplication = await prisma.application.update({
+      where: { id: applicationId },
+      data: { status },
+    });
+    if (!updatedApplication) {
+      return res.status(404).json({ error: 'Application not found' });
+    }
+    logger.info('Application status updated successfully: ' + updatedApplication.id);
+    res.status(200).json({ message: 'Application status updated successfully' });
   } catch (error) {
-      logger.error('Error fetching available jobs:', error);
-      res.status(500).json({ error: 'Error fetching jobs' });
+    logger.error('Error updating application status: ' + error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-// Candidate: Apply for a job
-app.post('/api/candidate/jobs/:id/apply', verifyToken, verifyRole('CANDIDATE'), async (req, res) => {
-  const jobId = req.params.id;
-
+  
+// Candidate endpoints  
+// Get all job posts
+app.get('/api/candidate/get-jobposts', async (req, res) => {
   try {
-      // Check if already applied
-      const existingApplication = await prisma.application.findUnique({
-          where: {
-              candidateId_jobId: { candidateId: req.user.id, jobId }
-          }
-      });
-
-      if (existingApplication) {
-          return res.status(400).json({ error: 'You have already applied for this job' });
-      }
-
-      // Apply for the job
-      await prisma.application.create({
-          data: {
-              candidateId: req.user.id,
-              jobId
-          }
-      });
-
-      res.json({ message: 'Successfully applied for the job' });
+    const jobPosts = await prisma.job.findMany();
+    console.log(jobPosts);
+    res.status(200).json(jobPosts); 
   } catch (error) {
-      logger.error('Error applying for job:', error);
-      res.status(500).json({ error: 'Error applying for job' });
+    logger.error('Error fetching job posts: ' + error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+  
+// View applied job posts
+app.get('/api/candidate/view-applied', verifyToken, verifyRole('CANDIDATE'), async (req, res) => {
+  try {
+    const candidateId = req.user.userId; // Get candidate ID from JWT token
+    const applications = await prisma.application.findMany({
+      where: { candidateId },
+      include: { job: true }, // Include job details
+    });
+    res.status(200).json(applications);
+  } catch (error) {
+    logger.error('Error fetching applied job posts for candidate: ' + error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 

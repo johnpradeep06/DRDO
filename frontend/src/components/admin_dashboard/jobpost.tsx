@@ -30,12 +30,16 @@ export const Jobpost: React.FC = () => {
 
   const fetchJobPosts = async () => {
     try {
+<<<<<<< HEAD
       const token = localStorage.getItem('token'); // Get the token from localStorage
       const response = await fetch('http://localhost:5000/api/recruiter/jobs', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+=======
+      const response = await fetch('http://localhost:5000/api/recruiter/get-jobposts');
+>>>>>>> 3633fbca341a9774eb75d7d373f2c02e43153ded
       const data = await response.json();
       if (response.ok) {
         setJobPosts(data); // Set job posts retrieved from the backend

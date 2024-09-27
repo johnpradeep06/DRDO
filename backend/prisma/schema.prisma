@@ -8,13 +8,15 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
   fullName     String
-  email        String   @unique
-  phoneNumber  String   @unique
+  email        String        @unique
+  phoneNumber  String        @unique
   password     String
   role         Role
-  createdAt    DateTime @default(now())
+  createdAt    DateTime      @default(now())
+  postedJobs   Job[]         @relation("RecruiterJobs")
+  applications Application[] @relation("CandidateApplications")
 }
 
 enum Role {
@@ -23,18 +25,37 @@ enum Role {
 }
 
 model Job {
-  id                String   @id @default(auto()) @map("_id") @db.ObjectId
-  recruiterName     String
-  jobTitle          String
-  jobDescription    String
-  employmentType    String
-  requiredSkills    String
+  id                 String        @id @default(auto()) @map("_id") @db.ObjectId
+  recruiter          User?          @relation("RecruiterJobs", fields: [recruiterId], references: [id])
+  recruiterId        String?        @db.ObjectId
+  jobTitle           String
+  jobDescription     String
+  employmentType     String
+  requiredSkills     String
   requiredExperience String
-  educationalLevel  String
-  contactInfo       String
-  location          String
-  companyName       String
-  salary            String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  educationalLevel   String
+  contactInfo        String
+  location           String
+  companyName        String
+  salary             String?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  applications       Application[] @relation("JobApplications")
+}
+
+model Application {
+  id           String            @id @default(auto()) @map("_id") @db.ObjectId
+  candidate    User              @relation("CandidateApplications", fields: [candidateId], references: [id])
+  candidateId  String            @db.ObjectId
+  job          Job               @relation("JobApplications", fields: [jobId], references: [id])
+  jobId        String            @db.ObjectId
+  status       ApplicationStatus @default(PENDING)
+  appliedAt    DateTime          @default(now())
+}
+
+enum ApplicationStatus {
+  PENDING
+  QUALIFIED_FOR_INTERVIEW
+  REJECTED
+  WAITING
 }
