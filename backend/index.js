@@ -163,10 +163,11 @@ app.get('/api/user', verifyToken, async (req, res) => {
 
 
 //posting job posts
-app.post('/api/recruiter/post-jobposts', async (req, res) => {
+app.post('/api/recruiter/post-jobposts', verifyToken, verifyRole('RECRUITER'), async (req, res) => {
     try {
+      const recruiterId = req.user.userId;
+      console.log(recruiterId); // Get recruiter ID from JWT token
       const {
-        recruiterName,
         jobTitle,
         jobDescription,
         employmentType,
@@ -181,7 +182,7 @@ app.post('/api/recruiter/post-jobposts', async (req, res) => {
       
       const newJob = await prisma.job.create({
         data: {
-          recruiterName,
+          recruiterId,
           jobTitle,
           jobDescription,
           employmentType,
@@ -194,11 +195,12 @@ app.post('/api/recruiter/post-jobposts', async (req, res) => {
           salary
         }
       });    
-        logger.info('New job created: ' + newJob.jobTitle);
-        res.status(201).json(newJob);
+      console.log(newJob);
+      logger.info('New job created: ' + newJob.jobTitle);
+      res.status(201).json(newJob);
     } catch (error) {
-        logger.error('Error creating job posting: ' + error.message);
-        res.status(500).json({ message: 'Error creating job posting' });
+      logger.error('Error creating job posting: ' + error.message);
+      res.status(500).json({ message: 'Error creating job posting' });
     }
 });
 
@@ -275,18 +277,28 @@ app.delete('/api/recruiter/delete-jobpost/:id', verifyToken, verifyRole('RECRUIT
   
 // View list of applicants for a job post (requires recruiter verification)
 app.get('/api/recruiter/view-applied/:jobId', verifyToken, verifyRole('RECRUITER'), async (req, res) => {
-  const jobId = req.params.jobId;
-  try {
-    const applications = await prisma.application.findMany({
-      where: { jobId },
-      include: { candidate: true }, // Include applicant details
-    });
-    res.status(200).json(applications);
-  } catch (error) {
-    logger.error('Error fetching applicants for job post: ' + error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
+    const jobId = req.params.jobId;
+    const recruiterId = req.user.userId; // Get recruiter ID from JWT token
+    try {
+      // First, verify that the job belongs to this recruiter
+      const job = await prisma.job.findFirst({
+        where: { id: jobId, recruiterId: recruiterId },
+      });
+      
+      if (!job) {
+        return res.status(403).json({ error: 'You do not have permission to view applications for this job' });
+      }
+      
+      const applications = await prisma.application.findMany({
+        where: { jobId },
+        include: { candidate: true }, // Include applicant details
+      });
+      res.status(200).json(applications);
+    } catch (error) {
+      logger.error('Error fetching applicants for job post: ' + error.message);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
   
 // Update application status (requires recruiter verification)
 app.patch('/api/recruiter/update-application/:applicationId', verifyToken, verifyRole('RECRUITER'), async (req, res) => {
@@ -315,10 +327,11 @@ app.patch('/api/recruiter/update-application/:applicationId', verifyToken, verif
   
 // Candidate endpoints  
 // Get all job posts
-app.get('/api/candidate/get-jobposts', verifyToken, verifyRole('CANDIDATE'), async (req, res) => {
+app.get('/api/candidate/get-jobposts', async (req, res) => {
   try {
     const jobPosts = await prisma.job.findMany();
-    res.status(200).json(jobPosts);
+    console.log(jobPosts);
+    res.status(200).json(jobPosts); 
   } catch (error) {
     logger.error('Error fetching job posts: ' + error.message);
     res.status(500).json({ error: 'Internal Server Error' });

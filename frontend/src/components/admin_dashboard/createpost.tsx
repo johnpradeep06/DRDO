@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,6 +27,19 @@ export default function JobPostingForm() {
     salary: ''  // Added field
   });
 
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    // Retrieve the token from localStorage when the component mounts
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken);
+    } else {
+      // If there's no token, redirect to login page
+      navigate('/login');
+    }
+  }, [navigate]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -38,23 +52,27 @@ export default function JobPostingForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    console.log(formData); // Log the formData before sending it
+    if (!token) {
+      toast.error('You must be logged in to post a job');
+      navigate('/login');
+      return;
+    }
 
     try {
       const response = await fetch('http://localhost:5000/api/recruiter/post-jobposts/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Include the token in the Authorization header
         },
         body: JSON.stringify(formData),
       });
 
-      // Handle response based on status
       if (response.ok) {
         const data = await response.json();
         console.log(data.jobTitle);
         toast.success('Job posting created successfully');
-        navigate(-1);  // Navigate back after successful creation
+        navigate(-1);
       } else {
         const errorData = await response.text();
         toast.error(errorData || 'Error creating job posting');
@@ -64,6 +82,7 @@ export default function JobPostingForm() {
       console.error("Error during job posting:", error);
     }
   };
+
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-md mx-auto mt-8 p-6 bg-card rounded-lg shadow-lg">
