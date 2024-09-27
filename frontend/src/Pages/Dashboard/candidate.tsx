@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Candidates } from '@/components/admin_dashboard/candidates';
+import Status from '@/components/candidate_dashboard/Status';
 import { Dash } from '@/components/candidate_dashboard/cdashboard';
 import { JobLists } from '@/components/candidate_dashboard/joblistings';
 import { Questions } from '@/components/admin_dashboard/questions';
@@ -34,7 +34,7 @@ export function CandidateDashboard() {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch("http://localhost:5000/api/candidate", {
+        const response = await fetch("http://localhost:5000/api/user", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -63,7 +63,8 @@ export function CandidateDashboard() {
       case "Job Listings":
         return <JobLists />;
       case "Application Status":
-        return <Candidates />;
+        return <Status/>
+                  
       case "Interview Schedules":
         return <Questions />;
       default:
