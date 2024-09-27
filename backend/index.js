@@ -6,7 +6,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const winston = require('winston');
 const multer = require('multer');
-const upload = multer({dest: 'uploads/'});
 
 dotenv.config();
 
