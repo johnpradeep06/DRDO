@@ -8,13 +8,15 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
   fullName     String
-  email        String   @unique
-  phoneNumber  String   @unique
+  email        String    @unique
+  phoneNumber  String    @unique
   password     String
   role         Role
-  createdAt    DateTime @default(now())
+  createdAt    DateTime  @default(now())
+  postedJobs   Job[]     @relation("RecruiterJobs")   // For recruiters
+  applications Application[] @relation("UserApplications") // For candidates
 }
 
 enum Role {
@@ -23,8 +25,9 @@ enum Role {
 }
 
 model Job {
-  id                String   @id @default(auto()) @map("_id") @db.ObjectId
-  recruiterName     String
+  id                String       @id @default(auto()) @map("_id") @db.ObjectId
+  recruiter         User         @relation("RecruiterJobs", fields: [recruiterId], references: [id]) // Recruiter who posted the job
+  recruiterId       String       @db.ObjectId
   jobTitle          String
   jobDescription    String
   employmentType    String
@@ -35,6 +38,24 @@ model Job {
   location          String
   companyName       String
   salary            String?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  applications      Application[] @relation("JobApplications") // List of applications for this job
+}
+
+model Application {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  candidate    User      @relation("UserApplications", fields: [candidateId], references: [id]) // Candidate who applied
+  candidateId  String    @db.ObjectId
+  job          Job       @relation("JobApplications", fields: [jobId], references: [id]) // Job applied for
+  jobId        String    @db.ObjectId
+  status       ApplicationStatus @default(PENDING) // Status of the application
+  appliedAt    DateTime  @default(now())  // Time of application
+}
+
+enum ApplicationStatus {
+  PENDING
+  QUALIFIED_FOR_INTERVIEW
+  REJECTED
+  WAITING
 }
