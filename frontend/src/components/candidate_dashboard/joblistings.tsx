@@ -4,6 +4,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Badge } from "@/components/ui/badge"
 import ShinyButton from "@/components/magicui/shiny-button";
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 
 interface JobPost {
@@ -127,9 +128,9 @@ export const JobLists: React.FC = () => {
                 </div>
               </CardContent>
               <CardFooter className="mt-auto flex justify-center">
-                <ShinyButton className='text-white bg-black'>
-                    <button onClick={handleClick('/candidate/apply')}>Apply</button>
-                </ShinyButton>
+                
+                    <Button onClick={handleClick('/candidate/apply')} >Apply</Button>
+                
 
               </CardFooter>
             </Card>

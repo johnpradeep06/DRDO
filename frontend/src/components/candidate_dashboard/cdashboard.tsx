@@ -63,21 +63,6 @@ export const Dash: React.FC = () => {
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
-      <div className="flex justify-between items-center">
-        <Button className="gap-2" onClick={handleResumeAction}>
-          <Plus className="h-4 w-4" />
-          {isResumeUploaded ? "View Resume" : "Upload Resume"}
-        </Button>
-
-        {/* Hidden file input for uploading the resume */}
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          style={{ display: "none" }} // Hide the file input
-        />
-      </div>
-
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
         <Card>
           <CardHeader>

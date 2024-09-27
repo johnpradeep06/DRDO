@@ -9,7 +9,7 @@ import { RecruiterDashboard} from "./Pages/Dashboard/recruiter";
 import { CandidateDashboard } from "./Pages/Dashboard/candidate";
 import JobPostingForm from "./components/admin_dashboard/createpost";
 import RLogin from "./Pages/RecruiterLogin";
-import { Apply } from "./components/candidate_dashboard/Apply";
+import  ResumeUploadCard   from "./components/candidate_dashboard/Apply";
 
 
 function App() {
@@ -27,7 +27,7 @@ function App() {
         <Route path="/auth/register" element={<Register />} />
         <Route path="/auth/recruiter" element={<RLogin />} />
         <Route path="/recruiter/createpost" element={<JobPostingForm />} />
-        <Route path="/candidate/apply" element={<Apply/>}/>
+        <Route path="/candidate/apply" element={<ResumeUploadCard/>}/>
         
         <Route path="/admin" element={
           <>
