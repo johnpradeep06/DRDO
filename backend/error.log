@@ -343,3 +343,120 @@
   level: 'error',
   timestamp: '2024-09-27T12:02:54.155Z'
 }
+{
+  message: 'Error fetching job posts for recruiter: \n' +
+    'Invalid `prisma.job.findMany()` invocation in\n' +
+    'D:\\DRDO\\DRDO\\backend\\index.js:250:41\n' +
+    '\n' +
+    "  247 app.get('/api/recruiter/get-jobposts', verifyToken, verifyRole('RECRUITER'), async (req, res) => {\n" +
+    '  248     try {\n' +
+    '  249       const recruiterId = req.user.userId; // Get recruiter ID from JWT token\n' +
+    '→ 250       const jobPosts = await prisma.job.findMany(\n' +
+    'Raw query failed. Code: `unknown`. Message: `Kind: I/O error: An existing connection was forcibly closed by the remote host. (os error 10054), labels: {}`',
+  level: 'error',
+  timestamp: '2024-09-27T12:49:50.477Z'
+}
+{
+  message: 'Error fetching user info: \n' +
+    'Invalid `prisma.user.findUnique()` invocation in\n' +
+    'D:\\DRDO\\DRDO\\backend\\index.js:149:40\n' +
+    '\n' +
+    '  146 //for jwt authentication\n' +
+    "  147 app.get('/api/user', verifyToken, async (req, res) => {\n" +
+    '  148     try {\n' +
+    '→ 149         const user = await prisma.user.findUnique(\n' +
+    'Raw query failed. Code: `unknown`. Message: `Kind: I/O error: An existing connection was forcibly closed by the remote host. (os error 10054), labels: {}`',
+  level: 'error',
+  timestamp: '2024-09-27T12:49:50.611Z'
+}
+{
+  message: 'Error fetching job posts for recruiter: \n' +
+    'Invalid `prisma.job.findMany()` invocation in\n' +
+    'D:\\DRDO\\DRDO\\backend\\index.js:250:41\n' +
+    '\n' +
+    "  247 app.get('/api/recruiter/get-jobposts', verifyToken, verifyRole('RECRUITER'), async (req, res) => {\n" +
+    '  248     try {\n' +
+    '  249       const recruiterId = req.user.userId; // Get recruiter ID from JWT token\n' +
+    '→ 250       const jobPosts = await prisma.job.findMany(\n' +
+    'Raw query failed. Code: `unknown`. Message: `Kind: I/O error: timed out, labels: {"RetryableWriteError"}`',
+  level: 'error',
+  timestamp: '2024-09-27T12:50:00.295Z'
+}
+{
+  message: 'Error deleting job post: \n' +
+    'Invalid `prisma.job.delete()` invocation in\n' +
+    'D:\\DRDO\\DRDO\\backend\\index.js:264:47\n' +
+    '\n' +
+    "  261 app.delete('/api/recruiter/delete-jobpost/:id', verifyToken, verifyRole('RECRUITER'), async (req, res) => {\n" +
+    '  262   const jobId = req.params.id;\n' +
+    '  263   try {\n' +
+    '→ 264     const deletedJob = await prisma.job.delete(\n' +
+    'An operation failed because it depends on one or more records that were required but not found. Record to delete does not exist.',
+  level: 'error',
+  timestamp: '2024-09-27T12:50:38.691Z'
+}
+{
+  message: 'Error deleting job post: \n' +
+    'Invalid `prisma.job.delete()` invocation in\n' +
+    'D:\\DRDO\\DRDO\\backend\\index.js:264:47\n' +
+    '\n' +
+    "  261 app.delete('/api/recruiter/delete-jobpost/:id', verifyToken, verifyRole('RECRUITER'), async (req, res) => {\n" +
+    '  262   const jobId = req.params.id;\n' +
+    '  263   try {\n' +
+    '→ 264     const deletedJob = await prisma.job.delete(\n' +
+    'Inconsistent column data: Malformed ObjectID: provided hex string representation must be exactly 12 bytes, instead got: ":66f6a996001895aa3e73fc99", length 25.',
+  level: 'error',
+  timestamp: '2024-09-27T12:50:38.698Z'
+}
+{
+  message: 'Error deleting job post: \n' +
+    'Invalid `prisma.job.delete()` invocation in\n' +
+    'D:\\DRDO\\DRDO\\backend\\index.js:264:47\n' +
+    '\n' +
+    "  261 app.delete('/api/recruiter/delete-jobpost/:id', verifyToken, verifyRole('RECRUITER'), async (req, res) => {\n" +
+    '  262   const jobId = req.params.id;\n' +
+    '  263   try {\n' +
+    '→ 264     const deletedJob = await prisma.job.delete(\n' +
+    'An operation failed because it depends on one or more records that were required but not found. Record to delete does not exist.',
+  level: 'error',
+  timestamp: '2024-09-27T12:50:38.764Z'
+}
+{
+  message: 'Error deleting job post: \n' +
+    'Invalid `prisma.job.delete()` invocation in\n' +
+    'D:\\DRDO\\DRDO\\backend\\index.js:264:47\n' +
+    '\n' +
+    "  261 app.delete('/api/recruiter/delete-jobpost/:id', verifyToken, verifyRole('RECRUITER'), async (req, res) => {\n" +
+    '  262   const jobId = req.params.id;\n' +
+    '  263   try {\n' +
+    '→ 264     const deletedJob = await prisma.job.delete(\n' +
+    'An operation failed because it depends on one or more records that were required but not found. Record to delete does not exist.',
+  level: 'error',
+  timestamp: '2024-09-27T12:50:38.983Z'
+}
+{
+  message: 'Error deleting job post: \n' +
+    'Invalid `prisma.job.delete()` invocation in\n' +
+    'D:\\DRDO\\DRDO\\backend\\index.js:264:47\n' +
+    '\n' +
+    "  261 app.delete('/api/recruiter/delete-jobpost/:id', verifyToken, verifyRole('RECRUITER'), async (req, res) => {\n" +
+    '  262   const jobId = req.params.id;\n' +
+    '  263   try {\n' +
+    '→ 264     const deletedJob = await prisma.job.delete(\n' +
+    'An operation failed because it depends on one or more records that were required but not found. Record to delete does not exist.',
+  level: 'error',
+  timestamp: '2024-09-27T12:50:38.988Z'
+}
+{
+  message: 'Error deleting job post: \n' +
+    'Invalid `prisma.job.delete()` invocation in\n' +
+    'D:\\DRDO\\DRDO\\backend\\index.js:264:47\n' +
+    '\n' +
+    "  261 app.delete('/api/recruiter/delete-jobpost/:id', verifyToken, verifyRole('RECRUITER'), async (req, res) => {\n" +
+    '  262   const jobId = req.params.id;\n' +
+    '  263   try {\n' +
+    '→ 264     const deletedJob = await prisma.job.delete(\n' +
+    'Inconsistent column data: Malformed ObjectID: provided hex string representation must be exactly 12 bytes, instead got: ":66f6a996001895aa3e73fc99", length 25.',
+  level: 'error',
+  timestamp: '2024-09-27T12:50:56.950Z'
+}

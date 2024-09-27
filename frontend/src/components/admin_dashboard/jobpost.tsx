@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Trash2, Edit } from 'lucide-react';
-import {  MapPin, Briefcase, GraduationCap, DollarSign } from 'lucide-react'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import ShinyButton from "@/components/magicui/shiny-button";
-
+import { MapPin, Briefcase, GraduationCap, DollarSign } from 'lucide-react';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import ShinyButton from '@/components/magicui/shiny-button';
 
 interface JobPost {
   id: string;
@@ -26,8 +25,6 @@ export const Jobpost: React.FC = () => {
   const [jobPosts, setJobPosts] = useState<JobPost[]>([]);
   const [loading, setLoading] = useState(true);
 
- 
-
   const fetchJobPosts = async () => {
     try {
       const token = localStorage.getItem('token'); // Get the token from localStorage
@@ -35,7 +32,7 @@ export const Jobpost: React.FC = () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      })
+      });
       const data = await response.json();
       if (response.ok) {
         setJobPosts(data); // Set job posts retrieved from the backend
@@ -47,6 +44,26 @@ export const Jobpost: React.FC = () => {
     } catch (error) {
       console.error('Error fetching job posts:', error);
       setLoading(false);
+    }
+  };
+
+  const deleteJobPost = async (id: string) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`http://localhost:5000/api/recruiter/delete-jobpost/:${id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.ok) {
+        setJobPosts((prev) => prev.filter((job) => job.id !== id)); // Remove deleted job from state
+      } else {
+        const data = await response.json();
+        console.error('Error deleting job post:', data.error);
+      }
+    } catch (error) {
+      console.error('Error deleting job post:', error);
     }
   };
 
@@ -111,17 +128,15 @@ export const Jobpost: React.FC = () => {
                 </div>
               </CardContent>
               <CardFooter className="mt-auto flex justify-center">
-              <Button variant="destructive" size="icon">
+                <Button variant="destructive" size="icon" onClick={() => deleteJobPost(job.id)}>
                   <Trash2 className="h-7 w-7" />
                 </Button>
-
               </CardFooter>
             </Card>
           ))}
         </div>
-      </main> 
+      </main>
     </div>
-
   );
 };
 
