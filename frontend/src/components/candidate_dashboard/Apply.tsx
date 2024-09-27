@@ -10,7 +10,6 @@ import { UploadIcon } from 'lucide-react'
 export default function ResumeUploadCard() {
   const [file, setFile] = useState<File | null>(null)
   const [uploadStatus, setUploadStatus] = useState<string | null>(null)
-  const token = localStorage.getItem('token');
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -29,19 +28,25 @@ export default function ResumeUploadCard() {
     const formData = new FormData()
     formData.append('resume', file)
     try {
-      console.log("hi");
+      const token = localStorage.getItem('token') // Move token retrieval here
+      if (!token) {
+        setUploadStatus('No authorization token found.')
+        return
+      }
+
       const response = await fetch('http://localhost:5000/api/candidate/upload', {
         method: 'POST',
         body: formData,
         headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          Authorization: `Bearer ${token}`,
+        },
       })
 
       if (response.ok) {
         setUploadStatus('File uploaded successfully.')
       } else {
-        setUploadStatus('Failed to upload the file.')
+        const errorData = await response.json();
+        setUploadStatus(`Failed to upload the file: ${errorData.error}`)
       }
     } catch (error) {
       console.error('Error uploading file:', error)
@@ -50,38 +55,23 @@ export default function ResumeUploadCard() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <Card className="w-[350px]">
-        <CardHeader>
-          <CardTitle>Upload Your Resume</CardTitle>
-          <CardDescription>Accepted formats: PDF, DOC, DOCX</CardDescription>
-        </CardHeader>
+    <Card>
+      <CardHeader>
+        <CardTitle>Upload Resume</CardTitle>
+        <CardDescription>Upload your resume here.</CardDescription>
+      </CardHeader>
+      <form onSubmit={handleUpload}>
         <CardContent>
-          <form onSubmit={handleUpload}>
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col space-y-1.5">
-                <Label htmlFor="resume">Resume</Label>
-                <Input 
-                  id="resume" 
-                  type="file" 
-                  accept=".pdf,.doc,.docx" 
-                  onChange={handleFileChange}
-                />
-              </div>
-            </div>
-          </form>
+          <Label htmlFor="resume">Resume</Label>
+          <Input type="file" id="resume" accept=".pdf" onChange={handleFileChange} />
         </CardContent>
-        <CardFooter className="flex flex-col items-start">
-          <Button type="submit" className="w-full" onClick={(e) => handleUpload(e as any)}>
-            <UploadIcon className="mr-2 h-4 w-4" /> Upload Resume
+        <CardFooter>
+          <Button type="submit">
+            Upload <UploadIcon className="ml-2" />
           </Button>
-          {uploadStatus && (
-            <p className={`mt-2 text-sm ${uploadStatus.includes('success') ? 'text-green-600' : 'text-red-600'}`}>
-              {uploadStatus}
-            </p>
-          )}
+          {uploadStatus && <p>{uploadStatus}</p>}
         </CardFooter>
-      </Card>
-    </div>
+      </form>
+    </Card>
   )
 }

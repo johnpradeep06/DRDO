@@ -1,13 +1,12 @@
 const express = require('express');
 const app = express(); 
-const multer = require('multer'); 
 const { PrismaClient } = require('@prisma/client');
 const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const winston = require('winston');
-const gridfs = require('gridfs-stream');
-const mongoClient = require('mongodb');
+const multer = require('multer');
+const upload = multer({dest: 'uploads/'});
 
 dotenv.config();
 
@@ -119,43 +118,36 @@ const loginUser = async (email, password, role, res) => {
 };
 
 app.post('/api/candidate/upload', verifyToken, upload.single('resume'), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+  
+      const userId = req.user.userId; // Assuming user ID is in req.user
+      const { originalname: filename, mimetype: contentType, filename: fileId } = req.file; // Retrieve file data
+  
+      console.log("User ID:", userId); // Log user ID
+      console.log("File details:", req.file); // Log file details
+  
+      // Save metadata to Prisma
+      const pdfDocument = await prisma.pDFDocument.create({
+        data: {
+          filename,
+          contentType,
+          fileId,
+          userId,
+        },
+      });
+  
+      res.status(200).json({
+        message: 'File uploaded successfully',
+        documentId: pdfDocument.id,
+      });
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      res.status(500).json({ error: 'Error uploading file' });
     }
-
-    const userId = req.user.userId; // Assuming user ID is in req.use
-
-    // Extract details from uploaded file
-    const filename = req.file.originalname;
-    const contentType = req.file.mimetype;
-
-    // Create a GridFS stream for the uploaded file
-    const writeStream = gfs.createWriteStream({ filename: filename });
-
-    // Pipe the uploaded file to the GridFS stream
-    writeStream.write(req.file.buffer);
-    writeStream.end();
-
-    // Save metadata to Prisma
-    const pdfDocument = await prisma.pDFDocument.create({
-      data: {
-        filename,
-        contentType,
-        fileId: writeStream._id.toString(), // Use GridFS file ID
-        userId,
-      },
-    });
-
-    res.status(200).json({
-      message: 'File uploaded successfully',
-      documentId: pdfDocument.id,
-    });
-  } catch (error) {
-    console.error('Error uploading file:', error);
-    res.status(500).json({ error: 'Error uploading file' });
-  }
-});
+  });
 
 
 app.get('/pdf/:id', async (req, res) => {
