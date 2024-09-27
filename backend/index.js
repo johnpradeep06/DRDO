@@ -98,7 +98,7 @@ const loginUser = async (email, password, role, res) => {
   }
 };
 
-app.post('/api/upload', verifyToken, async (req, res) => {
+app.post('/api/candidate/upload', verifyToken, async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
