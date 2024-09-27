@@ -41,7 +41,7 @@ export default function JobPostingForm() {
     console.log(formData); // Log the formData before sending it
 
     try {
-      const response = await fetch('http://localhost:5000/api/job-posting/', {
+      const response = await fetch('http://localhost:5000/api/recruiter/post-jobposts/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
