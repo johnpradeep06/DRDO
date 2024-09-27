@@ -123,22 +123,26 @@ app.post("/api/candidate/upload", verifyToken, upload.single("resume"), async (r
     console.log(req.file);
     const filename = req.file.originalname;
 
-    // Get the userId from the JWT token (assuming it's implemented in verifyToken middleware)
+    // Get the userId from the JWT token
     const userId = req.user.userId;
     console.log("User ID:", userId);
-    const user = req.user;
-    const jobId = req.jobId;
-    // Create the PDF document and associate it with the user
+
+    // Get the jobId from the request body or query parameters
+    const jobId = req.body.jobId || req.query.jobId;
+    
+    if (!jobId) {
+      return res.status(400).json({ error: "Job ID is required" });
+    }
+
+    // Create the PDF document and associate it with the user and job
     const newPdf = await prisma.pDFDocument.create({
       data: {
-        filename: filename, // Use the uploaded file's name
+        filename: filename,
         userId: userId,
-        user: user,
-        jobId: jobId    // Associate with the logged-in user's ID
+        jobId: jobId  // Include the jobId here
       },
     });
 
-    // Respond with success
     res.status(201).json({ message: "PDF uploaded successfully", pdfDocument: newPdf });
   } catch (error) {
     console.error("Error uploading PDF:", error);
