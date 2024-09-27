@@ -107,7 +107,7 @@ export const Jobpost: React.FC = () => {
             </Card>
           ))}
         </div>
-      </main>
+      </main> 
     </div>
 
   );
