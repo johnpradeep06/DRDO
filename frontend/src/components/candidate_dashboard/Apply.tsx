@@ -29,7 +29,7 @@ export default function ResumeUploadCard() {
     formData.append('resume', file)
 
     try {
-      const response = await fetch('http://your-backend-url.com/upload', {
+      const response = await fetch('http://localhost:5000/api/upload', {
         method: 'POST',
         body: formData,
       })

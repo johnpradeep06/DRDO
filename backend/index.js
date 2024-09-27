@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const { PrismaClient } = require('@prisma/client');
 const dotenv = require('dotenv');
-const bcrypt = require('bcrypt'); 
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const winston = require('winston');
 
@@ -15,88 +15,139 @@ app.use(express.json());
 
 //winston logger
 const logger = winston.createLogger({
-    level: 'info',
-    format: winston.format.combine(
-        winston.format.timestamp(),
-        winston.format.json(),
-        winston.format.prettyPrint()
-    ),
-    transports: [
-        new winston.transports.Console(),
-        new winston.transports.File({ filename: 'error.log', level: 'error' }),
-    ],
+  level: 'info',
+  format: winston.format.combine(
+      winston.format.timestamp(),
+      winston.format.json(),
+      winston.format.prettyPrint()
+  ),
+  transports: [
+      new winston.transports.Console(),
+      new winston.transports.File({ filename: 'error.log', level: 'error' }),
+  ],
 });
 
 //hashing
 const hashPassword = async (password) => {
-    return await bcrypt.hash(password, 10);
+  return await bcrypt.hash(password, 10);
 };
 
 //jwt
 const verifyToken = (req, res, next) => {
-    const token = req.headers['authorization']?.split(' ')[1];
+  const token = req.headers['authorization']?.split(' ')[1];
 
-    if (!token) {
-        logger.warn('No token provided');
-        return res.status(401).json({ error: 'No token provided' });
-    }
+  if (!token) {
+      logger.warn('No token provided');
+      return res.status(401).json({ error: 'No token provided' });
+  }
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-        if (err) {
-            logger.warn('Invalid or expired token');
-            return res.status(403).json({ error: 'Invalid or expired token' }); 
-        }
+  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+          logger.warn('Invalid or expired token');
+          return res.status(403).json({ error: 'Invalid or expired token' }); 
+      }
 
-        req.user = decoded;
-        next();  
-    });
+      req.user = decoded;
+      next();  
+  });
 };
 
 //verifying role
 const verifyRole = (role) => (req, res, next) => {
-    if (req.user.role !== role) {
-        logger.warn('Access denied. Insufficient permissions.')
-        return res.status(403).json({ error: 'Access denied. Insufficient permissions.' });
-    }
-    next();  
+  if (req.user.role !== role) {
+      logger.warn('Access denied. Insufficient permissions.')
+      return res.status(403).json({ error: 'Access denied. Insufficient permissions.' });
+  }
+  next();  
 };
 
 //login 
 const loginUser = async (email, password, role, res) => {
-    try {
-        const user = await prisma.user.findUnique({
-            where: { email },
-        });
+  try {
+      const user = await prisma.user.findUnique({
+          where: { email },
+      });
 
-        if (!user || user.role !== role) {
-            logger.warn(`${role} not found or invalid role for email: ${email}`);
-            return res.status(401).json({ error: `${role} not found or invalid role` });
-        }
+      if (!user || user.role !== role) {
+          logger.warn(`${role} not found or invalid role for email: ${email}`);
+          return res.status(401).json({ error: `${role} not found or invalid role` });
+      }
 
-        const isPasswordValid = await bcrypt.compare(password, user.password);
-        if (!isPasswordValid) {
-            logger.warn('Invalid password attempt for email: ' + email);
-            return res.status(401).json({ error: 'Invalid password' });
-        }
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+          logger.warn('Invalid password attempt for email: ' + email);
+          return res.status(401).json({ error: 'Invalid password' });
+      }
 
-        const token = jwt.sign(
-            { userId: user.id, email: user.email, role: user.role },
-            process.env.JWT_SECRET, 
-            { expiresIn: '1h' }     
-        );
-        // console.log(user.fullName);
-        console.log(token);
-        logger.info('User signed in successfully: ' + user.fullName);
-        res.status(200).json({ 
-            message: 'Sign in successful', 
-            token, 
-            user: { email: user.email, role: user.role, fullName: user.fullName} 
-        });
-    } catch (error) {
-        logger.error('Error during user login: ' + error.message);
-        res.status(500).json({ error: 'Something went wrong' });
-    }
+      const token = jwt.sign(
+          { userId: user.id, email: user.email, role: user.role },
+          process.env.JWT_SECRET, 
+          { expiresIn: '1h' }     
+      );
+      // console.log(user.fullName);
+      console.log(token);
+      logger.info('User signed in successfully: ' + user.fullName);
+      res.status(200).json({ 
+          message: 'Sign in successful', 
+          token, 
+          user: { email: user.email, role: user.role, fullName: user.fullName} 
+      });
+  } catch (error) {
+      logger.error('Error during user login: ' + error.message);
+      res.status(500).json({ error: 'Something went wrong' });
+  }
 };
+
+app.post('/api/upload', verifyToken, async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    const userId = req.user.userId; // Assuming user ID is in req.use
+    console.log(userId);
+    // Save metadata to Prisma
+    const pdfDocument = await prisma.pDFDocument.create({
+      data: {
+        filename,
+        contentType,
+        fileId,
+        userId,
+      },
+    });
+
+    res.status(200).json({
+      message: 'File uploaded successfully',
+      documentId: pdfDocument.id,
+    });
+  } catch (error) {
+    console.error('Error uploading file:', error);
+    res.status(500).json({ error: 'Error uploading file' });
+  }
+});
+
+
+app.get('/pdf/:id', async (req, res) => {
+  try {
+    const document = await prisma.pDFDocument.findUnique({
+      where: { id: req.params.id },
+    });
+
+    if (!document) {
+      return res.status(404).send('Document not found');
+    }
+
+    const downloadStream = gfs.openDownloadStream(new MongoClient.ObjectId(document.fileId));
+
+    res.set('Content-Type', document.contentType);
+    res.set('Content-Disposition', `inline; filename="${document.filename}"`);
+
+    downloadStream.pipe(res);
+  } catch (error) {
+    console.error('Error retrieving file:', error);
+    res.status(500).send('Error retrieving file');
+  }
+});
 
 //registering role
 app.post('/api/register', async (req, res) => {

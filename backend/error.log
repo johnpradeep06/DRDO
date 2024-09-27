@@ -473,3 +473,16 @@
   level: 'error',
   timestamp: '2024-09-27T13:10:16.419Z'
 }
+{
+  message: 'Error fetching job posts: \n' +
+    'Invalid `prisma.job.findMany()` invocation in\n' +
+    'C:\\Users\\balaa\\Desktop\\LEARN\\HACKATHONS\\CODECORTEX\\DRDO\\backend\\index.js:332:39\n' +
+    '\n' +
+    '  329 // Get all job posts\n' +
+    "  330 app.get('/api/candidate/get-jobposts', async (req, res) => {\n" +
+    '  331   try {\n' +
+    '→ 332     const jobPosts = await prisma.job.findMany(\n' +
+    'Raw query failed. Code: `unknown`. Message: `Kind: Server selection timeout: No available servers. Topology: { Type: ReplicaSetNoPrimary, Set Name: atlas-2icxhc-shard-0, Max Set Version: 101, Max Election ID: 7fffffff0000000000000065, Servers: [ { Address: cluster0-shard-00-00.ndqew.mongodb.net:27017, Type: Unknown, Error: Kind: I/O error: timed out, labels: {} }, { Address: cluster0-shard-00-01.ndqew.mongodb.net:27017, Type: Unknown, Error: Kind: I/O error: timed out, labels: {} }, { Address: cluster0-shard-00-02.ndqew.mongodb.net:27017, Type: Unknown, Error: Kind: I/O error: timed out, labels: {} } ] }, labels: {}`',
+  level: 'error',
+  timestamp: '2024-09-27T16:11:19.062Z'
+}
