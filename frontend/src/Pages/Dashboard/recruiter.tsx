@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { Candidates } from '@/components/admin_dashboard/candidates';
+import  Candidates  from '@/components/admin_dashboard/candidates';
 import { Dash } from '@/components/admin_dashboard/dashboard';
 import { Jobpost } from '@/components/admin_dashboard/jobpost';
 import { Questions } from '@/components/admin_dashboard/questions';
