@@ -144,7 +144,7 @@ app.post('/api/candidate-login', async (req, res) => {
 });
 
 //for jwt authentication
-app.get('/api/jwt-user', verifyToken, async (req, res) => {
+app.get('/api/user', verifyToken, async (req, res) => {
     try {
         const user = await prisma.user.findUnique({
             where: { id: req.user.userId },
@@ -203,9 +203,8 @@ app.post('/api/recruiter/post-jobposts', async (req, res) => {
 });
 
 //fetching jobs for the recruiter
-app.get('api/get-jobposts', async (req, res) => {
+app.get('/api/get-jobposts', async (req, res) => {
     try {
-      logger.info('Fetched all the job - posts for the candidate'); 
       const jobPosts = await prisma.job.findMany();
       res.status(200).json(jobPosts); 
     } catch (error) {

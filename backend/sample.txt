@@ -4,7 +4,7 @@ Functions:
 Endpoints: 
 
 1. Register             : http://localhost:5000/api/register 
-2. jwt authentication   : http://localhost:5000/api/jwt-user
+2. jwt authentication   : http://localhost:5000/api/user
 3. Recruiter login      : http://localhost:5000/api/recruiter-login
 4. Candidate login      : http://localhost:5000/api/candidate-login
 5. job-posting          : http://localhost:5000/api/recruiter/post-jobposts

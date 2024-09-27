@@ -33,7 +33,7 @@ export const JobLists: React.FC = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch("http://localhost:5000/api/jwt-user", {
+        const response = await fetch("http://localhost:5000/api/user", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
