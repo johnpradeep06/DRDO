@@ -5,6 +5,8 @@ const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const winston = require('winston');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
 
 dotenv.config();
 
@@ -98,33 +100,37 @@ const loginUser = async (email, password, role, res) => {
   }
 };
 
-app.post('/api/candidate/upload', verifyToken, async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ error: 'No file uploaded' });
+app.post('/api/candidate/upload', verifyToken, upload.single('resume'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+      }
+  
+      const userId = req.user.userId; // Assuming user ID is in req.user
+      const { originalname: filename, mimetype: contentType, filename: fileId } = req.file; // Retrieve file data
+  
+      console.log("User ID:", userId); // Log user ID
+      console.log("File details:", req.file); // Log file details
+  
+      // Save metadata to Prisma
+      const pdfDocument = await prisma.pDFDocument.create({
+        data: {
+          filename,
+          contentType,
+          fileId,
+          userId,
+        },
+      });
+  
+      res.status(200).json({
+        message: 'File uploaded successfully',
+        documentId: pdfDocument.id,
+      });
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      res.status(500).json({ error: 'Error uploading file' });
     }
-
-    const userId = req.user.userId; // Assuming user ID is in req.use
-    console.log(userId);
-    // Save metadata to Prisma
-    const pdfDocument = await prisma.pDFDocument.create({
-      data: {
-        filename,
-        contentType,
-        fileId,
-        userId,
-      },
-    });
-
-    res.status(200).json({
-      message: 'File uploaded successfully',
-      documentId: pdfDocument.id,
-    });
-  } catch (error) {
-    console.error('Error uploading file:', error);
-    res.status(500).json({ error: 'Error uploading file' });
-  }
-});
+  });
 
 
 app.get('/pdf/:id', async (req, res) => {
