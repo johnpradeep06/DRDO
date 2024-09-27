@@ -19,6 +19,7 @@ import { JobLists } from '@/components/candidate_dashboard/joblistings';
 import { Questions } from '@/components/admin_dashboard/questions';
 
 export function CandidateDashboard() {
+  
   const navigate = useNavigate();
   const handleLogout = () => {
     localStorage.removeItem("token");

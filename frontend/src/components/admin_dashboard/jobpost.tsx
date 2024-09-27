@@ -26,12 +26,24 @@ export const Jobpost: React.FC = () => {
   const [jobPosts, setJobPosts] = useState<JobPost[]>([]);
   const [loading, setLoading] = useState(true);
 
+ 
+
   const fetchJobPosts = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/get-jobposts');
+      const token = localStorage.getItem('token'); // Get the token from localStorage
+      const response = await fetch('http://localhost:5000/api/recruiter/jobs', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const data = await response.json();
-      setJobPosts(data);
-      setLoading(false);
+      if (response.ok) {
+        setJobPosts(data); // Set job posts retrieved from the backend
+        setLoading(false);
+      } else {
+        console.error('Error fetching job posts:', data.error);
+        setLoading(false);
+      }
     } catch (error) {
       console.error('Error fetching job posts:', error);
       setLoading(false);
