@@ -1,58 +1,55 @@
-'use client'
-
-import React, { useState } from 'react'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { UploadIcon } from 'lucide-react'
+import React, { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { UploadIcon } from 'lucide-react';
 
 export default function ResumeUploadCard() {
-  const [file, setFile] = useState<File | null>(null)
-  const [uploadStatus, setUploadStatus] = useState<string | null>(null)
+  const [file, setFile] = useState<File | null>(null);
+  const [uploadStatus, setUploadStatus] = useState<string | null>(null);
+  const token = localStorage.getItem('token'); // Move token retrieval here
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      setFile(event.target.files[0])
+      setFile(event.target.files[0]);
     }
-  }
+  };
 
   const handleUpload = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
+    event.preventDefault();
 
     if (!file) {
-      setUploadStatus('Please select a file first.')
-      return
+      setUploadStatus('Please select a file first.');
+      return;
     }
 
-    const formData = new FormData()
-    formData.append('resume', file)
-    try {
-      const token = localStorage.getItem('token') // Move token retrieval here
-      if (!token) {
-        setUploadStatus('No authorization token found.')
-        return
-      }
+    const formData = new FormData();
+    formData.append('resume', file);
+    formData.append('Content-Type', 'multipart/form-data');
 
+    try {
       const response = await fetch('http://localhost:5000/api/candidate/upload', {
         method: 'POST',
         body: formData,
         headers: {
           Authorization: `Bearer ${token}`,
         },
-      })
+      });
 
       if (response.ok) {
-        setUploadStatus('File uploaded successfully.')
+        const data = await response.json();
+        console.log(data);
+        setUploadStatus('File uploaded successfully!');
       } else {
         const errorData = await response.json();
-        setUploadStatus(`Failed to upload the file: ${errorData.error}`)
+        setUploadStatus(`Failed to upload the file: ${errorData.error}`);
       }
     } catch (error) {
-      console.error('Error uploading file:', error)
-      setUploadStatus('An error occurred while uploading the file.')
+      console.error('Error uploading file:', error);
+      setUploadStatus('An error occurred while uploading the file.');
     }
-  }
+  };
 
   return (
     <Card>
@@ -73,5 +70,5 @@ export default function ResumeUploadCard() {
         </CardFooter>
       </form>
     </Card>
-  )
+  );
 }

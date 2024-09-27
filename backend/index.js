@@ -13,23 +13,24 @@ const prisma = new PrismaClient();
 const cors = require('cors');
 app.use(cors());
 app.use(express.json());
-const upload = multer({ dest: './asset' })
+app.use("/assets", express.static("files"));
 
-let gfs;
-
-const connectToGridFS = async () => {
-  try {
-    const mongoURL = process.env.DATABASE_URL;
-    const mongoClientInstance = new mongoClient.MongoClient(mongoURL);
-    await mongoClientInstance.connect();
-    const db = mongoClientInstance.db('codecortexjh'); // Replace with your database name
-    gfs = gridfs(db, mongoClient.mongo.GridfsBucket);
-    logger.info('Connected to GridFS successfully');
-  } catch (error) {
-    logger.error('Error connecting to GridFS:', error);
-    throw error; // Re-throw the error to be handled in the calling function
+const storage = multer.diskStorage({
+  destination: function(req, file, cb){
+    cb(null, './assets')
+  },
+  filename: function(req, file, cb){
+    cb(null, file.originalname)
   }
-};
+})
+
+const upload = multer({
+    storage: storage, 
+    fields: [
+      { name: 'resume', maxCount: 1 },
+      { name: 'title', maxCount: 1 }, // Allow an additional field named 'title'
+    ],
+});
 
 //winston logger
 const logger = winston.createLogger({
@@ -116,60 +117,35 @@ const loginUser = async (email, password, role, res) => {
   }
 };
 
-app.post('/api/candidate/upload', verifyToken, upload.single('resume'), async (req, res) => {
-    try {
-      if (!req.file) {
-        return res.status(400).json({ error: 'No file uploaded' });
-      }
-  
-      const userId = req.user.userId; // Assuming user ID is in req.user
-      const { originalname: filename, mimetype: contentType, filename: fileId } = req.file; // Retrieve file data
-  
-      console.log("User ID:", userId); // Log user ID
-      console.log("File details:", req.file); // Log file details
-  
-      // Save metadata to Prisma
-      const pdfDocument = await prisma.pDFDocument.create({
-        data: {
-          filename,
-          contentType,
-          fileId,
-          userId,
-        },
-      });
-  
-      res.status(200).json({
-        message: 'File uploaded successfully',
-        documentId: pdfDocument.id,
-      });
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      res.status(500).json({ error: 'Error uploading file' });
-    }
-  });
-
-
-app.get('/pdf/:id', async (req, res) => {
+app.post("/api/candidate/upload", verifyToken, upload.single("resume"), async (req, res) => {
   try {
-    const document = await prisma.pDFDocument.findUnique({
-      where: { id: req.params.id },
+    // Log and get the uploaded file's name
+    console.log(req.file);
+    const filename = req.file.originalname;
+
+    // Get the userId from the JWT token (assuming it's implemented in verifyToken middleware)
+    const userId = req.user.userId;
+    console.log("User ID:", userId);
+    const user = req.user;
+    const jobId = req.jobId;
+    // Create the PDF document and associate it with the user
+    const newPdf = await prisma.pDFDocument.create({
+      data: {
+        filename: filename, // Use the uploaded file's name
+        userId: userId,
+        user: user,
+        jobId: jobId    // Associate with the logged-in user's ID
+      },
     });
 
-    if (!document) {
-      return res.status(404).send('Document not found');
-    }
-
-    const downloadStream = gfs.openDownloadStream(new MongoClient.ObjectId(document.fileId));
-
-    res.set('Content-Type', document.contentType);
-    res.set('Content-Disposition', `inline; filename="${document.filename}"`);
-
-    downloadStream.pipe(res);
+    // Respond with success
+    res.status(201).json({ message: "PDF uploaded successfully", pdfDocument: newPdf });
   } catch (error) {
-    console.error('Error retrieving file:', error);
-    res.status(500).send('Error retrieving file');
+    console.error("Error uploading PDF:", error);
+    res.status(500).json({ error: "Error uploading PDF" });
   }
 });
+
 
 //registering role
 app.post('/api/register', async (req, res) => {
@@ -403,7 +379,6 @@ app.patch('/api/recruiter/update-application/:applicationId', verifyToken, verif
 app.get('/api/candidate/get-jobposts', async (req, res) => {
   try {
     const jobPosts = await prisma.job.findMany();
-    console.log(jobPosts);
     res.status(200).json(jobPosts); 
   } catch (error) {
     logger.error('Error fetching job posts: ' + error.message);
