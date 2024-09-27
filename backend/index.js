@@ -13,6 +13,7 @@ const cors = require('cors');
 app.use(cors());
 app.use(express.json());
 
+//winston logger
 const logger = winston.createLogger({
     level: 'info',
     format: winston.format.combine(
@@ -26,10 +27,12 @@ const logger = winston.createLogger({
     ],
 });
 
+//hashing
 const hashPassword = async (password) => {
     return await bcrypt.hash(password, 10);
 };
 
+//jwt
 const verifyToken = (req, res, next) => {
     const token = req.headers['authorization']?.split(' ')[1];
 
@@ -49,6 +52,7 @@ const verifyToken = (req, res, next) => {
     });
 };
 
+//verifying role
 const verifyRole = (role) => (req, res, next) => {
     if (req.user.role !== role) {
         logger.warn('Access denied. Insufficient permissions.')
@@ -57,6 +61,7 @@ const verifyRole = (role) => (req, res, next) => {
     next();  
 };
 
+//login 
 const loginUser = async (email, password, role, res) => {
     try {
         const user = await prisma.user.findUnique({
@@ -80,7 +85,7 @@ const loginUser = async (email, password, role, res) => {
             { expiresIn: '1h' }     
         );
         // console.log(user.fullName);
-        // console.log(token);
+        console.log(token);
         logger.info('User signed in successfully: ' + user.fullName);
         res.status(200).json({ 
             message: 'Sign in successful', 
@@ -93,44 +98,52 @@ const loginUser = async (email, password, role, res) => {
     }
 };
 
-app.get('/api/jobposts', async (req, res) => {
-    try {
-      const jobPosts = await prisma.job.findMany(); 
-      res.status(200).json(jobPosts); 
-    } catch (error) {
-      logger.error('Error fetching job posts: ' + error.message);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
-  
+//registering role
+app.post('/api/register', async (req, res) => {
+    const { fullName, email, phoneNumber, password, role } = req.body;
 
-app.get('/api/user', verifyToken, async (req, res) => {
     try {
-        const user = await prisma.user.findUnique({
-            where: { id: req.user.userId },
-            select: { fullName: true },
+        const existingUser = await prisma.user.findUnique({
+            where: { email },
         });
-        if (!user) {
-            logger.warn('User not found for ID: ' + req.user.userId);
-            return res.status(404).json({ error: 'User not found' });
+
+        if (existingUser) {
+            logger.warn('User already exists: ' + email);
+            return res.status(400).json({ error: 'User already exists' });
         }
-        res.status(200).json({ name: user.fullName });
+
+        const hashedPassword = await hashPassword(password);
+
+        const newUser = await prisma.user.create({
+            data: {
+                fullName,
+                email,
+                phoneNumber,
+                password: hashedPassword,
+                role,
+            },
+        });
+        logger.info('User registered successfully: ' + newUser.fullName)
+        res.status(201).json({ message: 'User registered successfully', user: newUser });
     } catch (error) {
-        logger.error('Error fetching user info: ' + error.message);
-        res.status(500).json({ error: 'Internal server error' });
+        logger.error('Error during user registration: ' + error.message);
+        res.status(500).json({ error: 'Something went wrong' });
     }
 });
 
-app.post('/api/recruiter', async (req, res) => {
+//recruiter login
+app.post('/api/recruiter-login', async (req, res) => {
     const { email, password } = req.body;
     loginUser(email, password, 'RECRUITER', res);
 });
 
-app.post('/api/candidate', async (req, res) => {
+//candidate login
+app.post('/api/candidate-login', async (req, res) => {
     const { email, password } = req.body;
     loginUser(email, password, 'CANDIDATE', res);
 });
 
+//posting job posts
 app.post('/api/job-posting', async (req, res) => {
     try {
       const {
@@ -168,40 +181,21 @@ app.post('/api/job-posting', async (req, res) => {
         logger.error('Error creating job posting: ' + error.message);
         res.status(500).json({ message: 'Error creating job posting' });
     }
-  });
-
-app.post('/api/register', async (req, res) => {
-    const { fullName, email, phoneNumber, password, role } = req.body;
-
-    try {
-        const existingUser = await prisma.user.findUnique({
-            where: { email },
-        });
-
-        if (existingUser) {
-            logger.warn('User already exists: ' + email);
-            return res.status(400).json({ error: 'User already exists' });
-        }
-
-        const hashedPassword = await hashPassword(password);
-
-        const newUser = await prisma.user.create({
-            data: {
-                fullName,
-                email,
-                phoneNumber,
-                password: hashedPassword,
-                role,
-            },
-        });
-        logger.info('User registered successfully: ' + newUser.fullName)
-        res.status(201).json({ message: 'User registered successfully', user: newUser });
-    } catch (error) {
-        logger.error('Error during user registration: ' + error.message);
-        res.status(500).json({ error: 'Something went wrong' });
-    }
 });
 
+//fetching jobs for the recruiter
+app.get('/api/jobposts', async (req, res) => {
+    try {
+      const jobPosts = await prisma.job.findMany();
+      logger.info('Fetched all the job - posts for the candidate'); 
+      res.status(200).json(jobPosts); 
+    } catch (error) {
+      logger.error('Error fetching job posts: ' + error.message);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
+//fetching all the users
 app.get('/api/users', async (req, res) => {
     try {
         const users = await prisma.user.findMany({
@@ -211,6 +205,7 @@ app.get('/api/users', async (req, res) => {
                 role: true,
             },
         });
+        logger.info(users);
         res.status(200).json(users);
     } catch (error) {
         logger.error('Failed to fetch users: ' + error.message);
@@ -218,10 +213,12 @@ app.get('/api/users', async (req, res) => {
     }
 });
 
+//recruiter dashboard
 app.get('/api/recruiter/dashboard', verifyToken, verifyRole('RECRUITER'), (req, res) => {
     res.status(200).json({ message: 'Welcome to the recruiter dashboard' });
 });
 
+//candidate dashboard
 app.get('/api/candidate/dashboard', verifyToken, verifyRole('CANDIDATE'), (req, res) => {
     res.status(200).json({ message: 'Welcome to the candidate dashboard' });
 });

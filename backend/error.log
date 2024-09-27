@@ -1,0 +1,78 @@
+{
+  message: 'Error fetching job posts: \n' +
+    'Invalid `prisma.job.findMany()` invocation in\n' +
+    'C:\\Users\\balaa\\Desktop\\LEARN\\HACKATHONS\\CODECORTEX\\DRDO\\backend\\index.js:98:41\n' +
+    '\n' +
+    '  95 \n' +
+    "  96 app.get('/api/jobposts', async (req, res) => {\n" +
+    '  97     try {\n' +
+    '→ 98       const jobPosts = await prisma.job.findMany(\n' +
+    'Error converting field "recruiterId" of expected non-nullable type "String", found incompatible value of "null".',
+  level: 'error',
+  timestamp: '2024-09-27T06:30:57.108Z'
+}
+{
+  message: 'Error fetching job posts: \n' +
+    'Invalid `prisma.job.findMany()` invocation in\n' +
+    'C:\\Users\\balaa\\Desktop\\LEARN\\HACKATHONS\\CODECORTEX\\DRDO\\backend\\index.js:98:41\n' +
+    '\n' +
+    '  95 \n' +
+    "  96 app.get('/api/jobposts', async (req, res) => {\n" +
+    '  97     try {\n' +
+    '→ 98       const jobPosts = await prisma.job.findMany(\n' +
+    'Error converting field "recruiterId" of expected non-nullable type "String", found incompatible value of "null".',
+  level: 'error',
+  timestamp: '2024-09-27T06:30:57.405Z'
+}
+{
+  message: 'Error fetching job posts: \n' +
+    'Invalid `prisma.job.findMany()` invocation in\n' +
+    'C:\\Users\\balaa\\Desktop\\LEARN\\HACKATHONS\\CODECORTEX\\DRDO\\backend\\index.js:98:41\n' +
+    '\n' +
+    '  95 \n' +
+    "  96 app.get('/api/jobposts', async (req, res) => {\n" +
+    '  97     try {\n' +
+    '→ 98       const jobPosts = await prisma.job.findMany(\n' +
+    'Error converting field "recruiterId" of expected non-nullable type "String", found incompatible value of "null".',
+  level: 'error',
+  timestamp: '2024-09-27T06:31:02.146Z'
+}
+{
+  message: 'Error fetching job posts: \n' +
+    'Invalid `prisma.job.findMany()` invocation in\n' +
+    'C:\\Users\\balaa\\Desktop\\LEARN\\HACKATHONS\\CODECORTEX\\DRDO\\backend\\index.js:98:41\n' +
+    '\n' +
+    '  95 \n' +
+    "  96 app.get('/api/jobposts', async (req, res) => {\n" +
+    '  97     try {\n' +
+    '→ 98       const jobPosts = await prisma.job.findMany(\n' +
+    'Error converting field "recruiterId" of expected non-nullable type "String", found incompatible value of "null".',
+  level: 'error',
+  timestamp: '2024-09-27T06:31:04.321Z'
+}
+{
+  message: 'Error fetching job posts: \n' +
+    'Invalid `prisma.job.findMany()` invocation in\n' +
+    'C:\\Users\\balaa\\Desktop\\LEARN\\HACKATHONS\\CODECORTEX\\DRDO\\backend\\index.js:98:41\n' +
+    '\n' +
+    '  95 \n' +
+    "  96 app.get('/api/jobposts', async (req, res) => {\n" +
+    '  97     try {\n' +
+    '→ 98       const jobPosts = await prisma.job.findMany(\n' +
+    'Error converting field "recruiterId" of expected non-nullable type "String", found incompatible value of "null".',
+  level: 'error',
+  timestamp: '2024-09-27T06:31:09.761Z'
+}
+{
+  message: 'Error fetching job posts: \n' +
+    'Invalid `prisma.job.findMany()` invocation in\n' +
+    'C:\\Users\\balaa\\Desktop\\LEARN\\HACKATHONS\\CODECORTEX\\DRDO\\backend\\index.js:98:41\n' +
+    '\n' +
+    '  95 \n' +
+    "  96 app.get('/api/jobposts', async (req, res) => {\n" +
+    '  97     try {\n' +
+    '→ 98       const jobPosts = await prisma.job.findMany(\n' +
+    'Error converting field "recruiterId" of expected non-nullable type "String", found incompatible value of "null".',
+  level: 'error',
+  timestamp: '2024-09-27T06:31:10.061Z'
+}

@@ -39,6 +39,7 @@
     "framer-motion": "^11.3.31",
     "lodash": "^4.17.21",
     "lucide-react": "^0.438.0",
+    "miragejs": "^0.2.0-alpha.3",
     "next": "^14.2.7",
     "next-themes": "^0.3.0",
     "react": "^18.3.1",

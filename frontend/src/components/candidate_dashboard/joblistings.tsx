@@ -56,7 +56,11 @@ export const JobLists: React.FC = () => {
 
   const fetchJobPosts = async () => {
     try {
+<<<<<<< HEAD
       const response = await fetch('http://localhost:5000/api/jobplists');
+=======
+      const response = await fetch('http://localhost:5000/api/jobposts');
+>>>>>>> d33e319562b3b89af132e377462552e058704aea
       const data = await response.json();
       setJobPosts(data);
       setLoading(false);
