@@ -1,0 +1,19 @@
+Functions:
+
+
+Endpoints: 
+
+1. Register             : http://localhost:5000/api/register 
+2. jwt authentication   : http://localhost:5000/api/jwt-user
+3. Recruiter login      : http://localhost:5000/api/recruiter-login
+4. Candidate login      : http://localhost:5000/api/candidate-login
+5. job-posting          : http://localhost:5000/api/recruiter/post-jobposts
+6. viewing job posts    : http://localhost:5000/api/get-jobposts
+
+7. candidate job post view: http://localhost:5000/api/recruiter/get-jobposts
+8. recruiter job post view: http://localhost:5000/api/candidate/get-jobposts
+9. get all users: http://localhost:5000/api/users
+
+10. recruiter dashboard: http://localhost:5000/api/recruiter/dashboard
+11. candidate dashboard: http://localhost:5000/api/candidate/dashboard
+12. file upload: http://localhost:5000/api/candidate/upload-file

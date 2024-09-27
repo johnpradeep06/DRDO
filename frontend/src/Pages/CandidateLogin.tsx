@@ -28,7 +28,7 @@ const CLogin: React.FC = () => {
         e.preventDefault();
         setError('');
         try {
-            const response = await axios.post('http://localhost:5000/api/candidate/', {
+            const response = await axios.post('http://localhost:5000/api/candidate-login/', {
                 email,
                 password,
             });
