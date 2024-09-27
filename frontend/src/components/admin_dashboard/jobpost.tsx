@@ -28,7 +28,7 @@ export const Jobpost: React.FC = () => {
 
   const fetchJobPosts = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/jobposts');
+      const response = await fetch('http://localhost:5000/api/get-jobposts');
       const data = await response.json();
       setJobPosts(data);
       setLoading(false);
