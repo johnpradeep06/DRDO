@@ -17,3 +17,10 @@ Endpoints:
 10. recruiter dashboard: http://localhost:5000/api/recruiter/dashboard
 11. candidate dashboard: http://localhost:5000/api/candidate/dashboard
 12. file upload: http://localhost:5000/api/candidate/upload-file
+
+13. candidate apply: http://localhost:5000/api/candidate/applyjob
+14. applied jobs: http://localhost:5000/api/candidate/applied-jobs
+15. 
+
+status: applied
+        rejected/
