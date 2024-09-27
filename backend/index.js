@@ -1,10 +1,13 @@
 const express = require('express');
-const app = express();
+const app = express(); 
+const multer = require('multer'); 
 const { PrismaClient } = require('@prisma/client');
 const dotenv = require('dotenv');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const winston = require('winston');
+const gridfs = require('gridfs-stream');
+const mongoClient = require('mongodb');
 
 dotenv.config();
 
@@ -12,6 +15,23 @@ const prisma = new PrismaClient();
 const cors = require('cors');
 app.use(cors());
 app.use(express.json());
+const upload = multer({ dest: './asset' })
+
+let gfs;
+
+const connectToGridFS = async () => {
+  try {
+    const mongoURL = process.env.DATABASE_URL;
+    const mongoClientInstance = new mongoClient.MongoClient(mongoURL);
+    await mongoClientInstance.connect();
+    const db = mongoClientInstance.db('codecortexjh'); // Replace with your database name
+    gfs = gridfs(db, mongoClient.mongo.GridfsBucket);
+    logger.info('Connected to GridFS successfully');
+  } catch (error) {
+    logger.error('Error connecting to GridFS:', error);
+    throw error; // Re-throw the error to be handled in the calling function
+  }
+};
 
 //winston logger
 const logger = winston.createLogger({
@@ -98,20 +118,31 @@ const loginUser = async (email, password, role, res) => {
   }
 };
 
-app.post('/api/candidate/upload', verifyToken, async (req, res) => {
+app.post('/api/candidate/upload', verifyToken, upload.single('resume'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'No file uploaded' });
     }
 
     const userId = req.user.userId; // Assuming user ID is in req.use
-    console.log(userId);
+
+    // Extract details from uploaded file
+    const filename = req.file.originalname;
+    const contentType = req.file.mimetype;
+
+    // Create a GridFS stream for the uploaded file
+    const writeStream = gfs.createWriteStream({ filename: filename });
+
+    // Pipe the uploaded file to the GridFS stream
+    writeStream.write(req.file.buffer);
+    writeStream.end();
+
     // Save metadata to Prisma
     const pdfDocument = await prisma.pDFDocument.create({
       data: {
         filename,
         contentType,
-        fileId,
+        fileId: writeStream._id.toString(), // Use GridFS file ID
         userId,
       },
     });

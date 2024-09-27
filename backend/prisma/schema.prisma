@@ -1,72 +1,72 @@
-generator client {
-  provider = "prisma-client-js"
-}
+  generator client {
+    provider = "prisma-client-js"
+  }
 
-datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
-}
+  datasource db {
+    provider = "mongodb"
+    url      = env("DATABASE_URL")
+  }
 
-model User {
-  id           String        @id @default(auto()) @map("_id") @db.ObjectId
-  fullName     String
-  email        String        @unique
-  phoneNumber  String        @unique
-  password     String
-  role         Role
-  createdAt    DateTime      @default(now())
-  postedJobs   Job[]         @relation("RecruiterJobs")
-  applications Application[] @relation("CandidateApplications")
-  pdfDocument  PDFDocument?  @relation("UserPDF")
-}
+  model User {
+    id           String        @id @default(auto()) @map("_id") @db.ObjectId
+    fullName     String
+    email        String        @unique
+    phoneNumber  String        @unique
+    password     String
+    role         Role
+    createdAt    DateTime      @default(now())
+    postedJobs   Job[]         @relation("RecruiterJobs")
+    applications Application[] @relation("CandidateApplications")
+    pdfDocument  PDFDocument?  @relation("UserPDF")
+  }
 
-enum Role {
-  RECRUITER
-  CANDIDATE
-}
+  enum Role {
+    RECRUITER
+    CANDIDATE
+  }
 
-model Job {
-  id                 String        @id @default(auto()) @map("_id") @db.ObjectId
-  recruiter          User?         @relation("RecruiterJobs", fields: [recruiterId], references: [id])
-  recruiterId        String?       @db.ObjectId
-  jobTitle           String
-  jobDescription     String
-  employmentType     String
-  requiredSkills     String
-  requiredExperience String
-  educationalLevel   String
-  contactInfo        String
-  location           String
-  companyName        String
-  salary             String?
-  createdAt          DateTime      @default(now())
-  updatedAt          DateTime      @updatedAt
-  applications       Application[] @relation("JobApplications")
-}
+  model Job {
+    id                 String        @id @default(auto()) @map("_id") @db.ObjectId
+    recruiter          User?         @relation("RecruiterJobs", fields: [recruiterId], references: [id])
+    recruiterId        String?       @db.ObjectId
+    jobTitle           String
+    jobDescription     String
+    employmentType     String
+    requiredSkills     String
+    requiredExperience String
+    educationalLevel   String
+    contactInfo        String
+    location           String
+    companyName        String
+    salary             String?
+    createdAt          DateTime      @default(now())
+    updatedAt          DateTime      @updatedAt
+    applications       Application[] @relation("JobApplications")
+  }
 
-model Application {
-  id           String            @id @default(auto()) @map("_id") @db.ObjectId
-  candidate    User              @relation("CandidateApplications", fields: [candidateId], references: [id])
-  candidateId  String            @db.ObjectId
-  job          Job               @relation("JobApplications", fields: [jobId], references: [id])
-  jobId        String            @db.ObjectId
-  status       ApplicationStatus @default(PENDING)
-  appliedAt    DateTime          @default(now())
-}
+  model Application {
+    id           String            @id @default(auto()) @map("_id") @db.ObjectId
+    candidate    User              @relation("CandidateApplications", fields: [candidateId], references: [id])
+    candidateId  String            @db.ObjectId
+    job          Job               @relation("JobApplications", fields: [jobId], references: [id])
+    jobId        String            @db.ObjectId
+    status       ApplicationStatus @default(PENDING)
+    appliedAt    DateTime          @default(now())
+  }
 
-enum ApplicationStatus {
-  PENDING
-  QUALIFIED_FOR_INTERVIEW
-  REJECTED
-  WAITING
-}
+  enum ApplicationStatus {
+    PENDING
+    QUALIFIED_FOR_INTERVIEW
+    REJECTED
+    WAITING
+  }
 
-model PDFDocument {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  filename    String
-  contentType String
-  fileId      String   @unique // This will store the GridFS file ID
-  uploadDate  DateTime @default(now())
-  user        User     @relation("UserPDF", fields: [userId], references: [id])
-  userId      String   @unique @db.ObjectId
-}
+  model PDFDocument {
+    id          String   @id @default(auto()) @map("_id") @db.ObjectId
+    filename    String
+    contentType String
+    fileId      String   @unique 
+    uploadDate  DateTime @default(now())
+    user        User     @relation("UserPDF", fields: [userId], references: [id])
+    userId      String   @unique @db.ObjectId
+  }
