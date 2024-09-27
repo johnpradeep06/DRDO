@@ -4,8 +4,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { UploadIcon } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 
 export default function ResumeUploadCard() {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const jobId = queryParams.get('jobId');
   const [file, setFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);
   const token = localStorage.getItem('token'); // Move token retrieval here
@@ -18,16 +22,16 @@ export default function ResumeUploadCard() {
 
   const handleUpload = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+  
     if (!file) {
       setUploadStatus('Please select a file first.');
       return;
     }
-
+  
     const formData = new FormData();
     formData.append('resume', file);
-    formData.append('Content-Type', 'multipart/form-data');
-
+    formData.append('jobId', jobId!); // Include jobId in the form data
+  
     try {
       const response = await fetch('http://localhost:5000/api/candidate/upload', {
         method: 'POST',
@@ -36,7 +40,7 @@ export default function ResumeUploadCard() {
           Authorization: `Bearer ${token}`,
         },
       });
-
+  
       if (response.ok) {
         const data = await response.json();
         console.log();
