@@ -10,6 +10,7 @@ import { UploadIcon } from 'lucide-react'
 export default function ResumeUploadCard() {
   const [file, setFile] = useState<File | null>(null)
   const [uploadStatus, setUploadStatus] = useState<string | null>(null)
+  const token = localStorage.getItem('token');
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -29,9 +30,12 @@ export default function ResumeUploadCard() {
     formData.append('resume', file)
 
     try {
-      const response = await fetch('http://your-backend-url.com/upload', {
+      const response = await fetch('http://localhost:5000/candidate/upload', {
         method: 'POST',
         body: formData,
+        headers: {
+            Authorization: `Bearer ${token}`,
+          },
       })
 
       if (response.ok) {

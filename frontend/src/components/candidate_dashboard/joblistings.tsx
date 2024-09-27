@@ -31,28 +31,28 @@ export const JobLists: React.FC = () => {
     return ()=>navigate(url);
   }
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchUserData = async (id: string) => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch("http://localhost:5000/api/user", {
+        const response = await fetch(`http://localhost:5000/api/user/${id}`, { // Use backticks for template literals
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         const data = await response.json();
         if (response.ok) {
-          console.log(`Name from the front end: {data.name}`);
           setUserName(data.name); // Set the user's full name
         } else {
           console.error("Error fetching user data:", data.error);
         }
-        console.log(`Set the username: {UserName}`);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
-
-    fetchUserData();
+  
+    // Assuming you have access to the user's ID here
+    const userId = "some-user-id"; // Replace with actual user ID
+    fetchUserData(userId);
   }, []);
 
   const fetchJobPosts = async () => {
