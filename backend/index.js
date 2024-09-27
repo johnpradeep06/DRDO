@@ -118,33 +118,30 @@ const loginUser = async (email, password, role, res) => {
 };
 
 app.post("/api/candidate/upload", verifyToken, upload.single("resume"), async (req, res) => {
-  try {
-    // Log and get the uploaded file's name
-    console.log(req.file);
-    const filename = req.file.originalname;
-
-    // Get the userId from the JWT token (assuming it's implemented in verifyToken middleware)
-    const userId = req.user.userId;
-    console.log("User ID:", userId);
-    const user = req.user;
-    const jobId = req.jobId;
-    // Create the PDF document and associate it with the user
-    const newPdf = await prisma.pDFDocument.create({
-      data: {
-        filename: filename, // Use the uploaded file's name
-        userId: userId,
-        user: user,
-        jobId: jobId    // Associate with the logged-in user's ID
-      },
-    });
-
-    // Respond with success
-    res.status(201).json({ message: "PDF uploaded successfully", pdfDocument: newPdf });
-  } catch (error) {
-    console.error("Error uploading PDF:", error);
-    res.status(500).json({ error: "Error uploading PDF" });
-  }
-});
+    try {
+      console.log(req.file);
+      const filename = req.file.originalname;
+  
+      const userId = req.user.userId;
+      console.log("User ID:", userId);
+  
+      const jobId = req.body.jobId;
+      
+      // Create the PDF document and associate it with the user
+      const newPdf = await prisma.pDFDocument.create({
+        data: {
+          filename: filename,
+          userId: userId,
+          jobId: jobId
+        },
+      });
+  
+      res.status(201).json({ message: "PDF uploaded successfully", pdfDocument: newPdf });
+    } catch (error) {
+      console.error("Error uploading PDF:", error);
+      res.status(500).json({ error: "Error uploading PDF", details: error.message });
+    }
+  });
 
 
 //registering role

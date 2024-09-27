@@ -27,9 +27,9 @@ export const JobLists: React.FC = () => {
   const [jobPosts, setJobPosts] = useState<JobPost[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const handleClick = (url: string)=>{
-    return ()=>navigate(url);
-  }
+  const handleClick = (jobId: string) => {
+    return () => navigate(`/candidate/apply?jobId=${jobId}`); // Pass the job ID as a query parameter
+  };
   useEffect(() => {
     const fetchUserData = async (id: string) => {
       try {
@@ -135,7 +135,7 @@ export const JobLists: React.FC = () => {
               </CardContent>
               <CardFooter className="mt-auto flex justify-center">
                 
-                    <Button onClick={handleClick('/candidate/apply')} >Apply</Button>
+              <Button onClick={handleClick(job.id)}>Apply</Button>
                 
 
               </CardFooter>
