@@ -143,8 +143,27 @@ app.post('/api/candidate-login', async (req, res) => {
     loginUser(email, password, 'CANDIDATE', res);
 });
 
+//for jwt authentication
+app.get('/api/jwt-user', verifyToken, async (req, res) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: req.user.userId },
+            select: { fullName: true },
+        });
+        if (!user) {
+            logger.warn('User not found for ID: ' + req.user.userId);
+            return res.status(404).json({ error: 'User not found' });
+        }
+        res.status(200).json({ name: user.fullName });
+    } catch (error) {
+        logger.error('Error fetching user info: ' + error.message);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
 //posting job posts
-app.post('/api/job-posting', async (req, res) => {
+app.post('/api/recruiter/post-jobposts', async (req, res) => {
     try {
       const {
         recruiterName,
@@ -184,10 +203,10 @@ app.post('/api/job-posting', async (req, res) => {
 });
 
 //fetching jobs for the recruiter
-app.get('/api/jobposts', async (req, res) => {
+app.get('api/get-jobposts', async (req, res) => {
     try {
-      const jobPosts = await prisma.job.findMany();
       logger.info('Fetched all the job - posts for the candidate'); 
+      const jobPosts = await prisma.job.findMany();
       res.status(200).json(jobPosts); 
     } catch (error) {
       logger.error('Error fetching job posts: ' + error.message);
