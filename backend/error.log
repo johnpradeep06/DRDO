@@ -460,3 +460,16 @@
   level: 'error',
   timestamp: '2024-09-27T12:50:56.950Z'
 }
+{
+  message: 'Error deleting job post: \n' +
+    'Invalid `prisma.job.delete()` invocation in\n' +
+    'D:\\DRDO\\DRDO\\backend\\index.js:264:47\n' +
+    '\n' +
+    "  261 app.delete('/api/recruiter/delete-jobpost/:id', verifyToken, verifyRole('RECRUITER'), async (req, res) => {\n" +
+    '  262   const jobId = req.params.id;\n' +
+    '  263   try {\n' +
+    '→ 264     const deletedJob = await prisma.job.delete(\n' +
+    'An operation failed because it depends on one or more records that were required but not found. Record to delete does not exist.',
+  level: 'error',
+  timestamp: '2024-09-27T13:10:16.419Z'
+}

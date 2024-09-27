@@ -50,7 +50,7 @@ export const Jobpost: React.FC = () => {
   const deleteJobPost = async (id: string) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/recruiter/delete-jobpost/:${id}`, {
+      const response = await fetch(`http://localhost:5000/api/recruiter/delete-jobpost/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
