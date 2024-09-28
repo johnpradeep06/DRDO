@@ -1295,3 +1295,17 @@
   level: 'error',
   timestamp: '2024-09-28T06:06:02.908Z'
 }
+{
+  level: 'error',
+  message: 'Error fetching applied jobs: recruiterId is not defined',
+  stack: 'ReferenceError: recruiterId is not defined\n' +
+    '    at C:\\Users\\balaa\\Desktop\\LEARN\\HACKATHONS\\CODECORTEX\\DRDO\\backend\\index.js:292:69',
+  timestamp: '2024-09-28T06:16:48.176Z'
+}
+{
+  level: 'error',
+  message: 'Error fetching applied jobs: recruiterId is not defined',
+  stack: 'ReferenceError: recruiterId is not defined\n' +
+    '    at C:\\Users\\balaa\\Desktop\\LEARN\\HACKATHONS\\CODECORTEX\\DRDO\\backend\\index.js:292:69',
+  timestamp: '2024-09-28T06:16:48.275Z'
+}

@@ -252,7 +252,7 @@ app.get('/api/candidate/appliedjobs', verifyToken, async (req, res) => {
 app.get('/api/recruiter/appliedjobs', verifyToken, async (req, res) => {
   const userId = req.user.userId;
 
-  if (!recruiterId) {
+  if (!userId) {
     logger.error('Recruiter ID is missing in the request');
     return res.status(400).json({ message: 'Recruiter ID is required' });
   }
@@ -260,7 +260,7 @@ app.get('/api/recruiter/appliedjobs', verifyToken, async (req, res) => {
   try {
     const appliedJobs = await prisma.job.findMany({
       where: {
-        recruiterId: recruiterId,
+        recruiterId: userId,
       },
       include: {
         applications: {
@@ -268,7 +268,7 @@ app.get('/api/recruiter/appliedjobs', verifyToken, async (req, res) => {
             candidate: {
               select: {
                 id: true,
-                fullName: true,
+                fullName: true, // This will be used for the candidate's name
                 email: true,
               },
             },
@@ -279,8 +279,8 @@ app.get('/api/recruiter/appliedjobs', verifyToken, async (req, res) => {
 
     const formattedAppliedJobs = appliedJobs.flatMap((job) =>
       job.applications.map((application) => ({
-        id: application.id,
-        candidateName: application.candidate.fullName,
+        id: application.candidate.id, // Ensure this is the candidate ID
+        name: application.candidate.fullName, // Use 'name' for the candidate name
         candidateEmail: application.candidate.email,
         jobTitle: job.jobTitle,
         appliedFor: job.jobTitle,
@@ -289,13 +289,15 @@ app.get('/api/recruiter/appliedjobs', verifyToken, async (req, res) => {
       }))
     );
 
-    logger.info(`Successfully fetched applied jobs for recruiter: ${recruiterId}`);
+    console.log(appliedJobs);
+    logger.info(`Successfully fetched applied jobs for recruiter: ${userId}`);
     res.status(200).json(formattedAppliedJobs);
   } catch (error) {
     logger.error('Error fetching applied jobs:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 });
+
 
 //registering role
 app.post('/api/register', async (req, res) => {
