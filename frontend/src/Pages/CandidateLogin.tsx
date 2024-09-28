@@ -42,6 +42,7 @@ const CLogin: React.FC = () => {
         } catch (err: any) {
             if (err.response) {
                 setError(err.response.data.non_field_errors || 'Login failed');
+                toast.error('error in subitting');
             } else {
                 setError('An error occurred');
             }

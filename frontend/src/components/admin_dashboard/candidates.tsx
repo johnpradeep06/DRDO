@@ -1,9 +1,19 @@
-import { useState } from "react"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { useEffect, useState } from "react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
+// Define the Candidate type
+interface Candidate {
+  id: number;
+  name: string;
+  yearsOfExperience: number;
+  relevancyScore: number;
+  appliedFor: string;
+}
+
+// ProgressCircle Component
 function ProgressCircle({ percentage }: { percentage: number }) {
   const circumference = 2 * Math.PI * 18;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
@@ -39,15 +49,23 @@ function ProgressCircle({ percentage }: { percentage: number }) {
 }
 
 export default function Candidates() {
-  const [candidates, setCandidates] = useState([
-    { id: 1, name: "John Doe", yearsOfExperience: 5, relevancyScore: 90, appliedFor: "Frontend Developer" },
-    { id: 2, name: "Jane Smith", yearsOfExperience: 3, relevancyScore: 85, appliedFor: "UX Designer" },
-    { id: 3, name: "Mike Johnson", yearsOfExperience: 7, relevancyScore: 78, appliedFor: "Backend Developer" },
-    { id: 4, name: "Emily Brown", yearsOfExperience: 4, relevancyScore: 92, appliedFor: "Product Manager" },
-    { id: 5, name: "Chris Lee", yearsOfExperience: 6, relevancyScore: 88, appliedFor: "DevOps Engineer" },
-  ]);
-
+  const [candidates, setCandidates] = useState<Candidate[]>([]); // Type the state correctly
   const [minScore, setMinScore] = useState(70);
+
+  // Fetch data from the backend
+  useEffect(() => {
+    const fetchCandidates = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/recruiter/appliedjobs/");
+        const data = await response.json();
+        setCandidates(data); // Assuming the data is already in the correct format
+      } catch (err: any) {
+        console.error("Error fetching candidates:", err.message); // Safely log error message
+      }
+    };
+
+    fetchCandidates();
+  }, []);
 
   const handleRejectBelow = () => {
     setCandidates(candidates.filter(candidate => candidate.relevancyScore >= minScore));
@@ -122,5 +140,5 @@ export default function Candidates() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -4,6 +4,8 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Badge } from "@/components/ui/badge";
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
+
 
 interface JobPost {
   id: string;
@@ -49,14 +51,14 @@ export const JobLists: React.FC = () => {
           const result = await response.json();
           if (response.ok) {
             console.log('Application submitted successfully:', result);
-            alert(`Application submitted successfully. Relevancy Score: ${result.relevancyScore.toFixed(2)}%`);
+            toast.success('successfully Submitted');
           } else {
             console.error('Error submitting application:', result.error);
-            alert('Error submitting application. Please try again.');
+            toast.error('error submitting file');
           }
         } catch (error) {
           console.error('Error:', error);
-          alert('An error occurred. Please try again.');
+          toast.error('An error occurred. Please try again.');
         }
       }
     };
