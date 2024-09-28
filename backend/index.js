@@ -127,7 +127,7 @@ app.post("/api/candidate/upload", verifyToken, upload.single("resume"), async (r
     const userId = req.user.userId;
     const jobId = req.body.jobId;
     const requiredSkills = req.body.requiredSkills.split(',').map(skill => skill.trim());
-
+    console.log(`Required skills: ${requiredSkills}`);
     const newPdf = await prisma.pDFDocument.create({
       data: {
         filename: filename,
@@ -168,6 +168,7 @@ async function extractTextFromPDFAndAnalyze(pdfPath, skills) {
     const dataBuffer = fs.readFileSync(pdfPath);
     const data = await pdf(dataBuffer);
     const extractedText = data.text;
+    console.log(`Extracted text: ${extractedText}`);
     const skillMatches = analyzeTextForSkills(extractedText, skills);
     return { extractedText, skillMatches };
   } catch (error) {
@@ -198,7 +199,6 @@ app.get('/api/candidate/appliedjobs', verifyToken, async (req, res) => {
   }
 
   try {
-   // Step 1: Fetch all PDFDocuments for the user
    const pdfDocuments = await prisma.pDFDocument.findMany({
     where: {
      userId: userId,
@@ -208,7 +208,6 @@ app.get('/api/candidate/appliedjobs', verifyToken, async (req, res) => {
     },
    });
 
-   // Step 2: Extract the jobIds from the pdfDocuments
    const jobIds = pdfDocuments.map((doc) => doc.jobId).filter(id => id !== null);
 
    if (jobIds.length === 0) {
@@ -216,7 +215,6 @@ app.get('/api/candidate/appliedjobs', verifyToken, async (req, res) => {
     return res.status(404).json({ message: 'No applied jobs found for this candidate' });
    }
 
-   // Step 3: Fetch jobs and their application status
    const appliedJobs = await prisma.job.findMany({
     where: {
      id: {
@@ -235,7 +233,6 @@ app.get('/api/candidate/appliedjobs', verifyToken, async (req, res) => {
     },
    });
 
-   // Step 4: Format the response
    const formattedJobs = appliedJobs.map(job => ({
     id: job.id,
     jobTitle: job.jobTitle,
