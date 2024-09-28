@@ -168,7 +168,6 @@ async function extractTextFromPDFAndAnalyze(pdfPath, skills) {
     const dataBuffer = fs.readFileSync(pdfPath);
     const data = await pdf(dataBuffer);
     const extractedText = data.text;
-    console.log(`Extracted text: ${extractedText}`);
     const skillMatches = analyzeTextForSkills(extractedText, skills);
     return { extractedText, skillMatches };
   } catch (error) {
@@ -183,12 +182,15 @@ function analyzeTextForSkills(text, skills) {
 
   skills.forEach(skill => {
     const lowercaseSkill = skill.toLowerCase();
-    const matches = (lowercaseText.match(new RegExp(lowercaseSkill, 'g')) || []).length;
-    skillMatches[skill] = matches;
+    const exactMatches = (text.match(new RegExp(`\\b${skill}\\b`, 'g')) || []).length;
+    const caseInsensitiveMatches = (lowercaseText.match(new RegExp(`\\b${lowercaseSkill}\\b`, 'g')) || []).length;    
+    skillMatches[skill] = caseInsensitiveMatches > 0 ? caseInsensitiveMatches : exactMatches;
   });
-  console.log(skillMatches);  
+
+  console.log(skillMatches);
   return skillMatches;
 }
+
 
 app.get('/api/candidate/appliedjobs', verifyToken, async (req, res) => {
   const userId = req.user.userId;

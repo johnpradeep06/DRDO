@@ -45,7 +45,6 @@ export default function ResumeUploadCard() {
   
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         navigate('/candidate');
         setUploadStatus('File uploaded successfully!');
       } else {
