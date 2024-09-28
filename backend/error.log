@@ -486,3 +486,408 @@
   level: 'error',
   timestamp: '2024-09-27T16:11:19.062Z'
 }
+{
+  message: 'candidateId is missing in the request',
+  level: 'error',
+  timestamp: '2024-09-28T00:11:14.362Z'
+}
+{
+  message: 'candidateId is missing in the request',
+  level: 'error',
+  timestamp: '2024-09-28T00:11:28.699Z'
+}
+{
+  message: 'candidateId is missing in the request',
+  level: 'error',
+  timestamp: '2024-09-28T00:11:28.702Z'
+}
+{
+  message: 'candidateId is missing in the request',
+  level: 'error',
+  timestamp: '2024-09-28T00:13:53.627Z'
+}
+{
+  message: 'candidateId is missing in the request',
+  level: 'error',
+  timestamp: '2024-09-28T00:13:53.633Z'
+}
+{
+  message: 'candidateId is missing in the request',
+  level: 'error',
+  timestamp: '2024-09-28T00:13:53.636Z'
+}
+{
+  message: 'candidateId is missing in the request',
+  level: 'error',
+  timestamp: '2024-09-28T00:14:06.500Z'
+}
+{
+  message: 'candidateId is missing in the request',
+  level: 'error',
+  timestamp: '2024-09-28T00:14:06.503Z'
+}
+{
+  message: 'candidateId is missing in the request',
+  level: 'error',
+  timestamp: '2024-09-28T00:14:52.791Z'
+}
+{
+  message: 'candidateId is missing in the request',
+  level: 'error',
+  timestamp: '2024-09-28T00:14:52.793Z'
+}
+{
+  message: 'candidateId is missing in the request',
+  level: 'error',
+  timestamp: '2024-09-28T00:15:14.820Z'
+}
+{
+  message: 'candidateId is missing in the request',
+  level: 'error',
+  timestamp: '2024-09-28T00:15:14.823Z'
+}
+{
+  message: 'candidateId is missing in the request',
+  level: 'error',
+  timestamp: '2024-09-28T00:16:31.923Z'
+}
+{
+  error: PrismaClientValidationError: 
+  Invalid `prisma.pDFDocument.findMany()` invocation in
+  C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:158:50
+  
+    155 
+    156 try {
+    157   // Fetch all PDFDocuments for the given candidate, and include associated job data
+  → 158   const appliedJobs = await prisma.pDFDocument.findMany({
+            where: {
+              userId: "66f101cbe9345e84052e409f"
+            },
+            include: {
+              job: true,
+              ~~~
+          ?   user?: true
+            }
+          })
+  
+  Unknown field `job` for include statement on model `PDFDocument`. Available options are marked with ?.
+      at Dn (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:114:8082)
+      at Mn.handleRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7396)
+      at Mn.handleAndLogRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7061)
+      at Mn.request (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:6745)
+      at async l (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+      at async C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:158:25 {
+    clientVersion: '5.20.0'
+  },
+  level: 'error',
+  message: 'Error fetching applied jobs for candidateId: 66f101cbe9345e84052e409f',
+  timestamp: '2024-09-28T00:16:48.088Z'
+}
+{
+  error: PrismaClientValidationError: 
+  Invalid `prisma.pDFDocument.findMany()` invocation in
+  C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:158:50
+  
+    155 
+    156 try {
+    157   // Fetch all PDFDocuments for the given candidate, and include associated job data
+  → 158   const appliedJobs = await prisma.pDFDocument.findMany({
+            where: {
+              userId: "66f101cbe9345e84052e409f"
+            },
+            include: {
+              job: true,
+              ~~~
+          ?   user?: true
+            }
+          })
+  
+  Unknown field `job` for include statement on model `PDFDocument`. Available options are marked with ?.
+      at Dn (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:114:8082)
+      at Mn.handleRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7396)
+      at Mn.handleAndLogRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7061)
+      at Mn.request (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:6745)
+      at async l (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+      at async C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:158:25 {
+    clientVersion: '5.20.0'
+  },
+  level: 'error',
+  message: 'Error fetching applied jobs for candidateId: 66f101cbe9345e84052e409f',
+  timestamp: '2024-09-28T00:17:33.509Z'
+}
+{
+  error: PrismaClientValidationError: 
+  Invalid `prisma.pDFDocument.findMany()` invocation in
+  C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:158:50
+  
+    155 
+    156 try {
+    157   // Fetch all PDFDocuments for the given candidate, and include associated job data
+  → 158   const appliedJobs = await prisma.pDFDocument.findMany({
+            where: {
+              userId: "66f101cbe9345e84052e409f"
+            },
+            include: {
+              job: true,
+              ~~~
+          ?   user?: true
+            }
+          })
+  
+  Unknown field `job` for include statement on model `PDFDocument`. Available options are marked with ?.
+      at Dn (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:114:8082)
+      at Mn.handleRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7396)
+      at Mn.handleAndLogRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7061)
+      at Mn.request (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:6745)
+      at async l (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+      at async C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:158:25 {
+    clientVersion: '5.20.0'
+  },
+  level: 'error',
+  message: 'Error fetching applied jobs for candidateId: 66f101cbe9345e84052e409f',
+  timestamp: '2024-09-28T00:17:34.704Z'
+}
+{
+  error: PrismaClientValidationError: 
+  Invalid `prisma.pDFDocument.findMany()` invocation in
+  C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:158:50
+  
+    155 
+    156 try {
+    157   // Fetch all PDFDocuments for the given candidate, and include associated job data
+  → 158   const appliedJobs = await prisma.pDFDocument.findMany({
+            where: {
+              userId: "66f101cbe9345e84052e409f"
+            },
+            include: {
+              job: true,
+              ~~~
+          ?   user?: true
+            }
+          })
+  
+  Unknown field `job` for include statement on model `PDFDocument`. Available options are marked with ?.
+      at Dn (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:114:8082)
+      at Mn.handleRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7396)
+      at Mn.handleAndLogRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7061)
+      at Mn.request (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:6745)
+      at async l (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+      at async C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:158:25 {
+    clientVersion: '5.20.0'
+  },
+  level: 'error',
+  message: 'Error fetching applied jobs for candidateId: 66f101cbe9345e84052e409f',
+  timestamp: '2024-09-28T00:18:20.162Z'
+}
+{
+  error: PrismaClientValidationError: 
+  Invalid `prisma.pDFDocument.findMany()` invocation in
+  C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:158:50
+  
+    155 
+    156 try {
+    157   // Fetch all PDFDocuments for the given candidate, and include associated job data
+  → 158   const appliedJobs = await prisma.pDFDocument.findMany({
+            where: {
+              userId: "66f101cbe9345e84052e409f"
+            },
+            include: {
+              job: true,
+              ~~~
+          ?   user?: true
+            }
+          })
+  
+  Unknown field `job` for include statement on model `PDFDocument`. Available options are marked with ?.
+      at Dn (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:114:8082)
+      at Mn.handleRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7396)
+      at Mn.handleAndLogRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7061)
+      at Mn.request (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:6745)
+      at async l (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+      at async C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:158:25 {
+    clientVersion: '5.20.0'
+  },
+  level: 'error',
+  message: 'Error fetching applied jobs for candidateId: 66f101cbe9345e84052e409f',
+  timestamp: '2024-09-28T00:18:20.169Z'
+}
+{
+  error: PrismaClientKnownRequestError: 
+  Invalid `prisma.pDFDocument.findMany()` invocation in
+  C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:158:50
+  
+    155 
+    156 try {
+    157   // Fetch all PDFDocuments for the given candidate, and include associated job data
+  → 158   const appliedJobs = await prisma.pDFDocument.findMany(
+  Error converting field "jobId" of expected non-nullable type "String", found incompatible value of "null".
+      at Mn.handleRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7753)
+      at Mn.handleAndLogRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7061)
+      at Mn.request (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:6745)
+      at async l (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+      at async C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:158:25 {
+    code: 'P2032',
+    clientVersion: '5.20.0',
+    meta: {
+      modelName: 'PDFDocument',
+      field: 'jobId',
+      expected_type: 'String',
+      found: 'null'
+    }
+  },
+  level: 'error',
+  message: 'Error fetching applied jobs for candidateId: 66f101cbe9345e84052e409f',
+  timestamp: '2024-09-28T00:19:03.351Z'
+}
+{
+  error: PrismaClientKnownRequestError: 
+  Invalid `prisma.pDFDocument.findMany()` invocation in
+  C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:158:50
+  
+    155 
+    156 try {
+    157   // Fetch all PDFDocuments for the given candidate, and include associated job data
+  → 158   const appliedJobs = await prisma.pDFDocument.findMany(
+  Error converting field "jobId" of expected non-nullable type "String", found incompatible value of "null".
+      at Mn.handleRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7753)
+      at Mn.handleAndLogRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7061)
+      at Mn.request (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:6745)
+      at async l (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+      at async C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:158:25 {
+    code: 'P2032',
+    clientVersion: '5.20.0',
+    meta: {
+      modelName: 'PDFDocument',
+      field: 'jobId',
+      expected_type: 'String',
+      found: 'null'
+    }
+  },
+  level: 'error',
+  message: 'Error fetching applied jobs for candidateId: 66f101cbe9345e84052e409f',
+  timestamp: '2024-09-28T00:19:03.407Z'
+}
+{
+  error: PrismaClientKnownRequestError: 
+  Invalid `prisma.pDFDocument.findMany()` invocation in
+  C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:158:53
+  
+    155   
+    156 try {
+    157   // Step 1: Fetch all PDFDocuments for the given userId (candidate) to get jobIds
+  → 158   const pdfDocuments = await prisma.pDFDocument.findMany(
+  Error converting field "jobId" of expected non-nullable type "String", found incompatible value of "null".
+      at Mn.handleRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7753)
+      at Mn.handleAndLogRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7061)
+      at Mn.request (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:6745)
+      at async l (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+      at async C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:158:28 {
+    code: 'P2032',
+    clientVersion: '5.20.0',
+    meta: {
+      modelName: 'PDFDocument',
+      field: 'jobId',
+      expected_type: 'String',
+      found: 'null'
+    }
+  },
+  level: 'error',
+  message: 'Error fetching applied jobs for userId: 66f101cbe9345e84052e409f',
+  timestamp: '2024-09-28T00:21:47.285Z'
+}
+{
+  error: PrismaClientKnownRequestError: 
+  Invalid `prisma.pDFDocument.findMany()` invocation in
+  C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:158:53
+  
+    155   
+    156 try {
+    157   // Step 1: Fetch all PDFDocuments for the given userId (candidate) to get jobIds
+  → 158   const pdfDocuments = await prisma.pDFDocument.findMany(
+  Error converting field "jobId" of expected non-nullable type "String", found incompatible value of "null".
+      at Mn.handleRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7753)
+      at Mn.handleAndLogRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7061)
+      at Mn.request (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:6745)
+      at async l (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+      at async C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:158:28 {
+    code: 'P2032',
+    clientVersion: '5.20.0',
+    meta: {
+      modelName: 'PDFDocument',
+      field: 'jobId',
+      expected_type: 'String',
+      found: 'null'
+    }
+  },
+  level: 'error',
+  message: 'Error fetching applied jobs for userId: 66f101cbe9345e84052e409f',
+  timestamp: '2024-09-28T00:21:47.342Z'
+}
+{
+  error: PrismaClientValidationError: 
+  Invalid `prisma.job.findMany()` invocation in
+  C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:176:44
+  
+    173 }
+    174   
+    175 // Step 3: Fetch all jobs where the jobId is in the list of jobIds
+  → 176 const appliedJobs = await prisma.job.findMany({
+          where: {
+            id: {
+              in: [
+                null,
+                "66f172ab640988171d2edd89",
+                "66f17b4f42bd237355ea0128"
+              ]
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            }
+          }
+        })
+  
+  Argument `in`: Invalid value provided. Expected ListStringFieldRefInput, provided (Null, String, String).
+      at Dn (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:114:8082)
+      at Mn.handleRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7396)
+      at Mn.handleAndLogRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7061)
+      at Mn.request (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:6745)
+      at async l (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+      at async C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:176:27 {
+    clientVersion: '5.20.0'
+  },
+  level: 'error',
+  message: 'Error fetching applied jobs for userId: 66f101cbe9345e84052e409f',
+  timestamp: '2024-09-28T00:23:40.912Z'
+}
+{
+  error: PrismaClientValidationError: 
+  Invalid `prisma.job.findMany()` invocation in
+  C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:176:44
+  
+    173 }
+    174   
+    175 // Step 3: Fetch all jobs where the jobId is in the list of jobIds
+  → 176 const appliedJobs = await prisma.job.findMany({
+          where: {
+            id: {
+              in: [
+                null,
+                "66f172ab640988171d2edd89",
+                "66f17b4f42bd237355ea0128"
+              ]
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            }
+          }
+        })
+  
+  Argument `in`: Invalid value provided. Expected ListStringFieldRefInput, provided (Null, String, String).
+      at Dn (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:114:8082)
+      at Mn.handleRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7396)
+      at Mn.handleAndLogRequestError (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7061)
+      at Mn.request (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:6745)
+      at async l (C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+      at async C:\Users\balaa\Desktop\LEARN\HACKATHONS\CODECORTEX\DRDO\backend\index.js:176:27 {
+    clientVersion: '5.20.0'
+  },
+  level: 'error',
+  message: 'Error fetching applied jobs for userId: 66f101cbe9345e84052e409f',
+  timestamp: '2024-09-28T00:23:40.964Z'
+}

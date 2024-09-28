@@ -17,7 +17,6 @@ model User {
   createdAt    DateTime      @default(now())
   postedJobs   Job[]         @relation("RecruiterJobs")
   applications Application[] @relation("CandidateApplications")
-  pdfDocuments PDFDocument[] @relation("UserPDFs") // One-to-many relation with PDFDocument
 }
 
 enum Role {
@@ -65,7 +64,6 @@ model PDFDocument {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   filename    String
   uploadDate  DateTime @default(now())
-  user        User?    @relation("UserPDFs") // Correctly defined without `fields` and `references`
   userId      String   @db.ObjectId // Foreign key for User
-  jobId       String   @db.ObjectId // Reference to the job for which the PDF was uploaded
+  jobId       String?   @db.ObjectId // Reference to the job for which the PDF was uploaded
 }
