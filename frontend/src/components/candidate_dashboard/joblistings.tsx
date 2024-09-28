@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import {  MapPin, Briefcase, GraduationCap, DollarSign } from 'lucide-react'
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import ShinyButton from "@/components/magicui/shiny-button";
-import { useNavigate } from 'react-router-dom';
+import { MapPin, Briefcase, GraduationCap, DollarSign } from 'lucide-react';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from '@/components/ui/button';
-
+import { useNavigate } from 'react-router-dom';
 
 interface JobPost {
   id: string;
@@ -23,43 +21,52 @@ interface JobPost {
 }
 
 export const JobLists: React.FC = () => {
-  const [userName, setUserName] = useState("");
   const [jobPosts, setJobPosts] = useState<JobPost[]>([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const handleClick = (jobId: string) => {
-    return () => navigate(`/candidate/apply?jobId=${jobId}`); // Pass the job ID as a query parameter
-  };
-  useEffect(() => {
-    const fetchUserData = async (id: string) => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:5000/api/user/${id}`, { // Use backticks for template literals
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await response.json();
-        if (response.ok) {
-          setUserName(data.name); // Set the user's full name
-        } else {
-          console.error("Error fetching user data:", data.error);
+
+  const handleApply = async (jobId: string, requiredSkills: string) => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.pdf';
+    fileInput.onchange = async (e: Event) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const formData = new FormData();
+        formData.append('resume', file);
+        formData.append('jobId', jobId);
+        formData.append('requiredSkills', requiredSkills);
+
+        try {
+          const token = localStorage.getItem('token');
+          const response = await fetch('http://localhost:5000/api/candidate/upload', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            body: formData,
+          });
+          const result = await response.json();
+          if (response.ok) {
+            console.log('Application submitted successfully:', result);
+            alert(`Application submitted successfully. Relevancy Score: ${result.relevancyScore.toFixed(2)}%`);
+          } else {
+            console.error('Error submitting application:', result.error);
+            alert('Error submitting application. Please try again.');
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('An error occurred. Please try again.');
         }
-      } catch (error) {
-        console.error("Error fetching user data:", error);
       }
     };
-  
-    // Assuming you have access to the user's ID here
-    const userId = "some-user-id"; // Replace with actual user ID
-    fetchUserData(userId);
-  }, []);
+    fileInput.click();
+  };
 
   const fetchJobPosts = async () => {
     try {
-      const token = localStorage.getItem('token'); // Get the token from localStorage
-
-      const response = await fetch('http://localhost:5000/api/candidate/get-jobposts',{
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:5000/api/candidate/get-jobposts', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -75,7 +82,7 @@ export const JobLists: React.FC = () => {
 
   useEffect(() => {
     fetchJobPosts();
-    const interval = setInterval(fetchJobPosts, 1000);
+    const interval = setInterval(fetchJobPosts, 5000); // Fetch every 5 seconds
     return () => clearInterval(interval);
   }, []);
 
@@ -134,17 +141,13 @@ export const JobLists: React.FC = () => {
                 </div>
               </CardContent>
               <CardFooter className="mt-auto flex justify-center">
-                
-              <Button onClick={handleClick(job.id)}>Apply</Button>
-                
-
+                <Button onClick={() => handleApply(job.id, job.requiredSkills)}>Apply</Button>
               </CardFooter>
             </Card>
           ))}
         </div>
       </main>
     </div>
-
   );
 };
 

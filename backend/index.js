@@ -6,6 +6,9 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const winston = require('winston');
 const multer = require('multer');
+const fs = require('fs');
+const pdf = require('pdf-parse');
+const path = require('path');
 
 dotenv.config();
 
@@ -118,31 +121,73 @@ const loginUser = async (email, password, role, res) => {
 };
 
 app.post("/api/candidate/upload", verifyToken, upload.single("resume"), async (req, res) => {
-    try {
-      console.log(req.file);
-      const filename = req.file.originalname;
-  
-      const userId = req.user.userId;
-      console.log("User ID:", userId);
-  
-      const jobId = req.body.jobId;
-      
-      // Create the PDF document and associate it with the user
-      const newPdf = await prisma.pDFDocument.create({
-        data: {
-          filename: filename,
-          userId: userId,
-          jobId: jobId
-        },
-      });
-  
-      res.status(201).json({ message: "PDF uploaded successfully", pdfDocument: newPdf });
-    } catch (error) {
-      console.error("Error uploading PDF:", error);
-      res.status(500).json({ error: "Error uploading PDF", details: error.message });
-    }
+  try {
+    console.log(req.file);
+    const filename = req.file.originalname;
+    const userId = req.user.userId;
+    const jobId = req.body.jobId;
+    const requiredSkills = req.body.requiredSkills.split(',').map(skill => skill.trim());
+
+    const newPdf = await prisma.pDFDocument.create({
+      data: {
+        filename: filename,
+        userId: userId,
+        jobId: jobId
+      },
+    });
+
+    const pdfPath = path.join(__dirname, req.file.path);
+    const { skillMatches } = await extractTextFromPDFAndAnalyze(pdfPath, requiredSkills);
+
+    const totalRequiredSkills = requiredSkills.length;
+    const matchedSkills = Object.values(skillMatches).filter(count => count > 0).length;
+    const relevancyScore = (matchedSkills / totalRequiredSkills) * 100;
+
+    const application = await prisma.application.create({
+      data: {
+        candidateId: userId,
+        jobId: jobId,
+        relevancyScore: relevancyScore,
+      },
+    });
+
+    res.status(201).json({ 
+      message: "Application submitted successfully", 
+      pdfDocument: newPdf, 
+      application: application,
+      relevancyScore: relevancyScore
+    });
+  } catch (error) {
+    console.error("Error processing application:", error);
+    res.status(500).json({ error: "Error processing application", details: error.message });
+  }
 });
 
+async function extractTextFromPDFAndAnalyze(pdfPath, skills) {
+  try {
+    const dataBuffer = fs.readFileSync(pdfPath);
+    const data = await pdf(dataBuffer);
+    const extractedText = data.text;
+    const skillMatches = analyzeTextForSkills(extractedText, skills);
+    return { extractedText, skillMatches };
+  } catch (error) {
+    console.error('Error extracting text from PDF:', error);
+    throw error;
+  }
+}
+
+function analyzeTextForSkills(text, skills) {
+  const lowercaseText = text.toLowerCase();
+  const skillMatches = {};
+
+  skills.forEach(skill => {
+    const lowercaseSkill = skill.toLowerCase();
+    const matches = (lowercaseText.match(new RegExp(lowercaseSkill, 'g')) || []).length;
+    skillMatches[skill] = matches;
+  });
+  console.log(skillMatches);  
+  return skillMatches;
+}
 
 app.get('/api/candidate/appliedjobs', verifyToken, async (req, res) => {
   const userId = req.user.userId;
