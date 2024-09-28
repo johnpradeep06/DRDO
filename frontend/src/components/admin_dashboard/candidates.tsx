@@ -3,6 +3,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {toast} from 'sonner';
 
 // Define the Candidate type
 interface Candidate {
@@ -10,6 +11,7 @@ interface Candidate {
   name: string;
   relevancyScore: number;
   appliedFor: string;
+  jobId: number;
 }
 
 // ProgressCircle Component
@@ -55,7 +57,7 @@ export default function Candidates() {
   const fetchCandidates = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch("http://localhost:5000/api/candidates", {
+      const response = await fetch("http://localhost:5000/api/recruiter/appliedjobs", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -75,7 +77,7 @@ export default function Candidates() {
   const handleRejectBelow = async () => {
     try {
       const token = localStorage.getItem('token');
-      await fetch("http://localhost:5000/api/candidates/rejectBelow", {
+      await fetch("http://localhost:5000/api/candidate/rejectBelow", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -91,16 +93,20 @@ export default function Candidates() {
   };
 
   // Handle shortlisting a candidate
-  const handleShortlist = async (id: number) => {
+  const handleShortlist = async (id: number, jobId: number) => {
     try {
       const token = localStorage.getItem('token');
-      await fetch(`http://localhost:5000/api/candidates/shortlist/${id}`, {
+      const response = await fetch(`http://localhost:5000/api/candidate/shortlist/${jobId}`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-      alert(`Candidate ${id} shortlisted`);
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to shortlist candidate.");
+      }
+      toast.success('shortlisted');
       // Optionally re-fetch candidates if you want to update the UI
       fetchCandidates();
     } catch (err: any) {
@@ -109,15 +115,23 @@ export default function Candidates() {
   };
 
   // Handle rejecting a specific candidate
-  const handleReject = async (id: number) => {
+  const handleReject = async (id: number, jobId: number) => {
+    console.log(id);
     try {
       const token = localStorage.getItem('token');
-      await fetch(`http://localhost:5000/api/candidates/reject/${id}`, {
-        method: "DELETE",
+      const response = await fetch(`http://localhost:5000/api/candidate/reject/${jobId}`, {
+        method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to reject candidate.");
+      }
+      else{
+        toast.error('Rejected');
+      }
       // Re-fetch candidates after rejection
       fetchCandidates();
     } catch (err: any) {
@@ -168,10 +182,10 @@ export default function Candidates() {
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                        <Button onClick={() => handleShortlist(candidate.id)} variant="outline" size="sm" className="border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white">
+                        <Button onClick={() => handleShortlist(candidate.id, candidate.jobId)} variant="outline" size="sm" className="border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white">
                           Shortlist
                         </Button>
-                        <Button onClick={() => handleReject(candidate.id)} variant="destructive" size="sm">
+                        <Button onClick={() => handleReject(candidate.id, candidate.jobId)} variant="destructive" size="sm">
                           Reject
                         </Button>
                       </div>
