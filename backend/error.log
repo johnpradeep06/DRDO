@@ -1285,3 +1285,13 @@
   level: 'error',
   timestamp: '2024-09-28T05:21:32.037Z'
 }
+{
+  message: 'Recruiter ID is missing in the request',
+  level: 'error',
+  timestamp: '2024-09-28T06:06:02.906Z'
+}
+{
+  message: 'Recruiter ID is missing in the request',
+  level: 'error',
+  timestamp: '2024-09-28T06:06:02.908Z'
+}

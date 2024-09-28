@@ -191,7 +191,6 @@ function analyzeTextForSkills(text, skills) {
   return skillMatches;
 }
 
-
 app.get('/api/candidate/appliedjobs', verifyToken, async (req, res) => {
   const userId = req.user.userId;
 
@@ -247,6 +246,54 @@ app.get('/api/candidate/appliedjobs', verifyToken, async (req, res) => {
   } catch (error) {
    logger.error(`Error fetching applied jobs for userId: ${userId}`, { error });
    return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.get('/api/recruiter/appliedjobs', verifyToken, async (req, res) => {
+  const userId = req.user.userId;
+
+  if (!recruiterId) {
+    logger.error('Recruiter ID is missing in the request');
+    return res.status(400).json({ message: 'Recruiter ID is required' });
+  }
+
+  try {
+    const appliedJobs = await prisma.job.findMany({
+      where: {
+        recruiterId: recruiterId,
+      },
+      include: {
+        applications: {
+          include: {
+            candidate: {
+              select: {
+                id: true,
+                fullName: true,
+                email: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const formattedAppliedJobs = appliedJobs.flatMap((job) =>
+      job.applications.map((application) => ({
+        id: application.id,
+        candidateName: application.candidate.fullName,
+        candidateEmail: application.candidate.email,
+        jobTitle: job.jobTitle,
+        appliedFor: job.jobTitle,
+        relevancyScore: application.relevancyScore || 0,
+        status: application.status,
+      }))
+    );
+
+    logger.info(`Successfully fetched applied jobs for recruiter: ${recruiterId}`);
+    res.status(200).json(formattedAppliedJobs);
+  } catch (error) {
+    logger.error('Error fetching applied jobs:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 

@@ -56,7 +56,7 @@ export default function Candidates() {
   useEffect(() => {
     const fetchCandidates = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/recruiter/appliedjobs/");
+        const response = await fetch("http://localhost:5000/api/recruiter/appliedjobs");
         const data = await response.json();
         setCandidates(data); // Assuming the data is already in the correct format
       } catch (err: any) {
