@@ -17,14 +17,21 @@ export const AppliedJobLists: React.FC = () => {
   const fetchAppliedJobs = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/candidate/appliedjobs', {
+      const response = await fetch('http://localhost:5000/api/candidate/view-applied', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
       const data = await response.json();
       if (response.ok) {
-        setAppliedJobs(data.appliedJobs);
+        console.log("Applied jobs are: ", data); // Log the entire response to check the structure
+        const formattedJobs = data.map((application: any) => ({
+          id: application.id,
+          jobTitle: application.job.jobTitle,
+          companyName: application.job.companyName,
+          applicationStatus: application.status, // Assuming `status` is the field name for the application status
+        }));
+        setAppliedJobs(formattedJobs);
       } else {
         console.error('Error fetching applied jobs:', data.error);
       }

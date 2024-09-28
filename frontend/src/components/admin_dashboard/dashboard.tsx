@@ -27,9 +27,9 @@ export const description = "A radial chart with different colors and text"
 
 // Updated chart data with different content and colors
 const chartData = [
-  { Status: "Shortlisted", visitors: 300, fill: "#FF6384" }, // Redish for Safari
-  { Status: "Rejected", visitors: 500, fill: "#36A2EB" }, // Blue for Chrome
-  { Status: "Applied", visitors: 400, fill: "#FFCE56" }, // Yellow for Firefox
+  { Status: "Shortlisted", visitors: 15, fill: "#FF6384" }, // Redish for Safari
+  { Status: "Rejected", visitors: 20, fill: "#36A2EB" }, // Blue for Chrome
+  { Status: "Applied", visitors: 18, fill: "#FFCE56" }, // Yellow for Firefox
 ]
 
 const chartConfig = {

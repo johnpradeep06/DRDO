@@ -247,7 +247,7 @@ app.get('/api/recruiter/appliedjobs', verifyToken, async (req, res) => {
   }
 });
 
-app.post('/api/candidates/rejectBelow', async (req, res) => {
+app.post('/api/candidate/rejectBelow', async (req, res) => {
   const { minScore } = req.body;
 
   try {
@@ -550,6 +550,7 @@ app.get('/api/candidate/view-applied', verifyToken, verifyRole('CANDIDATE'), asy
       where: { candidateId },
       include: { job: true }, // Include job details
     });
+    console.log("The application applied by huma are:");
     console.log(applications);
     res.status(200).json(applications);
   } catch (error) {

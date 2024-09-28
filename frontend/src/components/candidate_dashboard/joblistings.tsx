@@ -140,10 +140,21 @@ export const JobLists: React.FC = () => {
                     <DollarSign className="w-4 h-4 mr-2" />
                     {job.salary}
                   </div>
+                  
                 </div>
               </CardContent>
-              <CardFooter className="mt-auto flex justify-center">
-                <Button onClick={() => handleApply(job.id, job.requiredSkills)}>Apply</Button>
+              <CardFooter className="mt-auto flex-col">
+             
+                <div className="flex flex-col items-center">
+                      <p className="text-sm text-muted-foreground mb-2">Upload your resume</p>
+                </div>
+                <div>
+                <Button onClick={() => handleApply(job.id, job.requiredSkills)}>
+                  Apply
+                </Button>
+                </div>
+                {/* Button for applying */}
+                
               </CardFooter>
             </Card>
           ))}
