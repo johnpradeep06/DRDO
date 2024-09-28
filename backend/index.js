@@ -141,57 +141,70 @@ app.post("/api/candidate/upload", verifyToken, upload.single("resume"), async (r
       console.error("Error uploading PDF:", error);
       res.status(500).json({ error: "Error uploading PDF", details: error.message });
     }
-  });
+});
 
 
-  app.get('/api/candidate/appliedjobs', verifyToken, async (req, res) => {
-    // Extract candidateId from the token (assuming it's stored in req.user)
-    const userId = req.user.userId;
-  
-    if (!userId) {
-      logger.error('userId is missing in the request');
-      return res.status(400).json({ error: 'userId is required' });
-    }
-  
-    try {
-      // Step 1: Fetch all PDFDocuments for the given userId (candidate) to get jobIds
-      const pdfDocuments = await prisma.pDFDocument.findMany({
-        where: {
-          userId: userId, // Filter by the candidate's user ID
-        },
-        select: {
-          jobId: true, // Only select jobId from the PDFDocument model
-        },
-      });
-  
-      // Step 2: Extract the jobIds from the pdfDocuments
-      const jobIds = pdfDocuments.map((doc) => doc.jobId);
-      const filteredjobIds = jobIds.filter(id => id !== null);
-      if (jobIds.length === 0) {
-        logger.info(`No applied jobs found for userId: ${userId}`);
-        return res.status(404).json({ message: 'No applied jobs found for this candidate' });
-      }
-  
-      // Step 3: Fetch all jobs where the jobId is in the list of jobIds
-      const appliedJobs = await prisma.job.findMany({
-        where: {
-          id: {
-            in: filteredjobIds, // Use the list of jobIds to filter jobs
-          },
-        },
-      });
-  
-      // Log success and send the response
-      console.log(appliedJobs);
-      logger.info(`Applied jobs fetched successfully for userId: ${userId}`);
-      return res.status(200).json(appliedJobs);
-    } catch (error) {
-      // Log the error and send a 500 response
-      logger.error(`Error fetching applied jobs for userId: ${userId}`, { error });
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
-  
+app.get('/api/candidate/appliedjobs', verifyToken, async (req, res) => {
+  const userId = req.user.userId;
+
+  if (!userId) {
+   logger.error('userId is missing in the request');
+   return res.status(400).json({ error: 'userId is required' });
+  }
+
+  try {
+   // Step 1: Fetch all PDFDocuments for the user
+   const pdfDocuments = await prisma.pDFDocument.findMany({
+    where: {
+     userId: userId,
+    },
+    select: {
+     jobId: true,
+    },
+   });
+
+   // Step 2: Extract the jobIds from the pdfDocuments
+   const jobIds = pdfDocuments.map((doc) => doc.jobId).filter(id => id !== null);
+
+   if (jobIds.length === 0) {
+    logger.info(`No applied jobs found for userId: ${userId}`);
+    return res.status(404).json({ message: 'No applied jobs found for this candidate' });
+   }
+
+   // Step 3: Fetch jobs and their application status
+   const appliedJobs = await prisma.job.findMany({
+    where: {
+     id: {
+      in: jobIds,
+     },
+    },
+    include: {
+     applications: {
+      where: {
+       candidateId: userId,
+      },
+      select: {
+       status: true,
+      },
+     },
+    },
+   });
+
+   // Step 4: Format the response
+   const formattedJobs = appliedJobs.map(job => ({
+    id: job.id,
+    jobTitle: job.jobTitle,
+    companyName: job.companyName,
+    applicationStatus: job.applications[0]?.status || 'PENDING',
+   }));
+
+   logger.info(`Applied jobs fetched successfully for userId: ${userId}`);
+   return res.status(200).json({ appliedJobs: formattedJobs });
+  } catch (error) {
+   logger.error(`Error fetching applied jobs for userId: ${userId}`, { error });
+   return res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 //registering role
 app.post('/api/register', async (req, res) => {
@@ -256,7 +269,6 @@ app.get('/api/user', verifyToken, async (req, res) => {
     }
 });
 
-
 //posting job posts
 app.post('/api/recruiter/post-jobposts', verifyToken, verifyRole('RECRUITER'), async (req, res) => {
     try {
@@ -308,7 +320,7 @@ app.get('/api/get-jobposts', async (req, res) => {
       logger.error('Error fetching job posts: ' + error.message);
       res.status(500).json({ error: 'Internal Server Error' });
     }
-  });
+});
   
 //fetching all the users
 app.get('/api/users', async (req, res) => {
@@ -393,7 +405,7 @@ app.get('/api/recruiter/view-applied/:jobId', verifyToken, verifyRole('RECRUITER
       logger.error('Error fetching applicants for job post: ' + error.message);
       res.status(500).json({ error: 'Internal Server Error' });
     }
-  });
+});
   
 // Update application status (requires recruiter verification)
 app.patch('/api/recruiter/update-application/:applicationId', verifyToken, verifyRole('RECRUITER'), async (req, res) => {
