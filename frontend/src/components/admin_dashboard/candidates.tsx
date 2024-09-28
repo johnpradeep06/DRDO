@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label";
 interface Candidate {
   id: number;
   name: string;
-  yearsOfExperience: number;
   relevancyScore: number;
   appliedFor: string;
 }
@@ -56,7 +55,12 @@ export default function Candidates() {
   useEffect(() => {
     const fetchCandidates = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/recruiter/appliedjobs/");
+        const token = localStorage.getItem('token');
+        const response = await fetch("http://localhost:5000/api/recruiter/appliedjobs/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         const data = await response.json();
         setCandidates(data); // Assuming the data is already in the correct format
       } catch (err: any) {
@@ -108,7 +112,6 @@ export default function Candidates() {
                 <TableRow>
                   <TableHead className="text-gray-300 font-bold">Candidate Name</TableHead>
                   <TableHead className="text-gray-300 font-bold">Applied For</TableHead>
-                  <TableHead className="text-gray-300 font-bold">Years of Experience</TableHead>
                   <TableHead className="text-gray-300 font-bold">Relevancy Score</TableHead>
                   <TableHead className="text-gray-300 font-bold">Actions</TableHead>
                 </TableRow>
@@ -118,7 +121,6 @@ export default function Candidates() {
                   <TableRow key={candidate.id} className="border-b border-gray-700">
                     <TableCell className="font-medium text-gray-300">{candidate.name}</TableCell>
                     <TableCell className="text-gray-400">{candidate.appliedFor}</TableCell>
-                    <TableCell className="text-gray-400">{candidate.yearsOfExperience}</TableCell>
                     <TableCell>
                       <ProgressCircle percentage={candidate.relevancyScore} />
                     </TableCell>
