@@ -1259,3 +1259,29 @@
   message: 'Error fetching applied jobs for userId: 66f101cbe9345e84052e409f',
   timestamp: '2024-09-28T04:34:38.712Z'
 }
+{
+  message: 'Error fetching job posts: \n' +
+    'Invalid `prisma.job.findMany()` invocation in\n' +
+    'D:\\DRDO\\DRDO\\backend\\index.js:439:39\n' +
+    '\n' +
+    '  436 // Get all job posts\n' +
+    "  437 app.get('/api/candidate/get-jobposts', async (req, res) => {\n" +
+    '  438   try {\n' +
+    '→ 439     const jobPosts = await prisma.job.findMany(\n' +
+    'Raw query failed. Code: `unknown`. Message: `Kind: I/O error: timed out, labels: {"RetryableWriteError"}`',
+  level: 'error',
+  timestamp: '2024-09-28T05:21:31.052Z'
+}
+{
+  message: 'Error fetching job posts: \n' +
+    'Invalid `prisma.job.findMany()` invocation in\n' +
+    'D:\\DRDO\\DRDO\\backend\\index.js:439:39\n' +
+    '\n' +
+    '  436 // Get all job posts\n' +
+    "  437 app.get('/api/candidate/get-jobposts', async (req, res) => {\n" +
+    '  438   try {\n' +
+    '→ 439     const jobPosts = await prisma.job.findMany(\n' +
+    'Raw query failed. Code: `unknown`. Message: `Kind: I/O error: timed out, labels: {"RetryableWriteError"}`',
+  level: 'error',
+  timestamp: '2024-09-28T05:21:32.037Z'
+}
