@@ -5,8 +5,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { UploadIcon } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function ResumeUploadCard() {
+    const navigate = useNavigate();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const jobId = queryParams.get('jobId');
@@ -43,7 +45,8 @@ export default function ResumeUploadCard() {
   
       if (response.ok) {
         const data = await response.json();
-        console.log();
+        console.log(data);
+        navigate('/candidate');
         setUploadStatus('File uploaded successfully!');
       } else {
         const errorData = await response.json();
@@ -56,23 +59,31 @@ export default function ResumeUploadCard() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Upload Resume</CardTitle>
-        <CardDescription>Upload your resume here.</CardDescription>
-      </CardHeader>
-      <form onSubmit={handleUpload}>
-        <CardContent>
-          <Label htmlFor="resume">Resume</Label>
-          <Input type="file" id="resume" accept=".pdf" onChange={handleFileChange} />
-        </CardContent>
-        <CardFooter>
-          <Button type="submit">
-            Upload <UploadIcon className="ml-2" />
-          </Button>
-          {uploadStatus && <p>{uploadStatus}</p>}
-        </CardFooter>
-      </form>
-    </Card>
+    <div className="flex justify-center items-center min-h-screen ">
+  <Card className="w-80 p-4">
+    <CardHeader className="text-center">
+      <CardTitle>Upload Resume</CardTitle>
+      <CardDescription>Upload your resume here.</CardDescription>
+    </CardHeader>
+    <form onSubmit={handleUpload}>
+      <CardContent className="space-y-4">
+        <Label htmlFor="resume">Resume</Label>
+        <Input
+          type="file"
+          id="resume"
+          accept=".pdf"
+          onChange={handleFileChange}
+          className="mt-1"
+        />
+      </CardContent>
+      <CardFooter className="flex justify-between items-center space-y-2">
+        <Button type="submit">
+          Upload <UploadIcon className="ml-2 h-4 w-4" />
+        </Button>
+        {uploadStatus && <p className="text-sm text-gray-500">{uploadStatus}</p>}
+      </CardFooter>
+    </form>
+  </Card>
+</div>
   );
 }

@@ -184,7 +184,7 @@ app.post("/api/candidate/upload", verifyToken, upload.single("resume"), async (r
       // Log success and send the response
       console.log(appliedJobs);
       logger.info(`Applied jobs fetched successfully for userId: ${userId}`);
-      return res.status(200).json({ appliedJobs });
+      return res.status(200).json(appliedJobs);
     } catch (error) {
       // Log the error and send a 500 response
       logger.error(`Error fetching applied jobs for userId: ${userId}`, { error });

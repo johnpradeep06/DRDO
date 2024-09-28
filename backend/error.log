@@ -891,3 +891,69 @@
   message: 'Error fetching applied jobs for userId: 66f101cbe9345e84052e409f',
   timestamp: '2024-09-28T00:23:40.964Z'
 }
+{
+  error: PrismaClientKnownRequestError: 
+  Invalid `prisma.pDFDocument.findMany()` invocation in
+  D:\DRDO\DRDO\backend\index.js:158:53
+  
+    155   
+    156 try {
+    157   // Step 1: Fetch all PDFDocuments for the given userId (candidate) to get jobIds
+  → 158   const pdfDocuments = await prisma.pDFDocument.findMany(
+  Raw query failed. Code: `unknown`. Message: `Kind: I/O error: An existing connection was forcibly closed by the remote host. (os error 10054), labels: {}`
+      at Mn.handleRequestError (D:\DRDO\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7753)
+      at Mn.handleAndLogRequestError (D:\DRDO\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:7061)
+      at Mn.request (D:\DRDO\DRDO\backend\node_modules\@prisma\client\runtime\library.js:121:6745)
+      at async l (D:\DRDO\DRDO\backend\node_modules\@prisma\client\runtime\library.js:130:9633)
+      at async D:\DRDO\DRDO\backend\index.js:158:28 {
+    code: 'P2010',
+    clientVersion: '5.20.0',
+    meta: {
+      modelName: 'PDFDocument',
+      code: 'unknown',
+      message: 'Kind: I/O error: An existing connection was forcibly closed by the remote host. (os error 10054), labels: {}'
+    }
+  },
+  level: 'error',
+  message: 'Error fetching applied jobs for userId: 66f5b4f074d26057e5ab83dd',
+  timestamp: '2024-09-28T04:14:37.099Z'
+}
+{
+  message: 'Error fetching job posts: \n' +
+    'Invalid `prisma.job.findMany()` invocation in\n' +
+    'D:\\DRDO\\DRDO\\backend\\index.js:427:39\n' +
+    '\n' +
+    '  424 // Get all job posts\n' +
+    "  425 app.get('/api/candidate/get-jobposts', async (req, res) => {\n" +
+    '  426   try {\n' +
+    '→ 427     const jobPosts = await prisma.job.findMany(\n' +
+    'Raw query failed. Code: `unknown`. Message: `Kind: I/O error: An existing connection was forcibly closed by the remote host. (os error 10054), labels: {}`',
+  level: 'error',
+  timestamp: '2024-09-28T04:14:40.458Z'
+}
+{
+  message: 'Error fetching user info: \n' +
+    'Invalid `prisma.user.findUnique()` invocation in\n' +
+    'D:\\DRDO\\DRDO\\backend\\index.js:244:40\n' +
+    '\n' +
+    '  241 //for jwt authentication\n' +
+    "  242 app.get('/api/user', verifyToken, async (req, res) => {\n" +
+    '  243     try {\n' +
+    '→ 244         const user = await prisma.user.findUnique(\n' +
+    'Raw query failed. Code: `unknown`. Message: `Kind: I/O error: timed out, labels: {"RetryableWriteError"}`',
+  level: 'error',
+  timestamp: '2024-09-28T04:14:44.693Z'
+}
+{
+  message: 'Error during user login: \n' +
+    'Invalid `prisma.user.findUnique()` invocation in\n' +
+    'D:\\DRDO\\DRDO\\backend\\index.js:86:38\n' +
+    '\n' +
+    '  83 //login \n' +
+    '  84 const loginUser = async (email, password, role, res) => {\n' +
+    '  85   try {\n' +
+    '→ 86       const user = await prisma.user.findUnique(\n' +
+    'Raw query failed. Code: `unknown`. Message: `Kind: Server selection timeout: No available servers. Topology: { Type: ReplicaSetNoPrimary, Set Name: atlas-2icxhc-shard-0, Max Set Version: 104, Max Election ID: 7fffffff0000000000000066, Servers: [ { Address: cluster0-shard-00-00.ndqew.mongodb.net:27017, Type: Unknown, Error: Kind: I/O error: An established connection was aborted by the software in your host machine. (os error 10053), labels: {} }, { Address: cluster0-shard-00-02.ndqew.mongodb.net:27017, Type: Unknown, Error: Kind: I/O error: An established connection was aborted by the software in your host machine. (os error 10053), labels: {} }, { Address: cluster0-shard-00-01.ndqew.mongodb.net:27017, Type: Unknown, Error: Kind: I/O error: An established connection was aborted by the software in your host machine. (os error 10053), labels: {} } ] }, labels: {}`',
+  level: 'error',
+  timestamp: '2024-09-28T04:14:45.443Z'
+}

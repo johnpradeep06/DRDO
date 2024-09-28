@@ -46,7 +46,7 @@ export const AppliedJobLists: React.FC = () => {
   const fetchAppliedJobs = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/candidate/view-applied', {
+      const response = await fetch('http://localhost:5000/api/candidate/appliedjobs', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
