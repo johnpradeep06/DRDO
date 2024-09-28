@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Briefcase } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge"; // Import Badge component
 
 interface AppliedJob {
   id: string;
@@ -40,6 +41,19 @@ export const AppliedJobLists: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'accepted':
+        return 'bg-green-500 text-white'; // Green badge for accepted
+      case 'rejected':
+        return 'bg-red-500 text-white'; // Red badge for rejected
+      case 'pending':
+        return 'bg-yellow-500 text-black'; // Yellow badge for pending
+      default:
+        return 'bg-gray-500 text-white'; // Default gray badge
+    }
+  };
+
   if (loading) {
     return <div className="text-center text-white">Loading applied jobs...</div>;
   }
@@ -64,9 +78,11 @@ export const AppliedJobLists: React.FC = () => {
                 <p className="text-lg text-muted-foreground">{job.companyName}</p>
               </CardHeader>
               <CardContent className="flex-grow">
-                <div className="flex items-center justify-end text-[#80cbc4]">
-                  <Briefcase className="w-4 h-4 mr-2" />
-                  Application Status: {job.applicationStatus}
+                <div className="flex items-center justify-between">
+                  <Briefcase className="w-4 h-4 mr-2 text-[#80cbc4]" />
+                  <Badge className={`py-1 px-3 rounded-full ${getStatusColor(job.applicationStatus)}`}>
+                    {job.applicationStatus}
+                  </Badge>
                 </div>
               </CardContent>
             </Card>
