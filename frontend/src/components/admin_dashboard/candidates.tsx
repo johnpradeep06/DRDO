@@ -48,39 +48,81 @@ function ProgressCircle({ percentage }: { percentage: number }) {
 }
 
 export default function Candidates() {
-  const [candidates, setCandidates] = useState<Candidate[]>([]); // Type the state correctly
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
   const [minScore, setMinScore] = useState(70);
 
   // Fetch data from the backend
-  useEffect(() => {
-    const fetchCandidates = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await fetch("http://localhost:5000/api/recruiter/appliedjobs/", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const data = await response.json();
-        setCandidates(data); // Assuming the data is already in the correct format
-      } catch (err: any) {
-        console.error("Error fetching candidates:", err.message); // Safely log error message
-      }
-    };
+  const fetchCandidates = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch("http://localhost:5000/api/candidates", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      setCandidates(data);
+    } catch (err: any) {
+      console.error("Error fetching candidates:", err.message);
+    }
+  };
 
+  useEffect(() => {
     fetchCandidates();
   }, []);
 
-  const handleRejectBelow = () => {
-    setCandidates(candidates.filter(candidate => candidate.relevancyScore >= minScore));
+  // Handle rejecting candidates below a certain score
+  const handleRejectBelow = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      await fetch("http://localhost:5000/api/candidates/rejectBelow", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ minScore }),
+      });
+      // Re-fetch candidates after rejection
+      fetchCandidates();
+    } catch (err: any) {
+      console.error("Error rejecting candidates below score:", err.message);
+    }
   };
 
-  const handleShortlist = (id: number) => {
-    alert(`Candidate ${id} shortlisted`);
+  // Handle shortlisting a candidate
+  const handleShortlist = async (id: number) => {
+    try {
+      const token = localStorage.getItem('token');
+      await fetch(`http://localhost:5000/api/candidates/shortlist/${id}`, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      alert(`Candidate ${id} shortlisted`);
+      // Optionally re-fetch candidates if you want to update the UI
+      fetchCandidates();
+    } catch (err: any) {
+      console.error("Error shortlisting candidate:", err.message);
+    }
   };
 
-  const handleReject = (id: number) => {
-    setCandidates(candidates.filter(candidate => candidate.id !== id));
+  // Handle rejecting a specific candidate
+  const handleReject = async (id: number) => {
+    try {
+      const token = localStorage.getItem('token');
+      await fetch(`http://localhost:5000/api/candidates/reject/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // Re-fetch candidates after rejection
+      fetchCandidates();
+    } catch (err: any) {
+      console.error("Error rejecting candidate:", err.message);
+    }
   };
 
   return (
