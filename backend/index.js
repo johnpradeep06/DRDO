@@ -191,64 +191,6 @@ function analyzeTextForSkills(text, skills) {
   return skillMatches;
 }
 
-app.get('/api/candidate/appliedjobs', verifyToken, async (req, res) => {
-  const userId = req.user.userId;
-
-  if (!userId) {
-   logger.error('userId is missing in the request');
-   return res.status(400).json({ error: 'userId is required' });
-  }
-
-  try {
-   const pdfDocuments = await prisma.pDFDocument.findMany({
-    where: {
-     userId: userId,
-    },
-    select: {
-     jobId: true,
-    },
-   });
-
-   const jobIds = pdfDocuments.map((doc) => doc.jobId).filter(id => id !== null);
-
-   if (jobIds.length === 0) {
-    logger.info(`No applied jobs found for userId: ${userId}`);
-    return res.status(404).json({ message: 'No applied jobs found for this candidate' });
-   }
-
-   const appliedJobs = await prisma.job.findMany({
-    where: {
-     id: {
-      in: jobIds,
-     },
-    },
-    include: {
-     applications: {
-      where: {
-       candidateId: userId,
-      },
-      select: {
-       status: true,
-      },
-     },
-    },
-   });
-
-   const formattedJobs = appliedJobs.map(job => ({
-    id: job.id,
-    jobTitle: job.jobTitle,
-    companyName: job.companyName,
-    applicationStatus: job.applications[0]?.status || 'PENDING',
-   }));
-
-   logger.info(`Applied jobs fetched successfully for userId: ${userId}`);
-   return res.status(200).json({ appliedJobs: formattedJobs });
-  } catch (error) {
-   logger.error(`Error fetching applied jobs for userId: ${userId}`, { error });
-   return res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
 app.get('/api/recruiter/appliedjobs', verifyToken, async (req, res) => {
   const userId = req.user.userId;
 
@@ -264,6 +206,11 @@ app.get('/api/recruiter/appliedjobs', verifyToken, async (req, res) => {
       },
       include: {
         applications: {
+          where: {
+            status: {
+              not: 'REJECTED', // Filter to exclude rejected applications
+            },
+          },
           include: {
             candidate: {
               select: {
@@ -277,6 +224,7 @@ app.get('/api/recruiter/appliedjobs', verifyToken, async (req, res) => {
       },
     });
 
+    // Format the job applications
     const formattedAppliedJobs = appliedJobs.flatMap((job) =>
       job.applications.map((application) => ({
         id: application.candidate.id, // Ensure this is the candidate ID
@@ -286,6 +234,7 @@ app.get('/api/recruiter/appliedjobs', verifyToken, async (req, res) => {
         appliedFor: job.jobTitle,
         relevancyScore: application.relevancyScore || 0,
         status: application.status,
+        jobId: application.id, // Use application.id as the job application ID
       }))
     );
 
@@ -295,6 +244,62 @@ app.get('/api/recruiter/appliedjobs', verifyToken, async (req, res) => {
   } catch (error) {
     logger.error('Error fetching applied jobs:', error);
     res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+app.post('/api/candidates/rejectBelow', async (req, res) => {
+  const { minScore } = req.body;
+
+  try {
+    const applications = await prisma.application.updateMany({
+      where: {
+        relevancyScore: {
+          lt: minScore,
+        },
+      },
+      data: {
+        status: 'REJECTED',
+      },
+    });
+
+    return res.status(200).json({ count: applications.count }); // Return the number of rejected applications
+  } catch (error) {
+    console.error("Error rejecting candidates below score:", error);
+    return res.status(500).json({ message: "Error rejecting candidates." });
+  }
+});
+
+app.post('/api/candidate/reject/:id', verifyToken, async (req, res) => {
+  const { id } = req.params; // Extract candidate ID from request parameters
+  console.log("cCHECKpoint 1");
+  console.log(id); // Ensure this prints the ID as expected
+  try {
+    const updatedApplication = await prisma.application.update({
+      where: { id: id }, // Use id directly as a string
+      data: { status: 'REJECTED' }, // Update status to REJECTED
+    });
+
+    res.status(200).json({ message: 'Candidate rejected successfully.', application: updatedApplication });
+  } catch (error) {
+    console.error("Error rejecting candidate:", error);
+    res.status(500).json({ message: 'Internal server error.' });
+  }
+});
+
+
+app.post('/api/candidate/shortlist/:id', verifyToken, async (req, res) => {
+  const { id } = req.params; // Extract candidate ID from request parameters
+
+  try {
+    const updatedApplication = await prisma.application.update({
+      where: { id: id },
+      data: { status: 'SHORTLISTED' }, // Update status to SHORTLISTED
+    });
+
+    res.status(200).json({ message: 'Candidate shortlisted successfully.', application: updatedApplication });
+  } catch (error) {
+    console.error("Error shortlisting candidate:", error);
+    res.status(500).json({ message: 'Internal server error.' });
   }
 });
 
@@ -545,6 +550,7 @@ app.get('/api/candidate/view-applied', verifyToken, verifyRole('CANDIDATE'), asy
       where: { candidateId },
       include: { job: true }, // Include job details
     });
+    console.log(applications);
     res.status(200).json(applications);
   } catch (error) {
     logger.error('Error fetching applied job posts for candidate: ' + error.message);
