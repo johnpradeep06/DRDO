@@ -43,7 +43,7 @@ export default function ResumeUploadCard() {
   
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        console.log();
         setUploadStatus('File uploaded successfully!');
       } else {
         const errorData = await response.json();

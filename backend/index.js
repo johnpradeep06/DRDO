@@ -144,6 +144,55 @@ app.post("/api/candidate/upload", verifyToken, upload.single("resume"), async (r
   });
 
 
+  app.get('/api/candidate/appliedjobs', verifyToken, async (req, res) => {
+    // Extract candidateId from the token (assuming it's stored in req.user)
+    const userId = req.user.userId;
+  
+    if (!userId) {
+      logger.error('userId is missing in the request');
+      return res.status(400).json({ error: 'userId is required' });
+    }
+  
+    try {
+      // Step 1: Fetch all PDFDocuments for the given userId (candidate) to get jobIds
+      const pdfDocuments = await prisma.pDFDocument.findMany({
+        where: {
+          userId: userId, // Filter by the candidate's user ID
+        },
+        select: {
+          jobId: true, // Only select jobId from the PDFDocument model
+        },
+      });
+  
+      // Step 2: Extract the jobIds from the pdfDocuments
+      const jobIds = pdfDocuments.map((doc) => doc.jobId);
+      const filteredjobIds = jobIds.filter(id => id !== null);
+      if (jobIds.length === 0) {
+        logger.info(`No applied jobs found for userId: ${userId}`);
+        return res.status(404).json({ message: 'No applied jobs found for this candidate' });
+      }
+  
+      // Step 3: Fetch all jobs where the jobId is in the list of jobIds
+      const appliedJobs = await prisma.job.findMany({
+        where: {
+          id: {
+            in: filteredjobIds, // Use the list of jobIds to filter jobs
+          },
+        },
+      });
+  
+      // Log success and send the response
+      console.log(appliedJobs);
+      logger.info(`Applied jobs fetched successfully for userId: ${userId}`);
+      return res.status(200).json({ appliedJobs });
+    } catch (error) {
+      // Log the error and send a 500 response
+      logger.error(`Error fetching applied jobs for userId: ${userId}`, { error });
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
+  
+
 //registering role
 app.post('/api/register', async (req, res) => {
     const { fullName, email, phoneNumber, password, role } = req.body;
