@@ -141,7 +141,7 @@ app.post("/api/candidate/upload", verifyToken, upload.single("resume"), async (r
 
     const totalRequiredSkills = requiredSkills.length;
     const matchedSkills = Object.values(skillMatches).filter(count => count > 0).length;
-    const relevancyScore = (matchedSkills / totalRequiredSkills) * 100;
+    const relevancyScore = parseFloat(((matchedSkills / totalRequiredSkills) * 100).toFixed(2));
 
     const application = await prisma.application.create({
       data: {
